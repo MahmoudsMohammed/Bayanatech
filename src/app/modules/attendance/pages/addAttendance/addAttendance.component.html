@@ -1,0 +1,61 @@
+<div class="d-flex flex-col">
+  <div class="d-flex align-items-start gap-3 p-3">
+    <form
+      class="flex-grow-1 d-flex flex-col gap-3 justify-center"
+      #form="ngForm"
+      (ngSubmit)="save(form)"
+    >
+      <div>
+        <label for="location"
+          ><i class="fa-solid fa-location-dot"></i> Name of this
+          location/office</label
+        >
+        <input
+          [ngModel]="locationName !== 'new' ? locationName : ''"
+          type="text"
+          name="location"
+          id="location"
+          placeholder="Enter Location Name"
+          class="form-control"
+        />
+      </div>
+      <div class="d-flex gap-3">
+        <input type="submit" class="btn btn-primary flex-grow-1" value="Save" />
+        <a
+          routerLink="/attendance/attendanceList"
+          class="btn btn-danger flex-grow-1"
+          >Cancel</a
+        >
+      </div>
+    </form>
+    <form
+      #latLonForm
+      class="latLonForm flex-grow-1 d-flex flex-col gap-3 justify-center"
+    >
+      <div>
+        <label for="lat">Latitude</label>
+        <input
+          #lat
+          type="text"
+          id="lat"
+          name="lat"
+          placeholder="Latitude"
+          class="form-control"
+        />
+      </div>
+      <div>
+        <label for="lng">Longitude</label>
+        <input
+          #lng
+          type="text"
+          name="lng"
+          id="lng"
+          placeholder="Longitude"
+          class="form-control"
+        />
+      </div>
+      <input type="submit" class="btn btn-primary" value="Search" />
+    </form>
+  </div>
+  <div id="viewDiv" style="height: calc(100vh - 385px)"></div>
+</div>

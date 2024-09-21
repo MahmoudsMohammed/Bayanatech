@@ -1,0 +1,522 @@
+<div class="staff-holidays">
+  <app-navigator [title]="title"></app-navigator>
+  <div class="head flex flex-column gap-4 flex-wrap items-start justify-start">
+    <div class="btns">
+      <button type="button" class="btn bg-base text-white" (click)="open(addNewVacation, null, 'add')">
+        {{ "new request" | translate }}
+      </button>
+
+      <button type="button" class="btn bg-base text-white" (click)="open(addNewVacation, null, 'add', 'withReason')">
+        {{ "New leave request with an excuse" | translate }}
+      </button>
+
+      <button type="button" class="btn bg-base text-white"
+        (click)="open(followVacationsModal, null, 'followVacations')">
+        {{ "Follow up on vacations" | translate }}
+      </button>
+
+    </div>
+
+    <div class="flex gap-2 flex-wrap items-end">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Employee Name" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}" [(ngModel)]="selectedUser"
+          [ngModelOptions]="{ standalone: true }">
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+            }}</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label">
+          {{ "the kind of holiday" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}" [(ngModel)]="selectedUser"
+          [ngModelOptions]="{ standalone: true }">
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+            }}</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "leave status" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}" [(ngModel)]="selectedUser"
+          [ngModelOptions]="{ standalone: true }">
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+            }}</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="form-check form-switch me-3">
+        <label class="form-check-label" for="flexSwitchCheckDefault" style="width: max-content">
+          {{ "Deduction from salary?" | translate }}
+        </label>
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+      </div>
+
+      <div class="flex items-center gap-2 mx-3" style="margin-bottom: 10px">
+        <input type="checkbox" name="dateSearch" id="dateSearch" (change)="showDate = !showDate" />
+        <label for="dateSearch" class="mb-0">{{ "date" | translate }}</label>
+      </div>
+
+      <div *ngIf="showDate" class="form-group timeInput">
+        <label class="col-form-label">{{ "Chose Date" | translate }}</label>
+        <input placeholder="{{ 'Chose Date' | translate }}" name="date" ngModel type="text" class="form-control"
+          bsDaterangepicker #dpr="bsDaterangepicker" style="min-width: 300px" />
+      </div>
+    </div>
+  </div>
+
+  <div class="tables-data mt-3 overflow-hidden">
+    <!-- table -->
+    <input (keyup)="applyFilter($event)" class="form-control mb-3" style="max-width: 300px" #input
+      placeholder="{{ 'search' | translate }}" />
+    <div class="overflow-auto">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max">
+        <!-- employeName column -->
+        <ng-container matColumnDef="employeName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Employee Name" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.employeName }}</span>
+          </td>
+        </ng-container>
+        <!-- vacationType column -->
+        <ng-container matColumnDef="vacationType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "the kind of holiday" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.vacationType }}</span>
+          </td>
+        </ng-container>
+        <!-- vacationStatus column -->
+        <ng-container matColumnDef="vacationStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "leave status" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.vacationStatus }}</span>
+          </td>
+        </ng-container>
+        <!-- manager column -->
+        <ng-container matColumnDef="manager">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "decision maker" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.manager }}</span>
+          </td>
+        </ng-container>
+        <!-- from reason -->
+        <ng-container matColumnDef="Reasons for the decision">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="max-width: 240px;">
+            <span>{{ "Reasons for the decision" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.reason }}</span>
+          </td>
+        </ng-container>
+        <!-- from column -->
+        <ng-container matColumnDef="from">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>
+              {{ "From" | translate }}{{ " " }} {{ "date" | translate }}
+            </span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.from | date : "dd-MM-yyyy" }}</span>
+          </td>
+        </ng-container>
+        <!-- to column -->
+        <ng-container matColumnDef="to">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ "To" | translate }}{{ " " }} {{ "date" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.to | date : "dd-MM-yyyy" }}</span>
+          </td>
+        </ng-container>
+        <!-- deductionFromSalary column -->
+        <ng-container matColumnDef="deductionFromSalary">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Deduction from salary?" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.deductionFromSalary }}</span>
+          </td>
+        </ng-container>
+        <!-- amount column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "discount amount" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element?.amount }}</span>
+          </td>
+        </ng-container>
+
+        <!-- operations Column -->
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef [translate]="'name'" [translateParams]="{
+              ar: 'خيارات',
+              en: 'Operations'
+            }"></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex gap-1 justify-center py-2">
+              <button class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(addNewVacation, element, 'edit')">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(deleteModal)">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="duration-300 hover:bg-slate-100"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "noResult" | translate }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+<!-- addNewVacation / edit -->
+<ng-template #addNewVacation let-modal>
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span *ngIf="modalDetails?.id">{{
+        "editVacationRequest" | translate
+        }}</span>
+
+      <span *ngIf="!modalDetails?.id">{{
+        "newVacationRequest" | translate
+        }}</span>
+    </h4>
+    <button type="button" class="text-white m-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row items-end">
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "Employee Name" | translate }}</label>
+            <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.employeeName" [ngModelOptions]="{ standalone: true }" name="user">
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+                }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "the kind of holiday" | translate }}</label>
+            <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.vacationType" [ngModelOptions]="{ standalone: true }" name="user">
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+                }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Chose Date" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input [(ngModel)]="modalDetails.date" name="date" type="text" class="form-control" bsDatepicker />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ ("Chose Date" | translate) + " " + ("From" | translate) }}
+            </label>
+            <div class="form-group timeInput">
+              <input [(ngModel)]="modalDetails.from" name="from" type="text" class="form-control" bsDatepicker />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ ("Chose Date" | translate) + " " + ("To" | translate) }}
+            </label>
+            <div class="form-group timeInput">
+              <input [(ngModel)]="modalDetails.to" name="to" type="text" class="form-control" bsDatepicker />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-check form-switch me-3">
+            <label class="form-check-label" for="flexSwitchCheckDefault" style="width: max-content">
+              {{ "Deduction from salary?" | translate }}
+            </label>
+            <input [(ngModel)]="modalDetails.discound" class="form-check-input" type="checkbox" role="switch"
+              id="flexSwitchCheckDefault" name="discound" />
+          </div>
+        </div>
+        <div *ngIf="withReason" class="col-md-6 col-lg-4 mb-3">
+          <div class="upload">
+            <file-upload class="h-full" [control]="control">
+              <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+                <div *ngIf="control.size === 0">
+                  <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
+                      <path
+                        d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z" />
+                    </svg>
+                  </div>
+
+                  <div class="upload-text">
+                    {{ "Add Image" | translate }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template let-i="index" let-file="file" let-control="control" #item>
+                <div class="overlay">
+                  <span class="delete-button" (click)="control.removeFile(file)">
+                    <svg viewBox="0 0 448 512">
+                      <path
+                        d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z">
+                      </path>
+                    </svg>
+                  </span>
+                  <img class="max-h-44" *ngIf="control.valid" [src]="uploadedFile | async" />
+                </div>
+              </ng-template>
+            </file-upload>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-flex items-center justify-end gap-3 mt-4">
+      <button type="button" class="btn bg-base text-white" [disabled]="form.invalid" (click)="
+          modalDetails?.id ? EditVacationRequest() : AddVacationRequest();
+          modal.close('Save click', 'end')
+        ">
+        {{ modalDetails?.id ? ("edit" | translate) : ("add" | translate) }}
+      </button>
+
+      <button (click)="modal?.dismiss()" class="btn btn-outline-secondary">
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p [translate]="'name'" [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"></p>
+    <div class="flex gap-2 justify-center">
+      <button type="button" mat-raised-button color="warn" (click)="confirm(); modal.dismiss()">
+        {{ "Yes" | translate }}
+      </button>
+      <button type="button" (click)="modal.dismiss()" mat-raised-button color="basic">
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- followVacationsModal -->
+<ng-template #followVacationsModal let-modal>
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span>{{ "followVacations" | translate }}</span>
+    </h4>
+    <button type="button" class="text-white m-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <div class="content">
+      <!-- wating table -->
+      <div class="mb-4">
+        <h4 class="text-start">{{ "Requests pending approval" | translate }}</h4>
+        <div class="tables-data mt-3 overflow-hidden">
+          <div class="overflow-auto">
+            <table mat-table [dataSource]="dataSourceWaitingVacation" matSort
+              class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max">
+              <!-- employeName column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "date" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.date | date : "dd-MM-yyyy" }}</span>
+                </td>
+              </ng-container>
+              <!-- vacationType column -->
+              <ng-container matColumnDef="employeeName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "Employee Name" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.employeeName }}</span>
+                </td>
+              </ng-container>
+              <!-- vacationStatus column -->
+              <ng-container matColumnDef="vacationType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "the kind of holiday" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.vacationType }}</span>
+                </td>
+              </ng-container>
+              <!-- manager column -->
+              <ng-container matColumnDef="discoundType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "discound type" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.discoundType }}</span>
+                </td>
+              </ng-container>
+              <!-- from column -->
+              <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>
+                    {{ "vacation start" | translate }}
+                  </span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.startDate | date : "dd-MM-yyyy" }}</span>
+                </td>
+              </ng-container>
+              <!-- to column -->
+              <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ "duration" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.duration }}</span>
+                </td>
+              </ng-container>
+              <!-- deductionFromSalary column -->
+              <ng-container matColumnDef="dicesion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "dicesion" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.dicesion }}</span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsWaitingVacation"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsWaitingVacation"
+                class="duration-300 hover:bg-slate-100"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <!-- accepted table -->
+        <h4 class="text-start">{{ "Approved leave movement" | translate }}</h4>
+        <div class="tables-data mt-3 overflow-hidden">
+          <div class="overflow-auto">
+            <table mat-table [dataSource]="dataSourceAcceptingVacation" matSort
+              class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max">
+              <!-- employeName column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "Approval date" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element.date | date : "dd-MM-yyyy" }}</span>
+                </td>
+              </ng-container>
+              <!-- vacationType column -->
+              <ng-container matColumnDef="employeeName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "Employee Name" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element?.employeeName }}</span>
+                </td>
+              </ng-container>
+              <!-- vacationStatus column -->
+              <ng-container matColumnDef="vacationType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "the kind of holiday" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element?.vacationType }}</span>
+                </td>
+              </ng-container>
+              <!-- manager column -->
+              <ng-container matColumnDef="discoundType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>{{ "discound type" | translate }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element?.discoundType }}</span>
+                </td>
+              </ng-container>
+              <!-- from column -->
+              <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span>
+                    {{ "duration" | translate }}
+                  </span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element?.duration }}</span>
+                </td>
+              </ng-container>
+              <!-- to column -->
+              <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ "end date" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span>{{ element?.endDate | date : "dd-MM-yyyy" }}</span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsAcceptingVacation"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsAcceptingVacation"
+                class="duration-300 hover:bg-slate-100"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 justify-end">
+      <button type="button" (click)="modal.dismiss()" class="btn btn-outline-secondary">
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,458 @@
+<div class="add-search pb-4">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="tables-data mt-3 overflow-hidden">
+    <div class="flex gap-2 flex-wrap items-end">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Employee" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+          <ng-option [value]="0">
+            {{ "Employee" | translate }}
+          </ng-option>
+
+          <ng-option [value]="0">
+            {{ "Employee" | translate }}
+          </ng-option>
+
+          <ng-option [value]="0">
+            {{ "Employee" | translate }}
+          </ng-option>
+        </ng-select>
+      </div>
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Show" | translate }}</label>
+        <ng-select
+          class="w-full p-0"
+          name="filter"
+          [(ngModel)]="data.filter.show"
+          placeholder="{{ 'Chose' | translate }}"
+        >
+          <ng-option
+            [value]="0"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الأمس',
+              en: 'Yesterday'
+            }"
+          >
+          </ng-option>
+          <ng-option
+            [value]="1"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'اليوم',
+              en: 'Today'
+            }"
+          >
+          </ng-option>
+          <ng-option
+            [value]="2"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الأسبوع',
+              en: 'The Week'
+            }"
+          >
+          </ng-option>
+          <ng-option
+            [value]="3"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الشهر',
+              en: 'The Month'
+            }"
+          >
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div>
+        <button type="button" disabled class="btn btn-outline-secondary">
+          <i class="fa fa-calendar" style="margin-inline-end: 6px"></i>
+          {{ data.day | hijriDate }}
+        </button>
+      </div>
+
+      <div class="status">
+        <ul
+          class="list-unstyled flex gap-8 flex-wrap items-center justify-center"
+        >
+          <li>
+            <span class="bg-green-500"></span>
+            <span>{{ "Present" | translate }}</span>
+          </li>
+          <li>
+            <span class="bg-red-500"></span>
+            <span>{{ "absent" | translate }}</span>
+          </li>
+          <li>
+            <span class="bg-sky-500"></span>
+            <span>{{ "weekend" | translate }}</span>
+          </li>
+          <li>
+            <span class="bg-blue-500"></span>
+            <span>{{ "Official holiday" | translate }}</span>
+          </li>
+          <li>
+            <span class="bg-purple-500"></span>
+            <span>{{ "vacation" | translate }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex gap-2 controler">
+        <button
+          class="flex gap-1 btn btn-primary"
+          (click)="open(editAttendence)"
+        >
+          <span
+            class="hidden md:block"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'تعديل الحضور',
+              en: 'Edit Day Attendence'
+            }"
+          ></span>
+          <i class="fa-solid fa-fingerprint"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto mt-3">
+      <table
+        class="min-w-max overflow-hidden rounded-t-lg table table-bordered table-striped"
+      >
+        <thead>
+          <tr class="bg-base text-white align-middle">
+            <th
+              class="invoice-title uppercase text-center"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'اسم العميل',
+                en: 'Employee Name'
+              }"
+            ></th>
+            <th
+              class="invoice-title uppercase text-center"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'الرقم الوظيفى',
+                en: 'Jop Number'
+              }"
+            ></th>
+
+            <th
+              *ngIf="data.filter.show < 2"
+              class="invoice-title uppercase text-center"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'الحالة',
+                en: 'Status'
+              }"
+            ></th>
+
+            <th
+              *ngIf="data.filter.show < 2"
+              class="invoice-title uppercase text-center"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'التاريخ',
+                en: 'Date'
+              }"
+            ></th>
+
+            <ng-container *ngIf="data.filter.show < 2">
+              <th
+                class="invoice-title uppercase text-center"
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'حضور فترة اولى	',
+                  en: 'Attending an initial period	'
+                }"
+              ></th>
+              <th
+                class="invoice-title uppercase text-center"
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'انصراف فترة اولى	',
+                  en: 'Leaving the first period	'
+                }"
+              ></th>
+              <th
+                class="invoice-title uppercase text-center"
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'حضور فترة ثانية	',
+                  en: 'Attend a Second Term'
+                }"
+              ></th>
+              <th
+                class="invoice-title uppercase text-center"
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'انصراف فترة ثانية	',
+                  en: 'Leaving a second period'
+                }"
+              ></th>
+            </ng-container>
+            <!-- week -->
+            <ng-container *ngIf="data.filter.show == 2">
+              <td *ngFor="let day of data.week" class="min-w-fit">
+                <div
+                  class="mx-auto w-10 h-10 flex items-center flex-col min-w-max justify-center rounded-full"
+                >
+                  <span>
+                    {{ toLocalString(day) }}
+                  </span>
+                  <span>
+                    {{ day | date : "shortDate" }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+            <!-- month -->
+            <ng-container *ngIf="data.filter.show == 3">
+              <td *ngFor="let day of data.days" class="min-w-fit">
+                <div
+                  class="mx-auto w-10 h-10 flex items-center flex-col min-w-max justify-center rounded-full"
+                >
+                  <span>
+                    {{ toLocalString(day) }}
+                  </span>
+                  <span>
+                    {{ day.getDate() }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <th
+              *ngIf="data.filter.show == 1"
+              class="invoice-title uppercase text-center"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'خيارات	',
+                en: 'Operation	'
+              }"
+            ></th>
+          </tr>
+        </thead>
+        <tbody id="tabledetails">
+          <tr
+            class="text-black text-center align-middle"
+            *ngFor="let employee of data.fingerAttendence"
+          >
+            <td>
+              <div class="flex gap-2 items-center">
+                <img
+                  class="w-14 aspect-square object-cover rounded-full"
+                  *ngIf="data.filter.show == 1 && employee.PhotoUrl"
+                  src="https://tameercloud.com{{ employee.PhotoUrl }}"
+                  alt=""
+                />
+                <span>{{ employee.FullName }}</span>
+              </div>
+            </td>
+            <td>{{ employee.EmpNo }}</td>
+            <!-- status -->
+            <td *ngIf="data.filter.show < 2">
+              <div
+                class="mx-auto w-10 h-10 block rounded-full bg-red-50 text-red-500" style="line-height: 35px;"
+              >
+                غ
+              </div>
+            </td>
+            <!-- yesterday and today -->
+            <ng-container *ngIf="data.filter.show < 2">
+              <td>{{ employee.DateDay }}</td>
+              <td>{{ employee.TimeJoin1 }}</td>
+              <td>{{ employee.TimeLeave1 }}</td>
+              <td>{{ employee.TimeJoin2 }}</td>
+              <td>{{ employee.TimeLeave2 }}</td>
+              <td *ngIf="data.filter.show == 1">
+                <button
+                  class="btn btn-outline-primary"
+                  (click)="open(editAttendenceForClient)"
+                >
+                  <i class="fa-solid fa-ellipsis"></i>
+                </button>
+              </td>
+            </ng-container>
+            <!-- week -->
+            <ng-container *ngIf="data.filter.show == 2">
+              <td *ngFor="let day of data.week">
+                <div
+                  class="mx-auto w-10 h-10 block rounded-full bg-red-50 text-red-500" style="line-height: 35px;"
+                >
+                  غ
+                </div>
+              </td>
+            </ng-container>
+            <!-- month -->
+            <ng-container *ngIf="data.filter.show == 3">
+              <td *ngFor="let day of data.days">
+                <div
+                  class="mx-auto w-10 h-10 block rounded-full bg-red-50 text-red-500" style="line-height: 35px;"
+                >
+                  غ
+                </div>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- add / edit -->
+<ng-template #editAttendence let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl"> </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="col-form-label"> {{ "Employee" | translate }}</label>
+          <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+            <ng-option [value]="0">
+              {{ "Employee" | translate }}
+            </ng-option>
+
+            <ng-option [value]="0">
+              {{ "Employee" | translate }}
+            </ng-option>
+
+            <ng-option [value]="0">
+              {{ "Employee" | translate }}
+            </ng-option>
+          </ng-select>
+        </div>
+        <div class="form-group timeInput">
+          <label class="col-form-label"> {{ "Date" | translate }}</label>
+          <input
+            placeholder="{{ 'Chose Date' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+        <div>
+          <label class="col-form-label"> {{ "login" | translate }}</label>
+          <mat-form-field class="w-full" appearance="outline">
+            <input
+              type="time"
+              dir="ltr"
+              matInput
+              name="week"
+              min="09:00"
+              max="18:00"
+            />
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="col-form-label"> {{ "logout" | translate }}</label>
+          <mat-form-field class="w-full" appearance="outline">
+            <input
+              type="time"
+              dir="ltr"
+              matInput
+              name="week"
+              min="09:00"
+              max="18:00"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #editAttendenceForClient let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl"> </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <h2>محمد هلهل</h2>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>{{ data.day | date : "shortDate" }}</span>
+          </div>
+          <div>١٠:٠٠ ص : ١٧:٠٠ م</div>
+        </div>
+
+        <div>
+          <label class="col-form-label"> {{ "login" | translate }}</label>
+          <mat-form-field class="w-full" appearance="outline">
+            <input
+              type="time"
+              dir="ltr"
+              matInput
+              name="week"
+              min="09:00"
+              max="18:00"
+            />
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="col-form-label"> {{ "logout" | translate }}</label>
+          <mat-form-field class="w-full" appearance="outline">
+            <input
+              type="time"
+              dir="ltr"
+              matInput
+              name="week"
+              min="09:00"
+              max="18:00"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

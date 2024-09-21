@@ -1,0 +1,474 @@
+<div class="profile py-5">
+  <!-- <h2 class="mb-5 px-3 confirm-msg">الملف الشخصي</h2> -->
+  <div class="container-fluid">
+    <form class="px-2 grid items-start md:grid-cols-2 gap-3" #userForm="ngForm">
+      <div class="grid grid-cols-2 gap-x-1 gap-y-4">
+        <div class="flex flex-col items-center gap-1">
+          <img class="w-1/2" src="assets/user-test.png" alt="" />
+          <h3 class="font-bold m-0">محمد هلهل</h3>
+          <span>محاسب</span>
+          <label
+            for="user-img"
+            class="btn-primary btn mt-2"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'تحميل صورة ',
+              en: 'Upload image'
+            }"
+          ></label>
+          <input hidden type="file" id="user-img" />
+        </div>
+
+        <div class="flex flex-col gap-2 items-center">
+          <img class="w-1/2" src="assets/images/qrcode.jpg" alt="" />
+          <a href="">
+            <img src="assets/images/google-play.png" alt="" />
+          </a>
+          <a href="">
+            <img src="assets/images/app-store.png" alt="" />
+          </a>
+        </div>
+
+        <div class="col-span-2 flex flex-col gap-3">
+          <div>
+            <mat-slide-toggle color="primary"
+              ><span
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'اظهار شاشة الترحيب',
+                  en: 'Show welcome page'
+                }"
+              ></span
+            ></mat-slide-toggle>
+          </div>
+          <div>
+            <mat-slide-toggle color="primary"
+              ><span
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'عدم اظهار اسم المستخدم في طباعة الفاتورة',
+                  en: 'Hide user name on invoice print'
+                }"
+              ></span
+            ></mat-slide-toggle>
+          </div>
+          <div>
+            <mat-slide-toggle color="primary"
+              ><span
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'حالة المستخدم فى التطبيق نشطه',
+                  en: 'Activate user status on application'
+                }"
+              ></span
+            ></mat-slide-toggle>
+          </div>
+          <span
+            class="font-bold"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'عنوان السيرفر الخاص بك ',
+              en: 'Server IP'
+            }"
+          >
+          </span>
+          <div class="flex gap-1 text-xl font-bold items-center max-w-[250px]">
+            <input
+              type="text"
+              class="form-control aspect-square text-center"
+              readonly
+              value="192"
+            />
+            .
+            <input
+              type="text"
+              class="form-control aspect-square text-center"
+              readonly
+              value="168"
+            />
+            .
+            <input
+              type="text"
+              class="form-control aspect-square text-center"
+              readonly
+              value="2"
+            />
+            .
+            <input
+              type="text"
+              class="form-control aspect-square text-center"
+              readonly
+              value="22"
+            />
+          </div>
+        </div>
+
+        <h3
+          class="head-h3"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'خطوات تحميل التطبيق ',
+            en: 'Application download steps'
+          }"
+        ></h3>
+        <ol
+          type="1"
+          class="col-span-2 flex flex-col gap-1 list-decimal"
+          style="padding-inline-start: 16px"
+        >
+          <li
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'قم بتنزيل التطبيق من خلال المتجر ، وذلك البحث عن نظام تعمير السحابي',
+              en: 'Download the application through the store, by searching for the cloud reconstruction system'
+            }"
+          ></li>
+          <li
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'بعد التحميل اضغط على زر QR CODE',
+              en: 'After downloading, click on the QR CODE button'
+            }"
+          ></li>
+          <li
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'قم بتمرير الكامرة على الرمز المرئي الذي أمامك',
+              en: 'Pass the camera on the visible symbol in front of you'
+            }"
+          ></li>
+          <li
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'قم بتسجيل الخروج من المتصفح',
+              en: ' Log out of your browser'
+            }"
+          ></li>
+        </ol>
+        <span
+          class="col-span-2 font-semibold customP"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'ملاحظة: في حال الدخول من التطبيق تأكد من تسجيل الخروج من صفحة الويب ، لأن النظام يمنع ازدواجية الدخول ، حيث لا يمكن الدخول من التطبيق ومن المتصفح في آن واحد ، فلابد من الخروج من أحدهم ، فإما الدخول من التطبيق ، أو من المتصفح .',
+
+            en: 'Note: If you log in from the application, be sure to log out from the web page, because the system prevents double entry, as it is not possible to log in from the application and from the browser at the same time, so it is necessary to exit from one of them, either from the application, or from the browser.'
+          }"
+        >
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="cusomeInput">
+          <label class="col-form-label"
+            >{{ "nameAr" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            id="empNameArtxt"
+            name="empNameArtxt"
+            class="form-control"
+            placeholder="{{ 'nameAr' | translate }}"
+          />
+        </div>
+        <div class="cusomeInput">
+          <label class="col-form-label" for="empNameEntxt">{{
+            "nameEn" | translate
+          }}</label>
+          <input
+            type="text"
+            id="empNameEntxt"
+            name="empNameEntxt"
+            class="form-control"
+            placeholder="{{ 'nameEn' | translate }} "
+          />
+        </div>
+        <div class="cusomeInput">
+          <label class="col-form-label">{{ "userName" | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="{{ 'userName' | translate }} "
+          />
+        </div>
+        <div class="flex gap-2 items-end cusomeInput">
+          <div class="flex-grow">
+            <label class="col-form-label">
+              {{ "Email" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              type="email"
+              class="form-control"
+              name="email"
+              id="Emailtxt"
+              placeholder="you@email.com"
+              title="enter your email."
+            />
+          </div>
+          <button
+            (click)="openModal(changeEmail, '', '', '')"
+            class="btn bg-base text-white mt-3"
+            type="type"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <div class="flex gap-2 items-end cusomeInput">
+          <div class="flex-grow">
+            <label class="col-form-label">
+              {{ "Mobile" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input type="tel" class="form-control" />
+          </div>
+          <button
+            (click)="openModal(changePhone, '', '', '')"
+            class="btn bg-base text-white mt-3"
+            type="button"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <div class="flex gap-2 items-end cusomeInput">
+          <div class="flex-grow">
+            <label class="col-form-label">
+              {{ "password" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input type="password" class="form-control" />
+          </div>
+          <button
+            (click)="openModal(changePassword, '', '', '')"
+            class="btn bg-base text-white mt-3"
+            type="button"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <div class="cusomeInput flex items-center justify-between">
+          <label class="col-form-label"
+            >{{ "Session time" | translate }}
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            min="1"
+            max="20"
+            style="max-width: 80px"
+          />
+          <span
+            class="text-danger text-sm"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الحد الاقصى لمدة الجلسه 20 دقيقة ',
+              en: 'Max session time is 20 min'
+            }"
+            >*</span
+          >
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex justify-between items-center">
+            <span class="col-form-label font-lg font-bold">{{
+              "Engineer seal" | translate
+            }}</span>
+          </div>
+          <div class="p-3 rounded-lg m-2 bg-zinc-200">
+            <img
+              class="rounded-lg w-100"
+              src="assets/images/zatca.jpg"
+              alt=""
+              style="max-height: 200px; object-fit: fill"
+            />
+          </div>
+          <div></div>
+
+          <label for="user-img" class="btn-primary btn mt-2">
+            {{ "Upload" | translate }}
+          </label>
+          <input hidden type="file" id="user-img" />
+        </div>
+        <div class="text-end">
+          <button
+            style="width: 200px"
+            class="btn submit-btn"
+            (click)="open(confirmAlert)"
+            [translate]="'name'"
+            [translateParams]="{ ar: 'حفظ', en: 'save' }"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- confirm save -->
+<ng-template #confirmAlert let-modal>
+  <div class="modal-body text-center">
+    <h4 class="confirm-msg">هل تريد حفظ التغييرات؟</h4>
+  </div>
+  <div class="modal-footer justify-content-center" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      اغلاق
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn py-2 px-3 mt-0"
+      (click)="changeInfo(userForm.value)"
+    >
+      تأكيد
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #changeEmail let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        {{ "Change Email" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="modal-form" #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Email" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Confirm Email" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="text" Confirm Email />
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #changePassword let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        {{ "Change Password" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="modal-form" #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Password" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="password" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Confirm Password" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="password" Confirm Email />
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #changePhone let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        {{ "Change Phone" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="modal-form" #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Phone" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "Confirm Phone" | translate }}
+            <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="text" Confirm Email />
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

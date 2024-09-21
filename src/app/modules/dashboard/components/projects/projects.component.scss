@@ -1,0 +1,102 @@
+.project-box {
+  @apply bg-base bg-opacity-5 text-base rounded-lg p-2 duration-300 hover:bg-opacity-100 hover:bg-white;
+}
+.endNotice {
+  width: 300px;
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    width: 100%;
+  }
+}
+
+.endProject {
+  label {
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  ::ng-deep {
+    .mat-radio-button {
+      margin-inline-end: 15px;
+    }
+  }
+}
+
+::ng-deep {
+  .my-projects {
+    .nav-tabs {
+      width: max-content;
+      .nav-item {
+        .nav-link {
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--gray-color);
+        }
+      }
+    }
+  }
+  .mat-radio-button {
+    margin-inline-end: 20px;
+  }
+}
+
+textarea {
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+::ng-deep {
+  .apexcharts-legend {
+    display: none !important;
+  }
+}
+.info {
+  @media (max-width: 1200px) {
+    position: relative !important;
+    margin-bottom: 22px !important;
+    flex-wrap: wrap !important;
+  }
+}
+
+.content {
+  padding-top: 30px;
+  min-height: 400px;
+
+  .customLabel {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+}
+
+.lated-value {
+  padding: 12px;
+  background-color: #ced4da;
+  font-size: 17px;
+  color: #c9192a;
+  font-weight: 800;
+  border-radius: 5px;
+}
+
+.project-status-info .progress-bar {
+  font-size: 18px;
+}
+
+.uploadingIcon {
+  width: 30px;
+  height: 28px;
+  object-fit: contain;
+  padding: 5px;
+  display: block !important;
+  border: 1px solid var(--base-color);
+  border-radius: 0.25rem;
+}

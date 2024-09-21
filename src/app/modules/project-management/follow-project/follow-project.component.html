@@ -1,0 +1,1352 @@
+<div class="pb-4">
+  <app-navigator [title]="title"></app-navigator>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div
+      class="flex justify-center text-center flex-col items-center bg-white rounded-lg"
+    >
+      <img class="w-28" src="assets/images/logo_image.png" alt="logo" />
+      <div>
+        <h3
+          class="font-semibold mb-2 text-lg"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: ' المهندس الأعلي دخل',
+            en: 'The top engineer entered'
+          }"
+        ></h3>
+        <h4 class="text-base">Abo Ahmed</h4>
+      </div>
+      <!-- <div>
+        <h3 class="font-semibold mb-2 text-lg"></h3>
+        <h4 class="text-base">Abo Ahmed</h4>
+      </div> -->
+    </div>
+    <div id="chart" class="md:col-span-2">
+      <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [dataLabels]="chartOptions.dataLabels"
+        [plotOptions]="chartOptions.plotOptions"
+        [yaxis]="chartOptions.yaxis"
+        [xaxis]="chartOptions.xaxis"
+        [stroke]="chartOptions.stroke"
+        [grid]="chartOptions.grid"
+        [fill]="chartOptions.fill"
+        [annotations]="chartOptions.annotations"
+      ></apx-chart>
+    </div>
+  </div>
+  <div class="teabls-data mt-3 overflow-hidden">
+    <div class="flex gap-2 flex-wrap items-end">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Customer Name" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+          <ng-option [value]="1"> خيار </ng-option>
+          <ng-option [value]="1"> خيار </ng-option>
+          <ng-option [value]="1"> خيار </ng-option>
+        </ng-select>
+      </div>
+
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label">
+          {{ "Project Maneger" | translate }}</label
+        >
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          [(ngModel)]="data.selected"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <ng-option [value]="1"> خيار </ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <label
+          class="col-form-label"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: ' العميل الأعلى إيرادًا',
+            en: 'The highest paying customer'
+          }"
+        >
+        </label>
+        <input type="text" class="form-control" value="ابو احمد" readonly />
+      </div>
+
+      <div class="form-check">
+        <label
+          class="form-check-label"
+          for="allProjects"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: ' عرض جميع المشاريع',
+            en: 'Show All Projects'
+          }"
+        >
+        </label>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="allProjects"
+        />
+      </div>
+    </div>
+
+    <!-- buttons -->
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div class="w-fit">
+        <input
+          class="form-control"
+          (keyup)="applyFilter($event)"
+          placeholder="{{ 'search' | translate }}"
+          #input
+        />
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <ng-container matColumnDef="projectNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم المشروع',
+                en: 'Project Number'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ProjectNo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ProjectTime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'مدة المشروع',
+                en: 'Project Time'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.TimeStr }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ProjectPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'قيمة المشروع',
+                en: 'Project Price'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ContractValue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'مؤشر الإيراد والصرف الفعلي',
+                en: 'Actual revenue and expenditure index'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-2 py-2">
+            <div class="flex-col flex gap-2 text-white">
+              <div class="flex gap-2">
+                <div
+                  class="bg-blue-50 w-3/4 rounded-lg relative overflow-hidden"
+                >
+                  <div
+                    class="absolute h-full top-0 bg-base py-1"
+                    [style]="'width:67%'"
+                  >
+                    67%
+                    <!-- {{(element.CostE / element.ContractValue).toFixed(2) }}% -->
+                  </div>
+                </div>
+                <div class="py-1 w-1/4 rounded-lg bg-base min-w-fit px-2">
+                  {{ element.CostE - element.CostE_Credit_W }}
+                  <span
+                    [translate]="'name'"
+                    [translateParams]="{
+                      ar: ' ريال',
+                      en: ' SAR'
+                    }"
+                  ></span>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <div
+                  class="bg-orange-50 w-3/4 rounded-lg relative overflow-hidden"
+                >
+                  <div
+                    class="absolute h-full top-0 bg-orange-300 py-1"
+                    [style]="'width:50%'"
+                  >
+                    <!-- [style]="'width:' + (element.CostS_W / element.ContractValue)" -->
+                    50%
+                    <!-- {{(element.CostS_W / element.ContractValue).toFixed(2) }}% -->
+                  </div>
+                </div>
+                <div class="py-1 w-1/4 rounded-lg bg-orange-300 min-w-fit px-2">
+                  {{ element.CostS_W
+                  }}<span
+                    [translate]="'name'"
+                    [translateParams]="{
+                      ar: ' ريال',
+                      en: ' SAR'
+                    }"
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="profitability">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'نسبة الربحية',
+                en: 'profitability ratio'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{
+              (element.CostE - element.CostE_Credit_W - element.CostS_W) / 100
+            }}%
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Net">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'الصافى',
+                en: 'Net'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CostE - element.CostE_Credit_W - element.CostS_W }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="operations">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'خيارات',
+              en: 'Operations'
+            }"
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex gap-1 justify-center py-2">
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="addModal.show()"
+              >
+                <i class="fa-regular fa-plus"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="calcModal.show()"
+              >
+                <i class="fa-solid fa-calculator"></i>
+              </button>
+
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+              >
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="duration-300 hover:bg-slate-100"
+        ></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            <!-- {{ "No result found for " }} "{{ input.value }}" -->
+          </td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator #MatPaginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+<div
+  class="modal fade ngxModal"
+  bsModal
+  #calcModal="bs-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-static-name2"
+>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span
+        class="text-2xl"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'حاسبة المشروع وتوزيع النسب',
+          en: 'Project Calculator and Ratio Distribution'
+        }"
+      >
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="calcModal?.hide()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center max-h-[400px] overflow-auto">
+    <div class="text-start my-3">
+      <button
+        class="btn btn-primary"
+        (click)="addEmployee()"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'اضافة مشارك',
+          en: 'Employee Name'
+        }"
+      ></button>
+    </div>
+    <div class="overflow-auto">
+      <table class="custome-table">
+        <thead>
+          <tr>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'اسم الموظف	',
+                en: 'Employee Name'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'المدة الزمنية	',
+                en: 'Duration'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'نسبة الموظف	',
+                en: 'Employee ratio'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'راتب الموظف	',
+                en: 'Employee salary'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'التكلفة المتوقعة	',
+                en: 'Expected cost'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'خيارات',
+                en: 'Options'
+              }"
+            ></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees">
+            <td>
+              <select class="form-select" aria-label="Default select example">
+                <option selected>Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </td>
+            <td>
+              <div class="flex">
+                <input type="number" class="form-control" />
+
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>ساعه</option>
+                  <option value="1">يوم</option>
+                  <option value="2">اسبوع</option>
+                  <option value="3">شهر</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="flex">
+                <input type="text" class="form-control" />
+                <div class="bg-neutral-200 p-2 rounded-lg aspect-square">%</div>
+              </div>
+            </td>
+            <td>123</td>
+            <td>435</td>
+            <td>
+              <button class="p-2 rounded-lg text-red-500 bg-red-50">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h4
+      style="font-size: 24px; margin: 30px 0px"
+      class="font-bold text-blue-600"
+    >
+       {{'Through the data and preliminary reading of the project' | translate}}
+    </h4>
+    <div class="overflow-auto">
+      <table class="custome-table">
+        <thead>
+          <tr>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'مدة المشروع',
+                en: 'Project Time'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'قيمة المشروع',
+                en: 'Project Price'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'مصاريف التشغيل		',
+                en: 'operating expenses'
+              }"
+            ></td>
+            <td
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'حالة المشروع	',
+                en: 'Project state'
+              }"
+            ></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>11 شهر 19 يوم</td>
+            <td>1150.00</td>
+            <td>0</td>
+            <td>خاسر</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="max-w-xl mx-auto" id="chartcalc">
+      <apx-chart
+        [series]="calculatorChartOptions.series"
+        [chart]="calculatorChartOptions.chart"
+        [dataLabels]="calculatorChartOptions.dataLabels"
+        [plotOptions]="calculatorChartOptions.plotOptions"
+        [yaxis]="calculatorChartOptions.yaxis"
+        [legend]="calculatorChartOptions.legend"
+        [fill]="calculatorChartOptions.fill"
+        [stroke]="calculatorChartOptions.stroke"
+        [tooltip]="calculatorChartOptions.tooltip"
+        [xaxis]="calculatorChartOptions.xaxis"
+      ></apx-chart>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn bg-base text-white"
+      type="submit"
+      (click)="calcModal?.hide()"
+    >
+      {{ "Save" | translate }}
+    </button>
+    <button (click)="calcModal?.hide()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</div>
+
+<div
+  class="modal fade ngxModal"
+  bsModal
+  #addModal="bs-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-static-name2"
+>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span
+        class="text-2xl"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'سند صرف لمشروع رقم 2022-2',
+          en: 'Payment voucher for project no 2022-2'
+        }"
+      >
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="addModal?.hide()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center max-h-[70vh] overflow-auto">
+    <form class=" ">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div>
+          <label
+            for="Date"
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'التاريخ',
+              en: 'Date'
+            }"
+          >
+          </label>
+          <input
+            placeholder="{{ 'Chose Date' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+        <div>
+          <label
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الموافق',
+              en: 'Hijry Date'
+            }"
+          >
+          </label>
+          <input
+            placeholder="{{ 'Chose Date' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+        <div>
+          <label
+            for="Date"
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'رقم القسيمة',
+              en: 'Voucher Number'
+            }"
+          >
+          </label>
+          <input type="text" class="form-control" />
+        </div>
+        <div>
+          <label
+            for="Date"
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'عدد المسجلين',
+              en: 'Enrollment Number'
+            }"
+          >
+          </label>
+          <input type="text" class="form-control" />
+        </div>
+        <div>
+          <label
+            for="Date"
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الرقم المرجعى',
+              en: 'Reference Number'
+            }"
+          >
+          </label>
+          <input type="text" class="form-control" />
+        </div>
+        <div>
+          <label
+            for="Date"
+            class="form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'ف.الشراء',
+              en: 'Purchase invoice'
+            }"
+          >
+          </label>
+          <input type="text" class="form-control" />
+        </div>
+        <div>
+          <label
+            class="col-form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'م.التكلفة*',
+              en: 'Cost Branch'
+            }"
+          >
+          </label>
+          <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+          </ng-select>
+        </div>
+        <div>
+          <label
+            class="col-form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'نوع الدفع *',
+              en: 'Payment Type *'
+            }"
+          >
+          </label>
+          <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+            <ng-option [value]="1"> خيار </ng-option>
+          </ng-select>
+        </div>
+        <div>
+          <label
+            for="formFile"
+            class="col-form-label"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'ص.الفاتورة',
+              en: 'Invoice image'
+            }"
+          >
+          </label>
+          <input class="form-control" type="file" id="formFile" />
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 bg-blue-50 rounded-lg p-3 grid-box mt-3">
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'نوع الضريبة',
+              en: 'Tax Type *'
+            }"
+          ></label>
+
+          <div>
+            <select
+              class="form-select w-full"
+              aria-label="Default select example"
+            >
+              <option selected>Open this select menu</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'سبب الدفع *',
+              en: 'Pay Reason *'
+            }"
+          ></label>
+
+          <div class="flex w-full gap-2">
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+            >
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+            </ng-select>
+            <button (click)="clauseModal.show()" class="btn btn-primary">
+              <i class="fa-regular fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الدفع لحساب',
+              en: 'Pay To *'
+            }"
+          ></label>
+
+          <div class="flex w-full gap-2">
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+            >
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+            </ng-select>
+            <button class="btn btn-primary">
+              <i class="fa-regular fa-plus" (click)="supplierModal.show()"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'المستقبل',
+              en: 'Receiver Name'
+            }"
+          ></label>
+          <div>
+            <input type="text" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'مبلغ *',
+              en: 'Amount Of *'
+            }"
+          ></label>
+          <div class="grid grid-cols-4 gap-4">
+            <input type="text" class="form-control col-span-1" />
+            <input type="text" class="form-control col-span-3" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'المبلغ + ض.ق.المضافة',
+              en: 'Amount + VAT'
+            }"
+          ></label>
+          <div class="grid grid-cols-4 gap-2">
+            <input
+              placeholder="قيمة vat"
+              type="text"
+              class="form-control"
+              readonly
+            />
+            <input
+              placeholder="قبل vat"
+              type="text"
+              class="form-control"
+              readonly
+            />
+            <input
+              type="text"
+              placeholder="بعد vat"
+              class="form-control"
+              readonly
+            />
+            <input
+              type="text"
+              placeholder="بعد vat"
+              class="form-control"
+              readonly
+            />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'ر.ض.للمورد',
+              en: 'Supplier Tax.No'
+            }"
+          ></label>
+          <div class="grid grid-cols-2 gap-2">
+            <input placeholder="ر.ض.للمورد" type="text" class="form-control" />
+            <input placeholder="ر.الفاتورة" type="text" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'من حساب',
+              en: 'From Account'
+            }"
+          ></label>
+
+          <div class="grid grid-cols-2 gap-2">
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+            >
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+            </ng-select>
+            <input type="text" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'الى حساب',
+              en: 'To Account'
+            }"
+          ></label>
+
+          <div class="grid grid-cols-2 gap-2">
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+            >
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+
+              <ng-option [value]="1"> خيار </ng-option>
+              <ng-option [value]="1"> خيار </ng-option>
+            </ng-select>
+            <input type="text" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'من أجل',
+              en: 'This For'
+            }"
+          ></label>
+          <div>
+            <input placeholder="" type="text" class="form-control" />
+          </div>
+        </div>
+        <div>
+          <label
+            for=""
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'البيان',
+              en: 'Note'
+            }"
+          ></label>
+          <div>
+            <input placeholder="" type="text" class="form-control" />
+          </div>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 mt-3">
+        <div class="form-check w-fit">
+          <input class="form-check-input" type="checkbox" value="" id="tax" />
+          <label
+            class="form-check-label"
+            for="tax"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: ' عدم تفعيل القيمة المضافة',
+              en: 'Not activating the added value'
+            }"
+          >
+          </label>
+        </div>
+        <div class="form-check w-fit">
+          <label
+            class="form-check-label"
+            for="cost"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: ' عدم احتساب هذا السند في المصروفات',
+              en: 'Not counting this bond in expenses'
+            }"
+          >
+          </label>
+          <input class="form-check-input" type="checkbox" value="" id="cost" />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn bg-base text-white"
+      type="submit"
+      (click)="addModal?.hide()"
+    >
+      {{ "Save and carry over" | translate }}
+    </button>
+    <button
+      class="btn bg-base text-white"
+      type="submit"
+      (click)="addModal?.hide()"
+    >
+      {{ "Save" | translate }}
+    </button>
+    <button (click)="addModal?.hide()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</div>
+
+<div
+  class="modal fade ngxModal"
+  bsModal
+  #clauseModal="bs-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-static-name2"
+>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span
+        class="text-2xl"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'بند جديد',
+          en: 'new item'
+        }"
+      >
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="clauseModal?.hide()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <form #addFileType="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div class="form-group">
+        <label for="clauseNameArtxt3" class="text-right col-form-label block">
+          {{ "nameAr" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          required
+          #clauseNameAr="ngModel"
+          ngModel
+          [(ngModel)]="data.clause.NameAr"
+          class="form-control"
+          type="text"
+          id="clauseNameArtxt3"
+          name="clauseNameArtxt3"
+          autocomplete="off"
+          [placeholder]="('Write' | translate) + ' ' + ('nameAr' | translate)"
+        />
+      </div>
+      <div class="form-group">
+        <label for="CustomerNameEntxt3" class="text-right col-form-label block">
+          {{ "nameEn" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <div style="display: inline-flex; width: 100%">
+          <input
+            required
+            #clauseNameEnValue
+            #CustomerNameEn="ngModel"
+            [(ngModel)]="data.clause.NameEn"
+            ngModel
+            class="form-control"
+            type="text"
+            id="CustomerNameEntxt3"
+            name="CustomerNameEntxt3"
+            autocomplete="off"
+            [placeholder]="('Write' | translate) + ' ' + ('nameEn' | translate)"
+          />
+          <a
+            class="btn"
+            id="CopyCustomerName2"
+            (click)="clauseNameEnValue.value = clauseNameAr.value"
+            ><i class="fa fa-copy"></i
+          ></a>
+        </div>
+      </div>
+    </form>
+    <div class="max-h-80 overflow-auto px-2">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>{{ "nameAr" | translate }}</th>
+            <th>{{ "nameEn" | translate }}</th>
+            <th
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'خيارات',
+                en: 'Operations'
+              }"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let type of data.clauses">
+            <td>{{ type.NameAr }}</td>
+            <td>{{ type.NameEn || "-" }}</td>
+            <td class="flex gap-2 justify-center">
+              <button
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="
+                  data.clause.NameAr = type.NameAr;
+                  data.clause.NameEn = type.NameEn;
+                  data.clause.Id = type.PhaseDetailesId
+                "
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                (click)="deleteModal.show()"
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex gap-2 mt-3 pt-3 border-t border-neutral-300">
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        [disabled]="addFileType.invalid"
+        (click)="clauseModal?.hide()"
+      >
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="clauseModal?.hide()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade ngxModal"
+  bsModal
+  #supplierModal="bs-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-static-name2"
+>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span
+        class="text-2xl"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'مورد جديد',
+          en: 'New Supplier'
+        }"
+      >
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="supplierModal?.hide()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <form #addFileType="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div class="form-group">
+        <label for="clauseNameArtxt3" class="text-right col-form-label block">
+          {{ "nameAr" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          required
+          #suppliernameAr="ngModel"
+          ngModel
+          [(ngModel)]="data.clause.NameAr"
+          class="form-control"
+          type="text"
+          id="suppliernameAr"
+          name="suppliernameAr"
+          autocomplete="off"
+          [placeholder]="('Write' | translate) + ' ' + ('nameAr' | translate)"
+        />
+      </div>
+      <div class="form-group">
+        <label for="CustomerNameEntxt3" class="text-right col-form-label block">
+          {{ "nameEn" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <div style="display: inline-flex; width: 100%">
+          <input
+            required
+            #supplierNameEn
+            #CustomerNameEn="ngModel"
+            [(ngModel)]="data.clause.NameEn"
+            ngModel
+            class="form-control"
+            type="text"
+            id="CustomerNameEntxt3"
+            name="CustomerNameEntxt3"
+            autocomplete="off"
+            [placeholder]="('Write' | translate) + ' ' + ('nameEn' | translate)"
+          />
+          <a
+            class="btn"
+            id="CopyCustomerName2"
+            (click)="supplierNameEn.value = suppliernameAr.value"
+            ><i class="fa fa-copy"></i
+          ></a>
+        </div>
+      </div>
+      <div class="form-group">
+        <label
+          for="TaxNumber"
+          class="col-form-label"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'الرقم الضريبي',
+            en: 'Tax Number'
+          }"
+        >
+        </label>
+        <input
+          required
+          class="form-control"
+          type="text"
+          id="TaxNumber"
+          name="TaxNumber"
+          autocomplete="off"
+        />
+      </div>
+      <div class="form-group">
+        <label
+          for="Phone"
+          class="col-form-label"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'الهاتف',
+            en: 'Phone'
+          }"
+        >
+        </label>
+        <input
+          required
+          class="form-control"
+          type="text"
+          id="Phone"
+          name="Phone"
+          autocomplete="off"
+        />
+      </div>
+    </form>
+    <div class="max-h-80 overflow-auto px-2">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>{{ "nameAr" | translate }}</th>
+            <th>{{ "nameEn" | translate }}</th>
+            <th
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'خيارات',
+                en: 'Operations'
+              }"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let type of data.suppliers">
+            <td>{{ type.NameAr }}</td>
+            <td>{{ type.NameEn || "-" }}</td>
+            <td class="flex gap-2 justify-center">
+              <button
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="
+                  data.supplier.NameAr = type.NameAr;
+                  data.supplier.NameEn = type.NameEn;
+                  data.supplier.Id = type.PhaseDetailesId
+                "
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                (click)="deleteSupplierModal.show()"
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex gap-2 mt-3 pt-3 border-t border-neutral-300">
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        [disabled]="addFileType.invalid"
+        (click)="supplierModal?.hide()"
+      >
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="supplierModal?.hide()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade ngxModal center"
+  #deleteModal="bs-modal"
+  bsModal
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirmDelete()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="deleteModal.hide()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade ngxModal center"
+  #deleteSupplierModal="bs-modal"
+  bsModal
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirmDelete()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="deleteSupplierModal.hide()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,547 @@
+<div class="fiscal-years">
+  <app-navigator [title]="title"></app-navigator>
+  <div class="head flex gap-2 flex-wrap items-end justify-between">
+    <!-- all buttons  -->
+    <div class="btns mb-3 w-100">
+      <div class="row d-md-flex justify-content-end">
+        <button
+          type="button"
+          class="flex gap-1 btn bg-base text-white mb-3 col-md-2 ms-3"
+          (click)="open(RotateBalancesModal)"
+        >
+          {{ "RotateBalances" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <!--tabset  -->
+      <div class="col-xxl-12 col-md-4 col-sm-6 mb-3">
+        <mat-tab-group class="w-100">
+          <mat-tab
+            label="{{ 'AddFiscalYear' | translate }}"
+            class="bg-warning w-50"
+          >
+            <ng-template matTabContent>
+              <!-- Tab 1 content goes here -->
+              <!-- inputs  -->
+              <div class="row align-items-center">
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "Name" | translate }}</label
+                    >
+
+                    <input
+                      type="text "
+                      class="w-full p-2 inputType"
+                      name="Name"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "year" | translate }}</label
+                    >
+                    <div class="container">
+                      <input
+                        autocomplete="off"
+                        class="form-control"
+                        name="date"
+                        bsDatepicker
+                        [bsConfig]="{
+                          dateInputFormat: 'YYYY',
+                          minMode: 'year'
+                        }"
+                        (onShown)="onOpenCalendar($event)"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "search" | translate }}</label
+                    >
+
+                    <input
+                      type="text "
+                      class="w-full p-2 inputType"
+                      name="search"
+                    />
+                  </div>
+                </div>
+
+                <!-- all buttons  -->
+                <div class="btns mb-3 w-100">
+                  <div class="row d-md-flex justify-content-end">
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-base text-white mb-3 col-md-2 ms-2"
+                    >
+                      {{ "save" | translate }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-danger text-white mb-3 col-md-2 ms-3"
+                    >
+                      {{ "close" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- table -->
+              <div class="overflow-auto mt-4">
+                <table
+                  mat-table
+                  [dataSource]="projectsDataSource"
+                  matSort
+                  class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+                >
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Name" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Name }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="year">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "year" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.year }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="operations">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [translate]="'name'"
+                      [translateParams]="{
+                        ar: 'خيارات',
+                        en: 'Operations'
+                      }"
+                    ></th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="flex gap-1 justify-center py-2">
+                        <button
+                          class="min-w-max p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                        >
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                          (click)="open(deleteModal)"
+                        >
+                          <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="projectDisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let row;
+                      columns: projectDisplayedColumns;
+                      let i = index
+                    "
+                    [class.bg-gray-100]="i % 2 === 0"
+                    [class.bg-white]="i % 2 === 1"
+                  ></tr>
+                </table>
+              </div>
+
+              <div class="container-fluid">
+                <h3 class="mt-3">{{ "ChooseFiscalYear" | translate }}</h3>
+                <div class="row align-items-center me-3">
+                  <div class="col-xxl-3 col-md-4 col-sm-6 mb-0 mb-md-3">
+                    <div class="form-group text-center">
+                      <label class="col-form-label">
+                        {{ "current active year" | translate }}</label
+                      >
+                      <ng-select
+                        class="w-full p-0"
+                        placeholder="{{ 'Chose' | translate }}"
+                        ngModel
+                        name="FiscalYear"
+                      >
+                        <ng-option
+                          *ngFor="let user of users"
+                          [value]="user.id"
+                          >{{ user.Name }}</ng-option
+                        >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-xxl-3 col-md-4 col-sm-6 mb-0 mb-md-3">
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-base text-white mt-5 mb-2"
+                    >
+                      {{ "confirem" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab
+            label="{{ 'AddPowersYears' | translate }}"
+            class="bg-warning w-50"
+          >
+            <ng-template matTabContent>
+              <!-- Tab 1 content goes here -->
+              <!-- inputs  -->
+              <div class="row align-items-center">
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "user" | translate }}</label
+                    >
+
+                    <input
+                      placeholder="{{ 'Chose' | translate }}"
+                      type="text "
+                      class="w-full p-2 inputType"
+                      name="user"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "Branch" | translate }}</label
+                    >
+
+                    <input
+                      type="text "
+                      placeholder="{{ 'Chose' | translate }}"
+                      class="w-full p-2 inputType"
+                      name="Branch"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "year" | translate }}</label
+                    >
+                    <div
+                      style="overflow-y: scroll; height: 80px"
+                      class="border border-3 p-2"
+                    >
+                      <div class="d-flex" *ngFor="let year of years">
+                        <input
+                          type="checkbox"
+                          name="date"
+                          id="date"
+                          ngModel
+                          [value]="year"
+                        />
+                        <label for="date" class="mx-2">{{ year.Name }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xxl-4 col-md-4 col-sm-6 mb-3">
+                  <div class="form-group">
+                    <label class="col-form-label">
+                      {{ "search" | translate }}</label
+                    >
+                    <input
+                      type="text "
+                      class="w-full p-2 inputType"
+                      name="search"
+                    />
+                  </div>
+                </div>
+
+                <!-- all buttons  -->
+                <div class="btns mb-3 w-100">
+                  <div class="row d-md-flex justify-content-end">
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-base text-white mb-3 col-md-2 ms-2"
+                    >
+                      {{ "save" | translate }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-danger text-white mb-3 col-md-2 ms-3"
+                    >
+                      {{ "close" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- table -->
+              <div class="overflow-auto mt-4">
+                <table
+                  mat-table
+                  [dataSource]="projectsDataSource2"
+                  matSort
+                  class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+                >
+                  <ng-container matColumnDef="Employee">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Employee" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Employee }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Job">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Job" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Job }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Branch">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Branch" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.Branch }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="FiscalYear">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "FiscalYear" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.FiscalYear }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="operations">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [translate]="'name'"
+                      [translateParams]="{
+                        ar: 'خيارات',
+                        en: 'Operations'
+                      }"
+                    ></th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="flex gap-1 justify-center py-2">
+                        <button
+                          class="min-w-max p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                        >
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                          (click)="open(deleteModal)"
+                        >
+                          <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="projectDisplayedColumns2"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let row;
+                      columns: projectDisplayedColumns2;
+                      let i = index
+                    "
+                    [class.bg-gray-100]="i % 2 === 0"
+                    [class.bg-white]="i % 2 === 1"
+                  ></tr>
+                </table>
+              </div>
+
+              <div class="container-fluid">
+                <h3 class="mt-3">{{ "ChooseFiscalYear" | translate }}</h3>
+                <div class="row align-items-center me-3">
+                  <div class="col-xxl-3 col-md-4 col-sm-6 mb-0 mb-md-3">
+                    <div class="form-group text-center">
+                      <label class="col-form-label">
+                        {{ "current active year" | translate }}</label
+                      >
+                      <ng-select
+                        class="w-full p-0"
+                        placeholder="{{ 'Chose' | translate }}"
+                        ngModel
+                        name="FiscalYear"
+                      >
+                        <ng-option
+                          *ngFor="let user of users"
+                          [value]="user.id"
+                          >{{ user.Name }}</ng-option
+                        >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-xxl-3 col-md-4 col-sm-6 mb-0 mb-md-3">
+                    <button
+                      type="button"
+                      class="flex gap-1 btn bg-base text-white mt-5 mb-2"
+                    >
+                      {{ "confirem" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد حذف هذا العنصر ؟',
+        en: 'Do you want to delete this item?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "close" | translate }}
+      </button>
+
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- RotateBalancesModal  -->
+<ng-template #RotateBalancesModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "RotateBalances" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container>
+      <form class="" #smsForm="ngForm">
+        <div class="row align-items-end mb-4 mx-3 justify-content-center">
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label
+                for="RotateBalancesYear"
+                class="text-right col-form-label block"
+              >
+                {{ "RotateBalancesYear" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.user"
+                [ngModelOptions]="{ standalone: true }"
+                name="user"
+                disabled
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label
+                for="RetrievingBalancesYear"
+                class="text-right col-form-label block"
+              >
+                {{ "RetrievingBalancesYear" | translate }}
+              </label>
+              <input required class="form-control" type="text" disabled />
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- footer -->
+    </ng-container>
+
+    <div class="d-flex justify-content-end">
+      <div class="pt-3">
+        <button
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "StartRecyclingProcess" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3 mx-2">
+        <button
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "RecycleRecovery" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3">
+        <button (click)="modal?.dismiss()" class="btn btn-secondary">
+          {{ "close" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

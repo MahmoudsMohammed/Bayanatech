@@ -1,0 +1,24 @@
+<ng-container *ngIf="!deleted">
+  <div class="card d-flex">
+    <div class="info p-2 flex-grow-1 d-flex flex-col">
+      <p class="flex-grow-1 d-flex justify-center align-items-center">
+        {{ taskName }}
+      </p>
+      <div class="d-flex align-items-center justify-between">
+        <span>10 Employee</span>
+        <button>All Employees <i class="fa-solid fa-users"></i></button>
+      </div>
+    </div>
+    <div class="actions d-flex">
+      <a
+        class="flex-grow-1 p-3"
+        [routerLink]="['/attendance/addAttendance/', taskName]"
+      >
+        <i class="fa-solid fa-pen-to-square"></i> Update
+      </a>
+      <button class="flex-grow-1 p-3" (click)="deleted = true">
+        <i class="fa-solid fa-trash"></i> Delete
+      </button>
+    </div>
+  </div>
+</ng-container>

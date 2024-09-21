@@ -1,0 +1,59 @@
+::ng-deep {
+  .controler {
+    > button {
+      @apply flex items-center gap-2;
+    }
+  }
+  .mat-paginator-container {
+    justify-content: space-between !important;
+    padding: 15px 10px 0px !important;
+  }
+  .mat-paginator-range-actions {
+    direction: inherit !important;
+  }
+  .mat-paginator-range-label {
+    direction: initial;
+  }
+  .mat-tab-group {
+    padding-bottom: 15px;
+  }
+}
+
+.timeInput {
+  width: 240px;
+  text-align: center;
+}
+
+.modal-dialog {
+  &.addFile {
+    min-width: max-content;
+    .modal-content {
+      width: 700px;
+
+      @media (max-width: 768px) {
+        width: 550px;
+      }
+      @media (max-width: 575px) {
+        width: 300px;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .modal-dialog {
+    &.addFile {
+      min-width: max-content;
+      .modal-content {
+        width: 700px;
+
+        @media (max-width: 768px) {
+          width: 550px;
+        }
+        @media (max-width: 575px) {
+          width: 300px;
+        }
+      }
+    }
+  }
+}

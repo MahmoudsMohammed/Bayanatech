@@ -1,0 +1,166 @@
+.end-service-reward {
+    min-height: 100vh;
+}
+
+.end-service-reward .main-info ul {
+    min-height: 185px;
+}
+
+.end-service-reward .main-info ul.single-item li {
+    align-items: stretch;
+    min-height: 185px;
+}
+
+.end-service-reward .main-info ul.single-item li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.end-service-reward .main-info ul li,
+.end-service-reward .summary ul li {
+    border-inline: 2px solid #000;
+    border-top: 2px solid #000;
+    display: flex;
+    align-items: stretch;
+    justify-content: start;
+}
+
+.end-service-reward .main-info ul li:last-of-type,
+.end-service-reward .summary ul li:last-of-type {
+    border-bottom: 2px solid #000;
+}
+
+.end-service-reward .main-info ul li.nested {
+    line-height: 1.7em;
+}
+
+.end-service-reward .main-info ul li span,
+.end-service-reward .summary ul li span {
+    padding: 8px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
+    min-width: 200px;
+    font-weight: 500;
+    font-size: 13px;
+    max-width: 225px;
+}
+
+.end-service-reward .main-info ul li span.label,
+.end-service-reward .summary ul li span.label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-inline-end: 2px solid #000;
+    background-color: #d9d9d9;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.end-service-reward .main-info ul:first-of-type li span.label,
+.end-service-reward .main-info ul:last-of-type li span.label,
+.end-service-reward .summary ul:first-of-type li span.label,
+.end-service-reward .summary ul:last-of-type li span.label {
+    min-width: 90px;
+}
+
+.end-service-reward .main-info ul:nth-of-type(2) li span.label {
+    min-width: 240px;
+}
+
+.end-service-reward table {
+    width: 100%;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    min-width: max-content;
+}
+
+.end-service-reward table thead tr th {
+    background-color: #d9d9d9;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 2px;
+    color: #272727;
+    border-inline-start: 1.5px solid #272727;
+    border-block: 1.5px solid #272727;
+}
+
+.end-service-reward table thead tr:first-of-type th {
+    padding-block: 10px !important;
+}
+
+.end-service-reward table thead tr th:last-of-type {
+    border-inline-end: 1.5px solid #272727;
+}
+
+.end-service-reward table tr th.xsmall-cell,
+.end-service-reward table tr td.xsmall-cell {
+    max-width: 40px !important;
+}
+
+.end-service-reward table tr th.small-cell,
+.end-service-reward table tr td.small-cell {
+    max-width: 60px !important;
+}
+
+.end-service-reward table tr th.medium-cell,
+.end-service-reward table tr td.medium-cell {
+    max-width: 90px !important;
+}
+
+.end-service-reward table tr th.no-border,
+.end-service-reward table tr td.no-border {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.end-service-reward table tbody tr td,
+.end-service-reward table tfoot tr td {
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 2px;
+    color: #272727;
+    border-inline-start: 1.5px solid #272727;
+    border-bottom: 1.5px solid #272727;
+}
+
+.end-service-reward table tbody tr td:last-of-type,
+.end-service-reward table tfoot tr td:last-of-type,
+.end-service-reward table tr td.special {
+    border-inline-end: 1.5px solid #272727;
+}
+
+.end-service-reward table tr td.gray {
+    background-color: #d9d9d9 !important;
+}
+
+.end-service-reward table tr td.blue,
+.end-service-reward .summary .blue {
+    background-color: #b8cde1 !important;
+}
+
+.end-service-reward table tr td.lightBlue {
+    background-color: #dce6f0 !important;
+}
+
+.end-service-reward table tr td.green {
+    background-color: #d8e4c0 !important;
+}
+
+.end-service-reward table tr td.lightGreen {
+    background-color: #edf1e2 !important;
+}
+
+.end-service-reward .summary {
+    padding-inline-start: 150px;
+}
+
+@media (max-width:992px) {
+    .end-service-reward .summary {
+        padding-inline-start: 0px;
+    }
+} 

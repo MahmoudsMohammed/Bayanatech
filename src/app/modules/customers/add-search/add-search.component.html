@@ -1,0 +1,4339 @@
+<div class="add-search pb-4">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="tables-data mt-3 overflow-hidden">
+    <div class="btn-group gap-2 flex-wrap">
+      <label
+        class="btn btn-primary"
+        [(ngModel)]="data.type"
+        (click)="setCustomersType(0)"
+        btnRadio="0"
+        tabindex="0"
+        role="button"
+        ><i class="fa-solid fa-users"></i>
+        <span
+          class="text-sm"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'كل العملاء ',
+            en: 'All Customer Badge'
+          }"
+        ></span>
+        <span class="text-xs">{{ data.numbers.all }}</span></label
+      >
+      <label
+        class="btn btn-primary"
+        [(ngModel)]="data.type"
+        (click)="setCustomersType(1)"
+        btnRadio="1"
+        tabindex="0"
+        role="button"
+      >
+        <i class="fa fa-user-group text-sm"></i>
+        <span
+          class="text-sm"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'المواطنون',
+            en: 'Citizens'
+          }"
+        ></span>
+        <span class="text-xs">{{ data.numbers.citizens }}</span></label
+      >
+      <label
+        class="btn btn-primary"
+        [(ngModel)]="data.type"
+        (click)="setCustomersType(2)"
+        btnRadio="2"
+        tabindex="0"
+        role="button"
+      >
+        <i class="fa fa-building text-sm"></i>
+        <span
+          class="text-sm"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: ' مستثمرون وشركات',
+            en: ' Investor Company Badge  '
+          }"
+        ></span>
+        <span class="text-xs">{{ data.numbers.investor }}</span></label
+      >
+      <label
+        class="btn btn-primary"
+        [(ngModel)]="data.type"
+        (click)="setCustomersType(3)"
+        btnRadio="3"
+        tabindex="0"
+        role="button"
+      >
+        <i class="fa fa-city"></i>
+        <span
+          class="text-sm"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'جهة حكومية',
+            en: 'Government Badge'
+          }"
+        ></span>
+        <span class="text-xs">{{ data.numbers.government }}</span></label
+      >
+    </div>
+
+    <!-- buttons -->
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div class="w-fit">
+        <input
+          class="form-control"
+          (keyup)="applyFilter($event)"
+          placeholder="{{ 'search' | translate }}"
+          #input
+        />
+      </div>
+      <div class="flex gap-2 controler">
+        <button
+          class="flex gap-1 btn btn-primary"
+          (click)="open(dataModal, null, 'dataModal')"
+        >
+          <span
+            class="hidden md:block"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'عميل جديد ',
+              en: 'New Customer '
+            }"
+          ></span>
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
+        <button
+          class="flex gap-1 btn btn-secondary"
+          (click)="searchBox.open = !searchBox.open"
+        >
+          <span
+            class="hidden md:block"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'بحث',
+              en: 'Search'
+            }"
+          >
+          </span>
+          <i class="fa-solid fa-user-tag"></i>
+        </button>
+        <button class="flex gap-1 btn btn-warning">
+          <span
+            class="hidden md:block"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'تصدير ملف إكسل',
+              en: 'Export To Excel'
+            }"
+          ></span>
+          <i class="fa-solid fa-file-export"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- search box -->
+    <form
+      class="flex flex-wrap gap-2 items-end my-3"
+      #searchForm="ngForm"
+      [@fade]
+      *ngIf="searchBox.open"
+    >
+      <div class="flex-grow">
+        <label
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'نوع البحث',
+            en: 'Search Type'
+          }"
+        >
+        </label>
+        <ng-select
+          class="w-full p-0 mt-2.5"
+          [(ngModel)]="searchBox.searchType"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <ng-option
+            *ngFor="let type of searchBox.searchTypes"
+            [value]="type"
+            [translate]="'name'"
+            [translateParams]="{
+              ar: type.name.ar,
+              en: type.name.en
+            }"
+          ></ng-option>
+        </ng-select>
+      </div>
+
+      <div *ngIf="searchBox.searchType" [@fade]>
+        <label
+          for="searchBox"
+          class="form-label"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: searchBox.searchType.name.ar,
+            en: searchBox.searchType.name.en
+          }"
+        ></label>
+        <input
+          type="email"
+          class="form-control"
+          id="searchBox"
+          placeholder="{{ searchBox.searchType.en | translate }}"
+        />
+      </div>
+      <button
+        class="flex gap-1 btn btn-secondary"
+        style="display: flex"
+        type="submit"
+      >
+        <span
+          class="hidden md:block"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'بحث',
+            en: 'Search'
+          }"
+        >
+        </span>
+        <i class="fa-solid fa-user-tag"></i>
+      </button>
+    </form>
+
+    <!-- table -->
+    <div class="overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'اسم العميل',
+                en: 'Customer Name'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <span [translate]="'name'" [translateParams]="{
+        ar:element.name.ar,
+       en: element.name.en
+      }"></span> -->
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: element.CustomerNameAr,
+                en: element.CustomerNameEn
+              }"
+            ></span>
+          </td>
+        </ng-container>
+
+        <!-- nationalId Column -->
+        <ng-container matColumnDef="nationalId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم الهوية',
+                en: 'National Number'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerNationalId }}
+          </td>
+        </ng-container>
+
+        <!-- customerType Column -->
+        <ng-container matColumnDef="customerType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'نوع العميل',
+                en: 'CustomerType'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerTypeName }}
+          </td>
+        </ng-container>
+        <!-- email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'البريد الالكتروني',
+                en: 'Email'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerEmail }}
+          </td>
+        </ng-container>
+        <!-- phone Column -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم الهاتف',
+                en: 'Phone Number'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerPhone }}
+          </td>
+        </ng-container>
+        <!-- mobile Column -->
+        <ng-container matColumnDef="mobile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم الجوال',
+                en: 'Mobile Number'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerMobile }}
+          </td>
+        </ng-container>
+        <!-- operations Column -->
+        <ng-container matColumnDef="operations">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'خيارات',
+              en: 'Operations'
+            }"
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex gap-1 justify-center py-2">
+              <button
+                class="min-w-max p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="open(dataModal, element, 'dataModal')"
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="open(deleteModal)"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="
+                  open(sendEmail, element, 'sendEmail'); uploadedFiles = []
+                "
+              >
+                <i class="fa-solid fa-at"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="open(sendSms, element, 'sendSms')"
+              >
+                <i class="fa-solid fa-comment-sms"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="open(addFile, element, 'addFile')"
+              >
+                <i class="fa-solid fa-upload"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="duration-300 hover:bg-slate-100"
+        ></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "No result found for " }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+<!-- dataModal  -->
+<ng-template #dataModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ modalDetails.type | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+      <form class="modal-form" addForm="ngForm">
+        <div class="mb-3" *ngIf="!modalDetails.Id">
+          <div class="form-inline d-flex align-items-center col-span-4">
+            <div
+              class="btn-group gap-2 flex-wrap"
+              [ngModelOptions]="{ standalone: true }"
+              btnRadioGroup
+              [(ngModel)]="modalDetails.CustomerTypeId"
+            >
+              <label class="btn bg-base text-white mb-0" btnRadio="1">
+                <i class="fa fa-user-group text-sm"></i>
+                <span
+                  class="text-sm"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'مواطن',
+                    en: 'Citizen'
+                  }"
+                ></span>
+              </label>
+              <label class="btn bg-base text-white mb-0" btnRadio="2">
+                <i class="fa fa-building text-sm"></i>
+                <span
+                  class="text-sm"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: ' مستثمرون وشركات',
+                    en: ' Investor Company Badge  '
+                  }"
+                ></span>
+              </label>
+              <label class="btn bg-base text-white mb-0" btnRadio="3">
+                <i class="fa fa-city"></i>
+                <span
+                  class="text-sm"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'جهة حكومية',
+                    en: 'Government Badge'
+                  }"
+                ></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <!-- name -->
+          <div class="form-group">
+            <label for="CustomerNameArtxt3" class="col-form-label">
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 1">
+                {{ "Client Name (Arabic)" | translate }}
+              </ng-container>
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 2">
+                {{ "Company Name (Arabic)" | translate }}
+              </ng-container>
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 3">
+                {{ "Entity Name (Arabic)" | translate }}
+              </ng-container>
+              <span class="text-danger">*</span></label
+            >
+            <input
+              #CustomerNameAr="ngModel"
+              ngModel
+              [(ngModel)]="modalDetails.CustomerNameAr"
+              class="form-control"
+              type="text"
+              id="CustomerNameArtxt3"
+              name="CustomerNameArtxt3"
+              autocomplete="off"
+              [placeholder]="
+                ('Write' | translate) +
+                ' ' +
+                ((modalDetails.CustomerTypeId == 1
+                  ? 'Client Name (Arabic)'
+                  : modalDetails.CustomerTypeId == 2
+                  ? 'Company Name (Arabic)'
+                  : 'Entity Name (Arabic)'
+                ) | translate)
+              "
+            />
+          </div>
+          <div class="form-group">
+            <label for="CustomerNameEntxt3" class="col-form-label">
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 1">
+                {{ "Client Name (English)" | translate }}
+              </ng-container>
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 2">
+                {{ "Company Name (English)" | translate }}
+              </ng-container>
+              <ng-container *ngIf="modalDetails.CustomerTypeId == 3">
+                {{ "Entity Name (English)" | translate }}
+              </ng-container>
+              <span class="text-danger">*</span></label
+            >
+            <div style="display: inline-flex; width: 100%">
+              <input
+                #CustomerNameEnValue
+                #CustomerNameEn="ngModel"
+                ngModel
+                [(ngModel)]="modalDetails.CustomerNameEn"
+                class="form-control"
+                type="text"
+                id="CustomerNameEntxt3"
+                name="CustomerNameEntxt3"
+                autocomplete="off"
+                [placeholder]="
+                  ('Write' | translate) +
+                  ' ' +
+                  ((modalDetails.CustomerTypeId == 1
+                    ? 'Client Name (English)'
+                    : modalDetails.CustomerTypeId == 2
+                    ? 'Company Name (English)'
+                    : 'Entity Name (English)'
+                  ) | translate)
+                "
+              />
+              <a
+                class="btn"
+                id="CopyCustomerName2"
+                (click)="CustomerNameEnValue.value = CustomerNameAr.value"
+                ><i class="fa fa-copy"></i
+              ></a>
+            </div>
+          </div>
+
+          <!-- governate only -->
+          <div class="form-group" *ngIf="modalDetails.CustomerTypeId == 3">
+            <label for="ResponsiblePersontxt" class="col-form-label"
+              >{{ "Responsible Person" | translate
+              }}<span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="ResponsiblePersontxt"
+              autocomplete="off"
+              name="ResponsiblePersontxt"
+              #ResponsiblePerson="ngModel"
+              ngModel
+              [(ngModel)]="modalDetails.ResponsiblePerson"
+              placeholder="{{ 'Write' | translate }} {{
+                'Responsible Person' | translate
+              }} "
+            />
+          </div>
+          <!-- copmpany  only -->
+
+          <ng-container *ngIf="modalDetails.CustomerTypeId == 2">
+            <div class="form-group">
+              <label for="GeneralManager" class="col-form-label"
+                >{{ "General Manager" | translate
+                }}<span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="GeneralManager"
+                autocomplete="off"
+                name="GeneralManager"
+                #GeneralManager="ngModel"
+                ngModel
+                [(ngModel)]="modalDetails.GeneralManager"
+                placeholder="{{ 'Write' | translate }} {{
+                  'General Manager' | translate
+                }} "
+              />
+            </div>
+            <div class="form-group">
+              <label for="CommercialActivitytxt" class="col-form-label">
+                {{ "Commercial Activity" | translate
+                }}<span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                [(ngModel)]="modalDetails.CommercialActivity"
+                class="form-control"
+                id="CommercialActivitytxt"
+                autocomplete="off"
+                name="CommercialActivitytxt"
+                placeholder="{{ 'Commercial Activity' | translate }}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="CommercialRegistertxt" class="col-form-label"
+                >{{ "Commercial Register" | translate
+                }}<span class="text-danger">*</span></label
+              >
+              <input
+                type="number"
+                [(ngModel)]="modalDetails.CommercialRegister"
+                autocomplete="off"
+                class="form-control"
+                id="CommercialRegistertxt"
+                name="CommercialRegistertxt"
+                placeholder="{{ 'Commercial Register' | translate }}"
+              /><span> </span>
+            </div>
+          </ng-container>
+
+          <!-- citizens only  -->
+          <ng-container *ngIf="modalDetails.CustomerTypeId == 1">
+            <div class="form-group">
+              <label for="CustomerNationalIdtxt" class="col-form-label">{{
+                "NationalId" | translate
+              }}</label>
+              <input
+                class="form-control"
+                type="text"
+                id="CustomerNationalIdtxt"
+                name="CustomerNationalIdtxt"
+                autocomplete="off"
+                [(ngModel)]="modalDetails.Issuer"
+                placeholder="{{ 'Write' | translate }} {{
+                  'NationalId' | translate
+                }}"
+              />
+            </div>
+            <div class="inline-flex gap-1 w-full items-end">
+              <div class="flex-grow">
+                <label class="col-form-label">
+                  {{ "Issuer" | translate }}</label
+                >
+                <ng-select
+                  class="w-full p-0"
+                  placeholder="{{ 'Issuer' | translate }}"
+                  [(ngModel)]="modalDetails.NationalIdSource"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                  <ng-option
+                    *ngFor="let city of data.cities"
+                    [value]="city.id"
+                    >{{ city.Name }}</ng-option
+                  >
+                </ng-select>
+              </div>
+              <button
+                class="btn bg-base text-white"
+                (click)="modal?.close(); open(issuerModal)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </ng-container>
+          <!-- Branch  -->
+          <div>
+            <label class="col-form-label">
+              {{ "Customer Branch" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Customer Branch' | translate }}"
+              [(ngModel)]="modalDetails.BranchId"
+              (ngModelChange)="getBranchAccount($event)"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option
+                *ngFor="let branch of data.branches"
+                [value]="branch.id"
+                >{{ branch.Name }}</ng-option
+              >
+            </ng-select>
+          </div>
+          <div class="form-group">
+            <label for="example-text-input" class="col-form-label"
+              >{{ "Branch Account" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              [value]="
+                modalDetails?.CustMainAccByBranchId?.Code +
+                '-' +
+                modalDetails?.CustMainAccByBranchId?.NameAr
+              "
+              type="text"
+              id="BranchIAccTxttxt3"
+              name="BranchIAccTxttxt3"
+              readonly
+              autocomplete="off"
+              placeholder="{{ 'Branch Account' | translate }}"
+            />
+          </div>
+
+          <!-- contact  -->
+          <div class="form-group">
+            <label for="CustomerPhonetxt3" class="col-form-label">
+              {{ "Phone Number" | translate }}
+            </label>
+            <input
+              type="text"
+              autocomplete="off"
+              class="form-control"
+              id="CustomerPhonetxt3"
+              name="CustomerPhonetxt3"
+              placeholder="{{ 'Phone Number' | translate }} "
+            />
+          </div>
+          <div class="form-group">
+            <label for="CustomerMobiletxt3" class="col-form-label">
+              {{ "Mobile Number" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              autocomplete="off"
+              class="form-control"
+              id="CustomerMobiletxt3"
+              name="CustomerMobiletxt3"
+              placeholder="{{ 'Mobile Number' | translate }} "
+            />
+          </div>
+          <div class="form-group">
+            <label for="CustomerExternalTelephonetxt3" class="col-form-label">
+              {{ "Additional Phone" | translate }}
+            </label>
+            <input
+              type="text"
+              autocomplete="off"
+              class="form-control"
+              id="CustomerExternalTelephonetxt3"
+              name="CustomerExternalTelephonetxt3"
+              placeholder=" {{ 'Additional Phone' | translate }}"
+            />
+          </div>
+          <div class="form-group">
+            <label for="CustomerEmailtxt3" class="col-form-label">
+              {{ "Email" | translate }}
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              id="CustomerEmailtxt3"
+              autocomplete="off"
+              name="CustomerEmailtxt3"
+              placeholder=" {{ 'Email' | translate }}"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerCommertialRegistrytxt3" class="col-form-label">
+              {{ "Commerial Registration" | translate }}</label
+            >
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerCommertialRegistrytxt3"
+              name="CustomerCommertialRegistrytxt3"
+              autocomplete="off"
+              placeholder="{{ 'Commerial Registration' | translate }}"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerPostalCodetxt3" class="col-form-label">
+              {{ "Postal Code" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerPostalCodetxt3"
+              name="CustomerPostalCodetxt3"
+              placeholder="{{ 'Postal Code' | translate }}"
+              [(ngModel)]="modalDetails.PostalCodeFinal"
+              placeholder="Postal Code"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerCountrytxt3" class="col-form-label">
+              {{ "Country" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerCountrytxt3"
+              name="CustomerCountrytxt3"
+              placeholder="{{ 'Country' | translate }}"
+              [(ngModel)]="modalDetails.Country"
+              value="المملكة العربية السعودية"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerNeighborhoodtxt3" class="col-form-label">
+              {{ "Neighborhood" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerNeighborhoodtxt3"
+              name="CustomerNeighborhoodtxt3"
+              placeholder="{{ 'Neighborhood' | translate }}"
+              [(ngModel)]="modalDetails.Neighborhood"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerStreetNametxt3" class="col-form-label">
+              {{ "Street Name" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerStreetNametxt3"
+              name="CustomerStreetNametxt3"
+              placeholder="{{ 'Street Name' | translate }}"
+              [(ngModel)]="modalDetails.StreetName"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerBuildingNumbertxt3" class="col-form-label">
+              {{ "BuildingNumber" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="CustomerBuildingNumbertxt3"
+              name="CustomerBuildingNumbertxt3"
+              placeholder="{{ 'BuildingNumber' | translate }}"
+              [(ngModel)]="modalDetails.BuildingNumber"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerAddresstxt3" class="col-form-label">
+              {{ "Address" | translate }}
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="CustomerAddresstxt3"
+              autocomplete="off"
+              name="CustomerAddresstxt3"
+              placeholder="{{ 'Address' | translate }}"
+              [(ngModel)]="modalDetails.CustomerAddress"
+            />
+          </div>
+
+          <div>
+            <label class="col-form-label">
+              {{ "Area" | translate }}
+            </label>
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Area' | translate }}"
+              [(ngModel)]="modalDetails.CityId"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let city of data.cities" [value]="city.id">{{
+                city.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div>
+          <div class="form-group col-span-4">
+            <label for="example-text-input" class="col-form-label">{{
+              "Notes" | translate
+            }}</label>
+            <textarea
+              class="form-control autosizeme"
+              style="
+                border: 1px solid #b0b1b2;
+                border-radius: 6px !important;
+                padding: 5px 6px;
+              "
+              cols="30"
+              rows="4"
+              id="Notestxt3"
+              autocomplete="off"
+              name="Notestxt3"
+              placeholder="Notes"
+            ></textarea>
+          </div>
+        </div>
+        <div>
+          <div class="col-span-4 w-fit form-check my-3">
+            <label class="form-check-label" for="AgencData">{{
+              "Agency Data" | translate
+            }}</label>
+            <input
+              [(ngModel)]="modalDetails.AgencData"
+              [ngModelOptions]="{ standalone: true }"
+              [checked]="modalDetails.AgencData || modalDetails.AgentName"
+              type="checkbox"
+              class="form-check-input"
+              id="AgencData"
+            />
+          </div>
+        </div>
+        <ng-container *ngIf="modalDetails.AgencData || modalDetails.AgentName">
+          <div [@fade]>
+            <div class="form-group">
+              <label for="AgentNametxt1" class="col-form-label">
+                {{ "Agent Name" | translate }}
+                <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="AgentNametxt1"
+                [(ngModel)]="modalDetails.AgentName"
+                autocomplete="off"
+                name="AgentNametxt1"
+                placeholder="{{ 'Agent Name' | translate }}"
+              />
+            </div>
+            <div>
+              <label class="col-form-label">
+                {{ "Agent Type" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Agent Type' | translate }}"
+                [(ngModel)]="modalDetails.AgentType"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <ng-option
+                  [value]="1"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'مندوب',
+                    en: 'Delegate'
+                  }"
+                ></ng-option>
+                <ng-option
+                  [value]="2"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'وكيل',
+                    en: 'Agent'
+                  }"
+                ></ng-option>
+              </ng-select>
+            </div>
+            <div class="form-group" [@fade] *ngIf="modalDetails.AgentType == 2">
+              <label for="AgentNumbertxt" class="col-form-label">{{
+                "Agent Number" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                id="AgentNumbertxt"
+                name="AgentNumbertxt"
+                placeholder="{{ 'Agent Number' | translate }}"
+                maxlength="10"
+                [(ngModel)]="modalDetails.AgentNumber"
+              />
+            </div>
+          </div>
+          <div class="upload">
+            <file-upload [control]="control">
+              <ng-template
+                let-isFileDragDropAvailable="isFileDragDropAvailable"
+                #placeholder
+              >
+                <div *ngIf="control.size === 0">
+                  <div class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                      />
+                    </svg>
+                  </div>
+
+                  <div class="upload-text">
+                    {{ "Add Image" | translate }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template
+                let-i="index"
+                let-file="file"
+                let-control="control"
+                #item
+              >
+                <div class="overlay">
+                  <span
+                    class="delete-button"
+                    (click)="control.removeFile(file)"
+                  >
+                    <svg viewBox="0 0 448 512">
+                      <path
+                        d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                      ></path>
+                    </svg>
+                  </span>
+                  <img *ngIf="control.valid" [src]="uploadedFile | async" />
+                </div>
+              </ng-template>
+            </file-upload>
+          </div>
+        </ng-container>
+      </form>
+      <div
+        class="flex flex-wrap items-end border-t justify-between pt-2 border-neutral-300"
+      >
+        <div *ngIf="modalDetails.AddUser" class="flex gap-2 items-center">
+          <img
+            class="w-20 aspect-square rounded-full object-cover"
+            [src]="'https://tameercloud.com' + modalDetails.AddedcustomerImg"
+            alt=""
+          />
+          <div class="flex flex-col gap-2">
+            <span>{{ "Data Entry" | translate }}</span>
+            <div class="flex flex-col">
+              <span>{{ modalDetails.AddUser }}</span>
+              <span>{{ getDate(modalDetails.AddDate) | date : "short" }}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="text-red-500">{{ "required inputs" | translate }}</span>
+          <div class="flex gap-2 items-center mt-2">
+            <i class="fa-solid fa-mobile-screen text-base w-10"></i>
+            <span>{{ "Phone Number" | translate }}</span>
+          </div>
+          <div class="flex gap-2">
+            <i class="fa-solid fa-at text-base w-10"></i>
+            <span>{{ "Email" | translate }}</span>
+          </div>
+          <div class="flex gap-2">
+            <i class="fa-solid fa-id-card w-10 text-base"></i>
+            <span>{{ "NationalId" | translate }}</span>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button
+            class="btn bg-base text-white"
+            (click)="modalDetails?.Id ? edit() : addNewUser()"
+          >
+            {{ "save" | translate }}
+          </button>
+          <button (click)="modal?.close()" class="btn btn-secondary">
+            {{ "Back" | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!-- confirm delete -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.close()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="decline(); modal.close()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- issuerModal delete -->
+<ng-template #issuerModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl"
+        >{{ "Add" | translate }} {{ "Issuer" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close(); open(dataModal, null, 'dataModal')"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <form #addIssuer="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div class="form-group">
+        <label for="CustomerNameArtxt3" class="text-right col-form-label block">
+          {{ "nameAr" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          required
+          #CustomerNameAr="ngModel"
+          ngModel
+          class="form-control"
+          type="text"
+          id="CustomerNameArtxt3"
+          name="CustomerNameArtxt3"
+          autocomplete="off"
+          [placeholder]="('Write' | translate) + ' ' + ('nameAr' | translate)"
+        />
+      </div>
+      <div class="form-group">
+        <label for="CustomerNameEntxt3" class="text-right col-form-label block">
+          {{ "nameEn" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <div style="display: inline-flex; width: 100%">
+          <input
+            required
+            #CustomerNameEnValue
+            #CustomerNameEn="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="CustomerNameEntxt3"
+            name="CustomerNameEntxt3"
+            autocomplete="off"
+            [placeholder]="('Write' | translate) + ' ' + ('nameEn' | translate)"
+          />
+          <a
+            class="btn"
+            id="CopyCustomerName2"
+            (click)="CustomerNameEnValue.value = CustomerNameAr.value"
+            ><i class="fa fa-copy"></i
+          ></a>
+        </div>
+      </div>
+    </form>
+    <div class="flex gap-2 mt-3">
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        [disabled]="addIssuer.invalid"
+        (click)="
+          addNewIssuer();
+          modal?.close();
+          open(dataModal, modalDetails, 'dataModal')
+        "
+      >
+        {{ "save" | translate }}
+      </button>
+      <button
+        (click)="modal?.close(); open(dataModal, modalDetails, 'dataModal')"
+        class="btn btn-secondary"
+      >
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- fileTypeModal delete -->
+<ng-template #fileTypeModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl"> {{ "Add File Type" | translate }} </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close(); open(addFile)"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <form #addFileType="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div class="form-group">
+        <label for="CustomerNameArtxt3" class="text-right col-form-label block">
+          {{ "nameAr" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          required
+          #CustomerNameAr="ngModel"
+          ngModel
+          [(ngModel)]="data.fileType.NameAr"
+          class="form-control"
+          type="text"
+          id="CustomerNameArtxt3"
+          name="CustomerNameArtxt3"
+          autocomplete="off"
+          [placeholder]="('Write' | translate) + ' ' + ('nameAr' | translate)"
+        />
+      </div>
+      <div class="form-group">
+        <label for="CustomerNameEntxt3" class="text-right col-form-label block">
+          {{ "nameEn" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <div style="display: inline-flex; width: 100%">
+          <input
+            required
+            #CustomerNameEnValue
+            #CustomerNameEn="ngModel"
+            [(ngModel)]="data.fileType.NameEn"
+            ngModel
+            class="form-control"
+            type="text"
+            id="CustomerNameEntxt3"
+            name="CustomerNameEntxt3"
+            autocomplete="off"
+            [placeholder]="('Write' | translate) + ' ' + ('nameEn' | translate)"
+          />
+          <a
+            class="btn"
+            id="CopyCustomerName2"
+            (click)="CustomerNameEnValue.value = CustomerNameAr.value"
+            ><i class="fa fa-copy"></i
+          ></a>
+        </div>
+      </div>
+    </form>
+    <div class="max-h-80 overflow-auto">
+      <table class="table table-hover mt-2">
+        <thead>
+          <tr>
+            <th>{{ "nameAr" | translate }}</th>
+            <th>{{ "nameEn" | translate }}</th>
+            <th
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'خيارات',
+                en: 'Operations'
+              }"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let type of data.filesTypes">
+            <td>{{ type.Name }}</td>
+            <td>{{ type.Name }}</td>
+            <td class="flex gap-2 justify-center">
+              <button
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="
+                  data.fileType.NameAr = type.Name;
+                  data.fileType.NameEn = type.Name;
+                  data.fileType.Id = type.Id
+                "
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex gap-2 mt-3 pt-3 border-t border-neutral-300">
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        [disabled]="addFileType.invalid"
+        (click)="
+          addNewIssuer();
+          modal?.close();
+          open(dataModal, modalDetails, 'dataModal')
+        "
+      >
+        {{ "save" | translate }}
+      </button>
+      <button
+        (click)="modal?.close(); open(dataModal, modalDetails, 'dataModal')"
+        class="btn btn-secondary"
+      >
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- addFile delete -->
+<ng-template #addFile let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "addFile" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+      <form class="grid grid-cols-1 md:grid-cols-2" #addFileForm="ngForm">
+        <div>
+          <div class="form-group">
+            <label
+              for="FileDescription"
+              class="text-right col-form-label block"
+            >
+              {{ "File Description" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              required
+              #FileDescription="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="FileDescription"
+              name="FileDescription"
+              autocomplete="off"
+              [placeholder]="
+                ('Write' | translate) + ' ' + ('File Description' | translate)
+              "
+            />
+          </div>
+          <div class="flex gap-2 items-end">
+            <div class="flex-grow">
+              <label class="col-form-label">
+                {{ "File Type" | translate }}</label
+              >
+              <ng-select
+                class="w-full p-0"
+                [required]="true"
+                #FileType="ngModel"
+                ngModel
+                placeholder="{{ 'File Type' | translate }}"
+                name="FileType"
+              >
+                <ng-option
+                  *ngFor="let type of data.filesTypes"
+                  [value]="type"
+                  >{{ type.Name }}</ng-option
+                >
+              </ng-select>
+            </div>
+            <button
+              class="btn bg-base text-white mt-3"
+              type="type"
+              (click)="modal?.close(); open(fileTypeModal)"
+            >
+              <i class="f a fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="upload row-span-2">
+          <file-upload class="h-full" [control]="control">
+            <ng-template
+              let-isFileDragDropAvailable="isFileDragDropAvailable"
+              #placeholder
+            >
+              <div *ngIf="control.size === 0">
+                <div class="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="1em"
+                    viewBox="0 0 640 512"
+                  >
+                    <path
+                      d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                    />
+                  </svg>
+                </div>
+
+                <div class="upload-text">
+                  {{ "Add Image" | translate }}
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-template
+              let-i="index"
+              let-file="file"
+              let-control="control"
+              #item
+            >
+              <div class="overlay">
+                <span class="delete-button" (click)="control.removeFile(file)">
+                  <svg viewBox="0 0 448 512">
+                    <path
+                      d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                    ></path>
+                  </svg>
+                </span>
+                <img
+                  class="max-h-44"
+                  *ngIf="control.valid"
+                  [src]="uploadedFile | async"
+                />
+              </div>
+            </ng-template>
+          </file-upload>
+        </div>
+
+        <button
+          class="btn bg-base text-white mt-3"
+          type="type"
+          [disabled]="addFileForm.invalid"
+          (click)="addNewFile(addFileForm)"
+        >
+          {{ "Add" | translate }}
+        </button>
+
+        <div class="max-h-80 overflow-auto col-span-1 md:col-span-2 mt-3">
+          <table
+            *ngIf="data.files?.length"
+            class="table table-hover mt-2"
+            style="text-align: center; vertical-align: middle"
+          >
+            <thead>
+              <tr class="text-center">
+                <th>{{ "File Description" | translate }}</th>
+                <th>{{ "File Type" | translate }}</th>
+                <th>{{ "File Name" | translate }}</th>
+                <th
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'خيارات',
+                    en: 'Operations'
+                  }"
+                ></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let file of data.files; let i = index">
+                <td>{{ file.description }}</td>
+                <td>{{ file.type?.Name }}</td>
+                <td>{{ file.name }}</td>
+                <td class="flex gap-2 justify-center">
+                  <button
+                    (click)="data.files.splice(i, 1)"
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="flex justify-end gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+        >
+          <button (click)="modal?.close()" class="btn btn-secondary">
+            {{ "Back" | translate }}
+          </button>
+          <button
+            class="btn bg-base text-white"
+            type="submit"
+            (click)="addFilePost(); modal?.close()"
+          >
+            {{ "Save" | translate }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!-- sendSms delete -->
+<ng-template #sendSms let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "sendSms" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+      <form class="grid gap-3 grid-cols-1 md:grid-cols-2" #smsForm="ngForm">
+        <div class="form-group">
+          <label for="clientName" class="text-right col-form-label block">
+            {{ "Customer Name" | translate }}
+          </label>
+          <input
+            required
+            #clientName="ngModel"
+            [(ngModel)]="modalDetails.CustomerName"
+            ngModel
+            class="form-control"
+            type="text"
+            id="clientName"
+            name="clientName"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="mobileNumber" class="text-right col-form-label block">
+            {{ "Mobile Number" | translate }}
+          </label>
+          <input
+            required
+            #mobileNumber="ngModel"
+            [(ngModel)]="modalDetails.CustomerMobile"
+            ngModel
+            class="form-control"
+            type="text"
+            id="mobileNumber"
+            name="mobileNumber"
+            readonly
+          />
+        </div>
+
+        <div class="form-group col-span-1 md:col-span-2">
+          <label for="Text32" class="text-right col-form-label block">
+            {{ "Text" | translate }}
+          </label>
+          <textarea
+            required
+            #Text32="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="Text32"
+            name="Text32"
+          ></textarea>
+        </div>
+
+        <div
+          class="flex gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+        >
+          <button
+            class="btn bg-base text-white"
+            [disabled]="smsForm.invalid"
+            type="submit"
+            (click)="sendSMS(smsForm.value)"
+          >
+            {{ "Send" | translate }}
+          </button>
+          <button (click)="modal?.close()" class="btn btn-secondary">
+            {{ "Back" | translate }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!-- sendEmail delete -->
+<ng-template #sendEmail let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "sendSms" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.close()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+      <form class="grid gap-3 grid-cols-1 md:grid-cols-2" #emailForm="ngForm">
+        <div class="form-group">
+          <label for="from" class="text-right col-form-label block">
+            {{ "From" | translate }}
+          </label>
+          <input
+            required
+            #from="ngModel"
+            [(ngModel)]="data.orgEmail"
+            ngModel
+            class="form-control"
+            type="text"
+            id="from"
+            name="from"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="to234" class="text-right col-form-label block">
+            {{ "To" | translate }}
+          </label>
+          <input
+            required
+            #to234="ngModel"
+            [(ngModel)]="modalDetails.CustomerEmail"
+            ngModel
+            class="form-control"
+            type="text"
+            id="to234"
+            name="to234"
+            readonly
+          />
+        </div>
+        <div class="form-group col-span-1 md:col-span-2">
+          <label for="Subject" class="text-right col-form-label block">
+            {{ "subject" | translate }}
+          </label>
+          <input
+            required
+            #Subject="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="Subject"
+            name="Subject"
+          />
+        </div>
+
+        <div class="form-group col-span-1 md:col-span-2">
+          <label for="Text32" class="text-right col-form-label block">
+            {{ "Text" | translate }}
+          </label>
+          <textarea
+            required
+            #Text32="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="Text32"
+            name="Text32"
+          ></textarea>
+        </div>
+
+        <div class="upload col-span-1 md:col-span-2">
+          <label for="">{{ "Add Attachments" | translate }}</label>
+
+          <file-upload [(ngModel)]="uploadedFiles" name="files"></file-upload>
+        </div>
+
+        <div
+          class="flex gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+        >
+          <button
+            class="btn bg-base text-white"
+            type="submit"
+            (click)="sendEMAIL(emailForm.value)"
+          >
+            {{ "Send" | translate }}
+          </button>
+          <button (click)="modal?.close()" class="btn btn-secondary">
+            {{ "Back" | translate }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!-- optionsModal -->
+<ng-template let-modal #optionsModal>
+  <div class="modal-body py-3 relative">
+    <button
+      type="button"
+      style="inset-inline-end: 25px"
+      class="text-2xl m-0 absolute top-[20px]"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div
+      class="flex items-start gap-16 p-3 border-neutral-300 mb-3"
+      style="border: 2px solid #666; border-radius: 8px"
+    >
+      <div>
+        <h2 class="text-base">
+          {{ "instructions and actions" | translate }}
+        </h2>
+        <p class="mb-0">
+          <span>{{ "created account with number" | translate }} :</span>
+          <span> 416165 </span>
+        </p>
+        <p class="mb-0">
+          <span>{{ "main account name" | translate }} :</span>
+          <span> : شصيشص شصي </span>
+        </p>
+        <p class="mb-0">
+          <span>{{ "main account number" | translate }} :</span>
+          <span> : 451 </span>
+        </p>
+      </div>
+
+      <div class="text-center">
+        <h2
+          class="text-base"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'تمت إضافة العميل بنجاح',
+            en: 'Customer added successfully'
+          }"
+        ></h2>
+        <p>
+          <span>{{ "Client Name" | translate }} :</span>
+          <span>محمد خالد مراد </span>
+        </p>
+        <p>
+          <span>{{ "Branch" | translate }} :</span>
+          <span> فرع القاهرة </span>
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 justify-center flex-wrap mt-4">
+      <div class="mt-4 text-center">
+        <div class="mb-2 endNotice w-auto">
+          <mat-checkbox
+            name="checkedEmail"
+            [(ngModel)]="clientAddedCheckedEmail"
+          >
+          </mat-checkbox>
+          <button
+            [title]="'Send notice via e-mail' | translate"
+            class="min-w-max p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white aspect-square w-10 mx-3"
+          >
+            <i class="fa-solid fa-at"></i>
+          </button>
+          <button
+            *ngIf="clientAddedCheckedEmail"
+            type="button"
+            class="btn text-base"
+            style="border-color: var(--base-color); font-size: 13px"
+            (click)="open(sendEmail, null, 'sendEmail'); uploadedFiles = []"
+          >
+            {{ "send" | translate }}
+          </button>
+        </div>
+
+        <div class="endNotice w-auto">
+          <mat-checkbox
+            name="checkedPhone"
+            [(ngModel)]="clientAddedCheckedPhone"
+          >
+          </mat-checkbox>
+          <button
+            [title]="'Sending notice via mobile number' | translate"
+            class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white aspect-square w-10 mx-3"
+          >
+            <i class="fa-solid fa-comment-sms"></i>
+          </button>
+
+          <button
+            *ngIf="clientAddedCheckedPhone"
+            type="button"
+            class="btn text-base"
+            style="border-color: var(--base-color); font-size: 13px"
+            (click)="open(sendSms, null, 'sendSms')"
+          >
+            {{ "send" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn bg-base text-white"
+        (click)="open(NewInvoiceModal, null, 'NewInvoiceModal')"
+      >
+        {{
+          "Issuing an invoice to the customer (without a project)" | translate
+        }}
+      </button>
+      <button
+        type="button"
+        class="btn bg-base text-white"
+        (click)="open(addOfferPrice, null, 'addOfferPrice')"
+      >
+        {{ "Create a quote for the customer" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn bg-base text-white"
+        (click)="open(addProjectModal, null, 'addProjectModal')"
+      >
+        {{ "Create a project for the client" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn bg-base text-white"
+        (click)="open(addFile, null, 'addFile')"
+      >
+        {{ "upload files and documents for client" | translate }}
+      </button>
+    </div>
+
+    <div class="flex items-center gap-6 justify-between flex-wrap mt-4">
+      <p class="p-1 rounded-lg bg-red-200 w-max">
+        {{ "addclientNote" | translate }}
+      </p>
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="modal.dismiss('Cross click')"
+      >
+        {{ "No thanks, close" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- NewInvoiceModal  -->
+<ng-template #NewInvoiceModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "NewInvoice" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body py-0">
+    <ng-container>
+      <form class="" #smsForm="ngForm">
+        <div class="row align-items-end mb-2 mx-3">
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "date" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "invoice number" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ 'invoice number' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <input
+                required
+                placeholder="{{ 'Registration number' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <input
+                required
+                placeholder="{{ 'SR' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'mainCenter' | translate }}"
+                required
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.user"
+                [ngModelOptions]="{ standalone: true }"
+                name="user"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <!-- 2 line-->
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <label
+                for="Corresponding"
+                class="text-right col-form-label block"
+              >
+                {{ "Corresponding" | translate }}
+              </label>
+              <input
+                id="Corresponding"
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Type" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                name="description"
+                disabled
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0">
+            <div class="form-group">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.description"
+                [ngModelOptions]="{ standalone: true }"
+                name="description"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'thePhone' | translate }}"
+                required
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'ref' | translate }}"
+                required
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+          <!-- 3 line -->
+
+          <div class="col-sm-6 col-md-3 col-lg-3 mb-0">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Client" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                disabled
+                placeholder="{{ 'Chose' | translate }}"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0">
+            <div class="d-flex">
+              <input type="checkbox" name="date" id="date" ngModel />
+              <label for="date" class="mx-2">{{
+                "AllCustomer" | translate
+              }}</label>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-3 mb-0">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "R_tax" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ '' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 text-end">
+            <div class="form-check form-switch position-relative">
+              <label
+                class="form-check-label priceOffer"
+                for="flexSwitchCheckDefault"
+                style="width: max-content"
+              >
+                {{ "OfferPriceActive" | translate }}
+              </label>
+              <input
+                style="inset-inline-start: 0"
+                class="form-check-input px-3 priceOfferInput position-absolute left-100"
+                (change)="showPrice = !showPrice"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0" *ngIf="showPrice">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "OfferPrice" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                disabled
+                placeholder="{{ 'Chose' | translate }}"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div
+            class="editable shadow mb-2 block customTable"
+            style="overflow: auto"
+          >
+            <table
+              class="table table-responsive table-striped table-bordered text-center"
+              style="
+                vertical-align: middle;
+                font-size: 14px;
+                min-width: max-content;
+              "
+            >
+              <thead
+                class="bg-base text-white"
+                style="line-height: 30px; font-size: 13px"
+              >
+                <tr>
+                  <th>{{ "ServiceNo" | translate }}</th>
+                  <th colspan="2">{{ "ServiceName" | translate }}</th>
+                  <th>{{ "Unit" | translate }}</th>
+                  <th>{{ "Quantity" | translate }}</th>
+                  <th>{{ "price" | translate }}</th>
+                  <th>{{ "Discount" | translate }}</th>
+                  <th>{{ "discountPercentage" | translate }}</th>
+                  <th style="font-size: 11px">
+                    {{ "totalBeforeTax" | translate }}
+                  </th>
+                  <th>{{ "VATTax" | translate }}</th>
+                  <th>{{ "Net_taxes" | translate }}</th>
+                  <th>{{ "delete" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of invoiceData; let i = index"
+                  style="line-height: 5px"
+                >
+                  <td>{{ item.id }}</td>
+                  <td colspan="2">
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.unit"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.amount"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.price"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.discound"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.discountPercent"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.total"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.tax"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.netWithVat"
+                      ngModel
+                    />
+                  </td>
+
+                  <td>
+                    <button
+                      class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="box w-100 p-3">
+                <div>
+                  <label for="include_tax">{{ "tax type" | translate }}</label>
+                  <ng-select
+                    class="w-100"
+                    placeholder="{{ 'Chose' | translate }}"
+                    name="include_tax"
+                  >
+                    <ng-option [value]="0">{{
+                      "Excluding tax" | translate
+                    }}</ng-option>
+                    <ng-option [value]="1">{{
+                      "Taxes included" | translate
+                    }}</ng-option>
+                  </ng-select>
+                </div>
+
+                <div>
+                  <label for="paid" class="text-right col-form-label block">
+                    {{ "paid" | translate }}
+                  </label>
+                  <input
+                    id="paid"
+                    required
+                    class="form-control bg-green"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="remaining">{{ "remaining" | translate }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="remaining"
+                    name="remaining"
+                    class="form-control bg-red"
+                  />
+                </div>
+              </div>
+
+              <div class="d-flex me-3">
+                <input type="checkbox" name="date" id="date" ngModel />
+                <label for="date" class="mx-2">{{
+                  "hideAccount" | translate
+                }}</label>
+              </div>
+
+              <div class="form-group row my-4 me-3">
+                <label for="Statement" class="col-sm-2 col-form-label">{{
+                  "Statement" | translate
+                }}</label>
+                <div class="col-sm-10">
+                  <input
+                    disabled
+                    type="text"
+                    id="Statement"
+                    name="Statement"
+                    class="form-control"
+                    placeholder="{{ 'Statement' | translate }}"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row me-3">
+                <label for="theNotes" class="col-sm-2 col-form-label">{{
+                  "theNotes" | translate
+                }}</label>
+                <div class="col-sm-10">
+                  <input
+                    disabled
+                    type="text"
+                    id="theNotes"
+                    name="theNotes"
+                    class="form-control"
+                    placeholder="{{ 'theNotes' | translate }}"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box w-100 px-2 py-2 mx-3">
+                <div>
+                  <label
+                    for="totalAmount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "totalAmount" | translate }}
+                  </label>
+                  <input
+                    id="totalAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
+                    for="TotalDiscount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "TotalDiscount" | translate }}
+                  </label>
+                  <input
+                    id="TotalDiscount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="netAmount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "netAmount" | translate }}
+                  </label>
+                  <input
+                    id="netAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="AllTotal" class="text-right col-form-label block">
+                    {{ "AllTotal" | translate }}
+                  </label>
+                  <input
+                    id="AllTotal"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="netBill">{{ "netBill" | translate }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="netBill"
+                    name="netBill"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="TotalTaxes"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "TotalTaxes" | translate }}
+                  </label>
+                  <input
+                    id="TotalTaxes"
+                    required
+                    class="form-control bg-yellow"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="CreditNoteTotal">{{
+                    "CreditNoteTotal" | translate
+                  }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="CreditNoteTotal"
+                    name="CreditNoteTotal"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label for="TotalDebtorNotice">{{
+                    "TotalDebtorNotice" | translate
+                  }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="TotalDebtorNotice"
+                    name="TotalDebtorNotice"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="Net_taxes"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "Net_taxes" | translate }}
+                  </label>
+                  <input
+                    id="Net_taxes"
+                    required
+                    class="form-control bg-black"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- footer -->
+    </ng-container>
+
+    <div class="d-flex justify-content-end gap-3 mb-2">
+      <div>
+        <button
+          (click)="modal?.dismiss()"
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "Save_CarryOver" | translate }}
+        </button>
+      </div>
+
+      <div>
+        <button (click)="modal?.dismiss()" class="btn btn-secondary">
+          {{ "close" | translate }}
+        </button>
+      </div>
+
+      <div>
+        <button
+          (click)="modal?.dismiss()"
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- addOfferPrice -->
+<ng-template #addOfferPrice let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span>{{ "addNewOffer" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-white m-0"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #offerPriceForm="ngForm">
+      <div class="row align-items-end mb-4">
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customer" class="text-right col-form-label block">
+              {{ "Customer Name" | translate }}
+            </label>
+            <input
+              required
+              #customer="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customer"
+              name="customer"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Client Name (English)" | translate }}
+            </label>
+            <input
+              required
+              #customerEn="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customerEn"
+              name="customerEn"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEmail" class="text-right col-form-label block">
+              {{ "Email" | translate }}
+            </label>
+            <input
+              required
+              #customerEmail="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customerEmail"
+              name="customerEmail"
+              [disabled]="existValue"
+              email
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerPhone" class="text-right col-form-label block">
+              {{ "Mobile Number" | translate }}
+            </label>
+            <input
+              required
+              #customerPhone="ngModel"
+              ngModel
+              class="form-control"
+              type="tel"
+              id="customerPhone"
+              name="customerPhone"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Chose Date" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input
+                ngModel
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #exist="ngModel"
+              ngModel
+              type="checkbox"
+              id="exist"
+              name="exist"
+            />
+            <label for="exist" class="text-right col-form-label mx-2">
+              {{ "existUser" | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label"> {{ "Customer" | translate }}</label>
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="!existValue"
+              name="user"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label"> {{ "Title" | translate }}</label>
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              name="title"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "description " | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              name="description"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "sales Engineer" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              name="salesEngineer"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="department" class="text-right col-form-label block">
+              {{ "department" | translate }}
+            </label>
+            <input
+              required
+              #department="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="department"
+              name="department"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="offer_id" class="text-right col-form-label block">
+              {{ "Offer Number" | translate }}
+            </label>
+            <div class="flex items-start">
+              <input
+                required
+                #offer_id="ngModel"
+                ngModel
+                class="form-control"
+                type="text"
+                id="offer_id"
+                name="offer_id"
+                [disabled]="!showOfferValue"
+              />
+              <input
+                #showOffer="ngModel"
+                [(ngModel)]="showOfferValue"
+                class="form-check-input"
+                type="checkbox"
+                name="showOffer"
+                style="height: 38px; width: 38px; margin: 0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for=" offer_intro" class="text-right col-form-label block">
+              {{ "Presentation" | translate }}
+            </label>
+            <input
+              required
+              #offer_intro="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="offer_intro"
+              name="offer_intro"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-0 mb-sm-3 flex justify-center">
+          <div class="form-group">
+            <input
+              #default="ngModel"
+              ngModel
+              type="checkbox"
+              id="default"
+              name="default"
+            />
+            <label for="default" class="text-right col-form-label mx-2">
+              {{ "default" | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <button type="button" class="btn bg-base text-white area-btn">
+              <i class="fa fa-user mx-2"></i>
+              <span>{{ "Land area and required floors" | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "services" | translate }}
+          <button
+            type="button "
+            class="add-btn mx-2"
+            (click)="addService(offerServices?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="editable shadow mb-4" style="width: 100%; overflow-x: auto">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="
+              vertical-align: middle;
+              font-size: 14px;
+              min-width: max-content;
+              width: 100%;
+            "
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "ServiceNo" | translate }}</th>
+                <th>{{ "ServiceName" | translate }}</th>
+                <th>{{ "Unit" | translate }}</th>
+                <th>{{ "Quantity" | translate }}</th>
+                <th>{{ "price" | translate }}</th>
+                <th>{{ "VATTax" | translate }}</th>
+                <th>{{ "netTax" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerServices; let i = index"
+                style="line-height: 5px"
+              >
+                <td>{{ item.id }}</td>
+                <td (click)="open(servicesListModal, null, 'servicesList', i)">
+                  <input
+                    type="text"
+                    name="os-name{{ i }}"
+                    [(ngModel)]="item.name"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="os-unit{{ i }}"
+                    [(ngModel)]="item.unit"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="text"
+                    name="os-amount{{ i }}"
+                    [(ngModel)]="item.amount"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    name="os-price{{ i }}"
+                    [(ngModel)]="item.price"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    name="os-vatTax{{ i }}"
+                    [(ngModel)]="item.vatTax"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="os-taxes{{ i }}"
+                    [(ngModel)]="item.taxes"
+                  />
+                </td>
+                <td>
+                  <button
+                    title=""
+                    class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                    style="margin-inline-end: 6px"
+                    (click)="open(serviceDetailsModal, item, 'serviceDetails')"
+                  >
+                    <i class="fa-solid fa-info"></i>
+                  </button>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deleteService(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box-info">
+          <div class="pt-2">
+            <label for="include_tax">{{ "tax type" | translate }}</label>
+            <ng-select
+              class="p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              name="include_tax"
+            >
+              <ng-option [value]="0">{{
+                "Excluding tax" | translate
+              }}</ng-option>
+              <ng-option [value]="1">{{
+                "Taxes included" | translate
+              }}</ng-option>
+            </ng-select>
+          </div>
+
+          <div>
+            <label for="total_amount">{{ "Total amount" | translate }}</label>
+            <input
+              type="number"
+              id="total_amount"
+              name="total_amount"
+              class="form-control"
+            />
+          </div>
+
+          <div>
+            <label for="total_amount_text">{{
+              "total in writing" | translate
+            }}</label>
+            <input
+              type="text"
+              id="total_amount_text"
+              name="total_amount_text"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "payments" | translate }}
+          <button
+            type="button "
+            class="add-btn mx-2"
+            (click)="addPayments(offerPayments?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="table editable shadow">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="vertical-align: middle; font-size: 14px"
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "Statement" | translate }}</th>
+                <th>{{ "English statement" | translate }}</th>
+                <th>{{ "Ratio" | translate }}</th>
+                <th>{{ "amount" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+                <th>{{ "Installing" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerPayments; let i = index"
+                style="line-height: 5px"
+              >
+                <td>
+                  <input
+                    type="text"
+                    name="op-statement{{ i }}"
+                    [(ngModel)]="item.statement"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="op-statementEn{{ i }}"
+                    [(ngModel)]="item.statementEn"
+                  />
+                </td>
+                <td class="relative">
+                  <input
+                    type="number"
+                    name="op-ratio{{ i }}"
+                    [(ngModel)]="item.ratio"
+                  />
+                  <span class="absolute percent">%</span>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="op-amount{{ i }}"
+                    [(ngModel)]="item.amount"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deletePayments(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="item.status"
+                    name="op-status{{ i }}"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "Terms" | translate }}
+          <button
+            type="button "
+            class="add-btn mx-2"
+            (click)="addTerm(offerTerms?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="table editable shadow">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="vertical-align: middle; font-size: 14px"
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "Statement" | translate }}</th>
+                <th>{{ "English statement" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+                <th>{{ "Installing" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerTerms; let i = index"
+                style="line-height: 5px"
+              >
+                <td>
+                  <input
+                    type="text"
+                    name="ot-statement{{ i }}"
+                    [(ngModel)]="item.statement"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="ot-statementEn{{ i }}"
+                    [(ngModel)]="item.statementEn"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deleteTerm(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="item.status"
+                    name="ot-status{{ i }}"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr class="my-3" />
+
+      <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #remeberMe="ngModel"
+              ngModel
+              type="checkbox"
+              id="remeberMe"
+              name="remeberMe"
+            />
+            <label for="remeberMe" class="text-right col-form-label mx-2">
+              {{ "remeberMe" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <div class="form-group timeInput">
+              <input
+                placeholder="{{ 'Chose Date' | translate }}"
+                ngModel
+                name="followDate"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showNotification="ngModel"
+              ngModel
+              type="checkbox"
+              id="showNotification"
+              name="showNotification"
+            />
+            <label
+              for="showNotification"
+              class="text-right col-form-label mx-2"
+            >
+              {{ "showNotification" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showSignatures="ngModel"
+              ngModel
+              type="checkbox"
+              id="showSignatures"
+              name="showSignatures"
+            />
+            <label for="showSignatures" class="text-right col-form-label mx-2">
+              {{ "showMarks" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showAccount="ngModel"
+              ngModel
+              type="checkbox"
+              id="showAccount"
+              name="showAccount"
+            />
+            <label
+              for="showAccount"
+              class="text-right col-form-label area-btn mx-2"
+            >
+              {{ "showAccount" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #PrintEn="ngModel"
+              ngModel
+              type="checkbox"
+              id="PrintEn"
+              name="PrintEn"
+            />
+            <label for="PrintEn" class="text-right col-form-label mx-2">
+              {{ "printEn" | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn bg-base text-white"
+      (click)="AddOfferPrice(); modal.close('Save click', 'end')"
+    >
+      {{ modalDetails?.id ? ("edit" | translate) : ("add" | translate) }}
+    </button>
+
+    <button (click)="modal?.dismiss()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- servicesListModal -->
+<ng-template #servicesListModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "servicesList" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field class="w-full">
+      <mat-label>{{ "search" | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+    </mat-form-field>
+
+    <div class="table">
+      <table
+        mat-table
+        [dataSource]="serviceListDataSource"
+        class="mat-elevation-z8 table table-responsive table-striped table-bordered text-center"
+        style="vertical-align: middle; font-size: 14px"
+      >
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "ServiceName" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>{{ "price" | translate }}</th>
+          <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="servicesListdisplayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            let i = index;
+            columns: servicesListdisplayedColumns
+          "
+          (click)="setServiceRowValue(i); modal.dismiss()"
+        ></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "noResult" | translate }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="text-end mt-2">
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- serviceDetails -->
+<ng-template #serviceDetailsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "serviceDetails" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="service_item_details">
+      <li
+        *ngFor="let item of serviceDetails.items"
+        class="flex flex-wrap items-center justify-between w-100"
+      >
+        <div>
+          <i class="fa fa-check text-success"></i>
+          <span class="text-base mx-2">{{ item?.name }}</span>
+        </div>
+        <div class="serviceBtns">
+          <button
+            type="button"
+            class="btn border-base text-white"
+            style="margin-inline-end: 10px"
+          >
+            {{ "Insert" | translate }}
+          </button>
+          <button type="button" class="btn btn-outline-danger">
+            {{ "delete" | translate }}
+          </button>
+        </div>
+      </li>
+    </ul>
+    <div
+      class="flex justify-end gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+      <button type="button" class="btn bg-base text-white">
+        {{ "Insert All" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- addProjectModal  -->
+<ng-template #addProjectModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "new project" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-sm-6 col-xl-2 mb-3">
+          <div class="form-group">
+            <label for="projectNo" class="text-right col-form-label block">
+              {{ "project number" | translate }}
+            </label>
+            <input
+              required
+              #projectNo="ngModel"
+              ngModel
+              ngModel
+              class="form-control"
+              type="text"
+              id="projectNo"
+              name="projectNo"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-2 mb-3">
+          <div class="form-group">
+            <label
+              for="projectDuration"
+              class="text-right col-form-label block"
+            >
+              {{ "Project duration" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input
+                ngModel
+                name="projectDuration"
+                type="text"
+                class="form-control duration-input"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Branch" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="modalDetails.id"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "costCenter" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2 mb-3">
+          <div *ngIf="user?.value" class="manager-image w-full w-max">
+            <img
+              src="/assets/images/login-img.png"
+              alt="manager image"
+              class="img-fluid"
+              width="100px"
+              height="100px"
+              style="border-radius: 50%"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Date" | translate }} {{ " " }}{{ "From" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input
+                ngModel
+                name="from"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Date" | translate }} {{ " " }}{{ "To" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input
+                ngModel
+                name="to"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Project Type" | translate }}</label
+            >
+            <div class="flex">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                ngModel
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+              <button
+                type="button"
+                class="btn bg-base text-white"
+                style="padding: 5px 10px"
+                (click)="open(AddOption, null, 'Project Type')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Subproject type" | translate }}</label
+            >
+            <div class="flex">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                ngModel
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+              <button
+                type="button"
+                class="btn bg-base text-white"
+                style="padding: 5px 10px"
+                (click)="open(AddOption)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-types checkbox h-full flex-column">
+            <div class="checkbox-content relative {{ 'dir' | translate }}">
+              <!-- [checked]="item.status == 2" -->
+              <input
+                type="checkbox"
+                name="check"
+                ngModel
+                #checkbox="ngModel"
+                (change)="changeRequestStatus($event)"
+              />
+              <div class="box {{ withWalk ? 'checked' : 'blur' }}">
+                <span class="absolute">{{ "a walk" | translate }}</span>
+                <span class="absolute">{{
+                  "without walking" | translate
+                }}</span>
+                <div class="cycle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Customer" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "buildingType" | translate }}</label
+            >
+            <div class="flex">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                ngModel
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+              <button
+                type="button"
+                class="btn bg-base text-white"
+                style="padding: 5px 10px"
+                (click)="open(AddOption)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "services" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div *ngIf="withWalk" class="col-sm-6 col-md-5">
+          <div class="form-group">
+            <label for="BiosNo" class="text-right col-form-label block">
+              {{ "Bios number" | translate }}
+            </label>
+            <input
+              required
+              #BiosNo="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BiosNo"
+              name="BiosNo"
+            />
+          </div>
+        </div>
+        <div *ngIf="withWalk" class="col-sm-6 col-md-7">
+          <div class="form-group">
+            <label
+              for="BiosDescroption"
+              class="text-right col-form-label block"
+            >
+              {{ "Bios description" | translate }}
+            </label>
+            <input
+              required
+              #BiosDescroption="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BiosDescroption"
+              name="BiosDescroption"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "project manager" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              #user="ngModel"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Region" | translate }}</label
+            >
+            <div class="flex">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                ngModel
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+              <button
+                type="button"
+                class="btn bg-base text-white"
+                style="padding: 5px 10px"
+                (click)="open(AddOption)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="form-group">
+            <label
+              for="projectDescription"
+              class="text-right col-form-label block"
+            >
+              {{ "description" | translate }}
+            </label>
+            <textarea
+              required
+              #projectDuration="ngModel"
+              ngModel
+              id="projectDescription"
+              name="projectDescription"
+              style="width: 100%; height: 38px; resize: none; overflow: hidden"
+            ></textarea>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <label class="text-right col-form-label block">
+            {{ "Powers" | translate }}
+          </label>
+          <button
+            type="button"
+            (click)="open(modifyPermissionsModal)"
+            class="btn bg-base text-white"
+          >
+            {{ "The powers of the staff on the project" | translate }}
+          </button>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <label class="text-right col-form-label block">
+            {{ "Project goals" | translate }}
+          </label>
+          <button
+            type="button"
+            (click)="open(projectGoalsModal)"
+            class="btn bg-base text-white"
+          >
+            {{ "Determine project goals" | translate }}
+          </button>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "offerPriceNo" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-xl-3 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "department" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              style="min-width: max-content"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        (click)="addProject()"
+      >
+        {{ "add" | translate }}
+      </button>
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add option -->
+<ng-template #AddOption let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{ ar: 'اضافة جديدة', en: 'Add New' }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #addOptionForm="ngForm">
+      <div class="row">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameAr" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameAr' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameAr"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameEn" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameEn' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameEn"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-center" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="addOptionForm.invalid"
+      (click)="saveOption(addOptionForm.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+
+    <div
+      class="d-block w-100 mt-4"
+      style="
+        border-top: 2px solid #d5dadf;
+        padding-top: 24px;
+        border-radius: 3px;
+      "
+    >
+      <div class="w-100 mb-3">
+        <input
+          type="text"
+          class="form-control pull-right"
+          placeholder="{{ 'search' | translate }}"
+          (keyup)="updateFilter($event)"
+        />
+      </div>
+
+      <ngx-datatable
+        style="max-height: 300px; overflow-y: auto"
+        #table
+        class="striped w-100"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="100"
+        [rows]="rows"
+      >
+        <!-- Column: Editing Mode-->
+        <ngx-datatable-column [flexGrow]="0.5">
+          <ng-template
+            let-value="value"
+            let-row="row"
+            let-rowIndex="rowIndex"
+            ngx-datatable-cell-template
+          >
+            <!-- Pencil icon -->
+            <i
+              class="fa fa-pencil"
+              title="Modify"
+              style="cursor: pointer"
+              *ngIf="!this.isEditable[rowIndex]"
+              (click)="this.isEditable[rowIndex] = !this.isEditable[rowIndex]"
+            ></i>
+
+            <!-- Save/Delete icons -->
+            <div
+              class="actions"
+              style="width: 100px; display: flex; justify-content: space-evenly"
+            >
+              <i
+                class="fa fa-edit text-success"
+                style="font-size: 18px; cursor: pointer"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Save"
+                (click)="save(row, rowIndex)"
+              ></i>
+              <i
+                class="fa fa-trash text-danger"
+                style="font-size: 18px; cursor: pointer"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Delete"
+                (click)="delete(row, rowIndex)"
+              ></i>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameAr' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name"
+                [(ngModel)]="row.name_ar"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameEn' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name_en"
+                [(ngModel)]="row.name_en"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</ng-template>
+
+<!-- modify Permissions -->
+<ng-template #modifyPermissionsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "modifyPerms" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="flex align-items-end flex-wrap">
+        <div
+          class="form-group"
+          style="min-width: 240px; margin-inline-end: 30px"
+        >
+          <label class="text-right col-form-label block">
+            {{ "userName" | translate }}</label
+          >
+          <ng-select
+            class="w-full p-0"
+            placeholder="{{ 'Chose' | translate }}"
+            ngModel
+            name="user"
+            [(ngModel)]="selectedUserPermissions!.userName"
+          >
+            <ng-option *ngFor="let user of users" [value]="user.id">{{
+              user.Name
+            }}</ng-option>
+          </ng-select>
+        </div>
+
+        <div class="checkboxs flex align-items-end justify-between flex-wrap">
+          <div class="form-group">
+            <input
+              ngModel
+              type="checkbox"
+              id="Watch"
+              name="Watch"
+              [checked]="selectAllValue"
+              [(ngModel)]="selectedUserPermissions.watch"
+            />
+            <label for="Watch" class="text-right col-form-label mx-2">
+              {{ "Watch" | translate }}
+            </label>
+          </div>
+          <div class="form-group">
+            <input
+              ngModel
+              type="checkbox"
+              id="Add"
+              name="Add"
+              [checked]="selectAllValue"
+              [(ngModel)]="selectedUserPermissions.add"
+            />
+            <label for="Add" class="text-right col-form-label mx-2">
+              {{ "Add" | translate }}
+            </label>
+          </div>
+          <div class="form-group">
+            <input
+              ngModel
+              type="checkbox"
+              id="edit"
+              name="edit"
+              [checked]="selectAllValue"
+              [(ngModel)]="selectedUserPermissions.edit"
+            />
+            <label for="edit" class="text-right col-form-label mx-2">
+              {{ "edit" | translate }}
+            </label>
+          </div>
+          <div class="form-group">
+            <input
+              ngModel
+              type="checkbox"
+              id="delete"
+              name="delete"
+              [checked]="selectAllValue"
+              [(ngModel)]="selectedUserPermissions.delete"
+            />
+            <label for="delete" class="text-right col-form-label mx-2">
+              {{ "delete" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            ngModel
+            type="checkbox"
+            id="SelectAll"
+            name="SelectAll"
+            [(ngModel)]="selectAllValue"
+            (change)="setValues($event)"
+          />
+          <label for="SelectAll" class="text-right col-form-label mx-2">
+            {{ "SelectAll" | translate }}
+          </label>
+        </div>
+      </div>
+
+      <div class="flex gap-2 justify-end mt-3">
+        <button
+          type="button"
+          mat-raised-button
+          class="bg-success text-white"
+          (click)="form.reset(); selectedUserPermissions = null"
+        >
+          {{ "new" | translate }}
+        </button>
+        <button
+          type="button"
+          mat-raised-button
+          class="bg-base text-white"
+          (click)="addNewUserPermissions()"
+        >
+          {{ "save" | translate }}
+        </button>
+        <button
+          type="button"
+          (click)="modal.dismiss()"
+          mat-raised-button
+          color="basic"
+        >
+          {{ "close" | translate }}
+        </button>
+      </div>
+    </form>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ "search" | translate }}</mat-label>
+      <input matInput (keyup)="applyUserPermissionsFilter($event)" #input />
+    </mat-form-field>
+
+    <div class="table">
+      <div class="table">
+        <table
+          mat-table
+          [dataSource]="userPermissionsDataSource"
+          class="mat-elevation-z8 table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <!-- userName Column -->
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "userName" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+          </ng-container>
+
+          <!-- watch Column -->
+          <ng-container matColumnDef="watch">
+            <th mat-header-cell *matHeaderCellDef>{{ "Watch" | translate }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <i class="fa fa-check text-success" *ngIf="element.watch"></i>
+              <i class="fa fa-close text-danger" *ngIf="!element.watch"></i>
+            </td>
+          </ng-container>
+          <!-- add Column -->
+          <ng-container matColumnDef="add">
+            <th mat-header-cell *matHeaderCellDef>{{ "add" | translate }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <i class="fa fa-check text-success" *ngIf="element.add"></i>
+              <i class="fa fa-close text-danger" *ngIf="!element.add"></i>
+            </td>
+          </ng-container>
+          <!-- edit Column -->
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>{{ "edit" | translate }}</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <i class="fa fa-check text-success" *ngIf="element.edit"></i>
+              <i class="fa fa-close text-danger" *ngIf="!element.edit"></i>
+            </td>
+          </ng-container>
+          <!-- delete Column -->
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "delete" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <i class="fa fa-check text-success" *ngIf="element.delete"></i>
+              <i class="fa fa-close text-danger" *ngIf="!element.delete"></i>
+            </td>
+          </ng-container>
+
+          <!-- operations Column -->
+          <ng-container matColumnDef="operations">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "operations" | translate }}
+            </th>
+            <!-- " -->
+            <td mat-cell *matCellDef="let element; let i = index">
+              <button
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+                (click)="setSelectedUserPermissions(i)"
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(deleteModal)"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="userPermissionsColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; let i = index; columns: userPermissionsColumns"
+          ></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              {{ "noResult" | translate }} "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- projectGoalsModal -->
+<ng-template #projectGoalsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "Project goals" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <mat-form-field class="w-full">
+      <mat-label>{{ "search" | translate }}</mat-label>
+      <input matInput (keyup)="applyGoalsFilter($event)" #input />
+    </mat-form-field>
+
+    <div class="table">
+      <table
+        mat-table
+        [dataSource]="projectGoalsDataSource"
+        class="mat-elevation-z8 table table-responsive table-striped table-bordered text-center"
+        style="vertical-align: middle; font-size: 14px"
+      >
+        <!-- serial Column -->
+        <ng-container matColumnDef="serial">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "serial" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.serial }}</td>
+        </ng-container>
+
+        <!-- requirements Column -->
+        <ng-container matColumnDef="requirements">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "requirements and goals" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ element.requirements }}
+          </td>
+        </ng-container>
+        <!-- name/department Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "name/department" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ element.name }}
+          </td>
+        </ng-container>
+        <!-- expected duration Column -->
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "expected duration" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ element.duration }}
+          </td>
+        </ng-container>
+        <!-- choose Column -->
+        <ng-container matColumnDef="choose">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "to choose" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <input
+              type="checkbox"
+              name="{{ 'checkbox_' + i + 1 }}"
+              [(ngModel)]="element.choose"
+              (change)="selectGoalForProject(i)"
+            />
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="projectGoalsColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; let i = index; columns: projectGoalsColumns"
+        ></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "noResult" | translate }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ng-template>
+
+<!-- noticModal  -->
+<ng-template let-modal #noticModal>
+  <div class="modal-body py-3">
+    <div class="text-center">
+      <h2 class="text-base">
+        {{ "Project No. has been added" | translate }} : 416165
+      </h2>
+      <p>
+        <span>{{ "to the client" | translate }} :</span>
+        <span>محمد خالد مراد </span>
+      </p>
+      <p>
+        <span>{{ "Branch" | translate }} :</span>
+        <span> فرع القاهرة </span>
+      </p>
+    </div>
+
+    <div class="mt-4 text-center">
+      <h2 class="text-base">
+        {{ "Notify the client of the project creation" | translate }}
+      </h2>
+
+      <div class="mb-2 endNotice">
+        <mat-checkbox name="checkedEmail" [(ngModel)]="checkedEmail">
+        </mat-checkbox>
+        <button
+          [title]="'Send notice via e-mail' | translate"
+          class="min-w-max p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white aspect-square w-10 mx-3"
+        >
+          <i class="fa-solid fa-at"></i>
+        </button>
+        <span *ngIf="checkedEmail">test@mail.com</span>
+      </div>
+
+      <div class="endNotice">
+        <mat-checkbox name="checkedPhone" [(ngModel)]="checkedPhone">
+        </mat-checkbox>
+        <button
+          [title]="'Sending notice via mobile number' | translate"
+          class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white aspect-square w-10 mx-3"
+        >
+          <i class="fa-solid fa-comment-sms"></i>
+        </button>
+        <span *ngIf="checkedPhone">520123451</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6 justify-center flex-wrap mt-4">
+      <button
+        type="button"
+        mat-raised-button
+        class="bg-base text-white"
+        (click)="modal.dismiss('Cross click')"
+      >
+        {{ "send" | translate }}
+      </button>
+
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="modal.dismiss('Cross click')"
+      >
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

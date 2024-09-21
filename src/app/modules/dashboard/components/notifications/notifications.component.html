@@ -1,0 +1,509 @@
+<div>
+  <app-navigator [title]="title"></app-navigator>
+  <div class="mt-3">
+    <tabset>
+      <tab heading="{{ lang == 'ar' ? 'إشعارات واردة' : 'Notices in box' }}">
+        <div class="content">
+          <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+            <div class="w-fit">
+              <input
+                class="form-control"
+                placeholder="{{ 'search' | translate }}"
+                #input
+              />
+            </div>
+            <div class="flex gap-2 controler">
+              <button class="btn btn-primary">
+                <span
+                  class="text-sm"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'اشعارات جديدة ',
+                    en: 'New Notifications'
+                  }"
+                ></span>
+                <span class="text-xs rounded-full p-1 bg-white text-base"
+                  >23</span
+                >
+              </button>
+              <button class="btn btn-primary">
+                <span
+                  class="text-sm"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'اشعارات مقروؤه',
+                    en: 'Readed Notifications'
+                  }"
+                ></span>
+                <span class="text-xs rounded-full p-1 bg-white text-base"
+                  >23</span
+                >
+              </button>
+              <button class="flex gap-1 btn btn-danger">
+                <span
+                  class="hidden md:block"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    en: 'Delete Selected',
+                    ar: 'حذف المحدده'
+                  }"
+                ></span>
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-auto mt-3">
+            <table
+              matSort
+              #notifications_sort
+              mat-table
+              [dataSource]="data.notifications"
+              class="mat-elevation-z8 rounded-t-xl overflow-hidden"
+            >
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox
+                    color="warn"
+                    (change)="$event ? toggleAllRows() : null"
+                    [checked]="
+                      selection.notifications.hasValue() && isAllSelected()
+                    "
+                    [indeterminate]="
+                      selection.notifications.hasValue() && !isAllSelected()
+                    "
+                    [aria-label]="checkboxLabel()"
+
+                  >
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox
+                    color="warn"
+                    (click)="$event.stopPropagation()"
+                    (change)="
+                      $event ? selection.notifications.toggle(row) : null
+                    "
+                    [checked]="selection.notifications.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)"
+                  >
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="SendUserName">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "SenderName" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.SendUserName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef style="width: 320px">
+                  {{ "Text" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Description }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Date">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Date" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.Date }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="ProjectNo">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Project Number" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.ProjectNo }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="operations">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'خيارات',
+                    en: 'Operations'
+                  }"
+                ></th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex gap-1 justify-center items-center py-2">
+                    <button
+                      *ngIf="!element['showOptions']"
+                      class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                      (click)="showAction(element)"
+                    >
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button
+                      *ngIf="element['showOptions']"
+                      (click)="open(deleteModal, '', 'md', 'top')"
+                      class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button
+                      *ngIf="element['showOptions']"
+                      (click)="open(projectDetailsModal, '', 'xl')"
+                      class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white"
+                    >
+                      <span
+                        [translate]="'name'"
+                        [translateParams]="{
+                          ar: 'عرض المشروع',
+                          en: 'View Project'
+                        }"
+                      ></span>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columns.notifications"></tr>
+              <tr
+                mat-row
+                *matRowDef="
+                  let row;
+                  let i = index;
+                  columns: columns.notifications
+                "
+                class="{{ !row['showOptions'] ? 'bg-blue-100' : '' }}"
+              ></tr>
+            </table>
+          </div>
+          <mat-paginator #notifications_paginator [pageSizeOptions]="[10, 25]">
+          </mat-paginator>
+        </div>
+      </tab>
+      <tab heading="{{ lang == 'ar' ? 'إشعارات صادره' : 'Issued notices' }}">
+        <div class="content">
+          <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+            <div class="w-fit">
+              <input
+                class="form-control"
+                placeholder="{{ 'search' | translate }}"
+                #input
+              />
+            </div>
+            <div class="flex gap-2 controler">
+              <button
+                class="flex gap-1 btn btn-primary"
+                (click)="open(sendNotifications, '', '', 'top')"
+              >
+                <span
+                  class="hidden md:block"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    en: 'Send Notifications',
+                    ar: 'ارسال اشعار'
+                  }"
+                ></span>
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+              <button class="flex gap-1 btn btn-danger">
+                <span
+                  class="hidden md:block"
+                  [translate]="'name'"
+                  [translateParams]="{
+                    en: 'Delete Selected',
+                    ar: 'حذف المحدده'
+                  }"
+                ></span>
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-auto mt-3">
+            <table
+              matSort
+              #issued_sort
+              mat-table
+              [dataSource]="data.issued"
+              class="mat-elevation-z8 rounded-t-xl overflow-hidden"
+            >
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox
+                    color="warn"
+                    (change)="$event ? toggleAllRowsPro() : null"
+                    [checked]="
+                      selection.issued.hasValue() && isAllSelectedPro()
+                    "
+                    [indeterminate]="
+                      selection.issued.hasValue() && !isAllSelectedPro()
+                    "
+                    [aria-label]="checkboxLabelPro()"
+                  >
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox
+                    color="warn"
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.issued.toggle(row) : null"
+                    [checked]="selection.issued.isSelected(row)"
+                    [aria-label]="checkboxLabelPro(row)"
+                  >
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Text" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Description }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ReceivedUserName">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "To" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.ReceivedUserName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Date">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Date" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.Date }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="IsRead">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Status" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <i
+                    class="fa-solid {{
+                      element.IsRead
+                        ? 'text-green-500 fa-check'
+                        : 'text-red-500 fa-xmark'
+                    }}"
+                  ></i>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="ProjectNo">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Project Number" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.ProjectNo }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="operations">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  [translate]="'name'"
+                  [translateParams]="{
+                    ar: 'خيارات',
+                    en: 'Operations'
+                  }"
+                ></th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex gap-1 justify-center items-center py-2">
+                    <button
+                      class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columns.issued"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: columns.issued"
+                (click)="selection.issued.toggle(row)"
+              ></tr>
+            </table>
+          </div>
+          <mat-paginator #issued_paginator [pageSizeOptions]="[10, 25]">
+          </mat-paginator>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>
+
+<!-- projectDetailsModal sendNotifications-->
+<ng-template #projectDetailsModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{ ar: 'تفاصيل المشروع      ', en: 'Project Details' }"
+    ></h4>
+    <div class="flex items-center gap-12">
+      <p class="mb-0">
+        <span style="margin-inline-end: 10px">{{
+          "ProjectNumber" | translate
+        }}</span>
+        <span>{{ "255" }}</span>
+      </p>
+      <p class="mb-0">
+        <span style="margin-inline-end: 10px">{{
+          "projectDescription" | translate
+        }}</span>
+        <span>{{ "awd" }}</span>
+      </p>
+    </div>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-project-details
+      [projectDetails]="projectDetails"
+    ></app-project-details>
+  </div>
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+  </div>
+</ng-template>
+<!--  sendNotifications-->
+<ng-template #sendNotifications let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{ ar: 'ارسال اشعار', en: 'Send Notification' }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <button (click)="open()" [translate]="'name'" [translateParams]="{
+                          ar: 'تحديد المستلمين',
+                          en: 'Specify Reciever'
+                        }"></button> -->
+    <div class="grid gap-3">
+      <div>
+        <mat-slide-toggle
+          color="primary"
+          (change)="setNotificationOnProject($event)"
+          ><span
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'اشعار في مشروع',
+              en: 'Notification On Project'
+            }"
+          ></span
+        ></mat-slide-toggle>
+      </div>
+      <div *ngIf="NotificationOnProject">
+        <label class="col-form-label">
+          {{ "Project Number" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <ng-select
+          [clearable]="true"
+          class="w-full p-0"
+          placeholder="{{ 'Project Number' | translate }}"
+        >
+          <ng-option>الكل</ng-option>
+          <ng-option>اختيار</ng-option>
+          <ng-option>اختيار</ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <label class="col-form-label">
+          {{ "Users" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <ng-select
+          [multiple]="true"
+          [clearable]="true"
+          class="w-full p-0"
+          placeholder="{{ 'Users' | translate }}"
+        >
+          <ng-option>الكل</ng-option>
+          <ng-option>اختيار</ng-option>
+          <ng-option>اختيار</ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <label class="col-form-label">
+          {{ "Text notification" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input type="text" class="form-control" />
+      </div>
+      <div>
+        <label for="attachment23" class="col-form-label">{{
+          "Upload files" | translate
+        }}</label>
+        <input
+          class="form-control"
+          name="attachment23"
+          type="file"
+          id="attachment23"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "Send" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- confirm delete Modal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="modal.dismiss()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

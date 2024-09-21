@@ -1,0 +1,1594 @@
+<div class="offers-price">
+  <app-navigator [title]="title"></app-navigator>
+  <div class="head flex gap-2 flex-wrap items-end justify-between">
+    <div class="flex gap-2 flex-wrap items-end">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Customer" | translate }}</label>
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          [(ngModel)]="selectedUser"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+          }}</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group relative">
+        <i class="fa fa-search absolute"></i>
+        <input
+          placeholder="{{ 'searchByOfferNum' | translate }}"
+          type="text"
+          class="form-control"
+          name="offer_number"
+        />
+      </div>
+    </div>
+
+    <div class="btns">
+      <button
+        type="button"
+        class="flex gap-1 btn btn-warning"
+        (click)="exportExcel()"
+      >
+        {{ "exportExcel" | translate }}
+        <i class="fa-solid fa-file-export"></i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [routerLink]="'/projects/track-projects'"
+      >
+        {{ "projectManagement" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        [routerLink]="'/voucher/addServices'"
+      >
+        {{ "addServices" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn bg-base text-white"
+        (click)="open(addOfferPrice, null, 'add')"
+      >
+        {{ "addNewOffer" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="bg-green-500 hover:bg-green-700 text-white"
+        (click)="open(generalOrders)"
+      >
+        {{ "generalOrders" | translate }}
+        {{ " [ " + generalRequests?.length + " ]" }}
+      </button>
+
+      <button
+        type="button"
+        class="bg-red-500 hover:bg-red-700 text-white"
+        (click)="open(designOrders)"
+      >
+        {{ "designOrders" | translate }}
+
+        {{ " [ " + designRequests?.length + " ]" }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="selectedRow" class="mt-5 mx-2">
+    <span
+      [translate]="'name'"
+      [translateParams]="{ ar: 'عرض رقم', en: 'Offer Numer' }"
+    ></span>
+    <span class="mx-2">{{ selectedRow?.id }}</span>
+  </p>
+
+  <div class="timeLine">
+    <ul class="list-unstyled">
+      <li>
+        <span
+          *ngIf="selectedRow?.status >= 1"
+          class="{{ selectedRow?.status >= 1 ? 'bg-base text-white' : '' }}"
+        >
+          <i class="fa fa-check"></i
+        ></span>
+        <span *ngIf="selectedRow?.status < 1">1</span>
+
+        <span>{{ "step1" | translate }}</span>
+      </li>
+      <li>
+        <span
+          *ngIf="selectedRow?.status >= 2"
+          class="{{ selectedRow?.status >= 2 ? 'bg-base text-white' : '' }}"
+        >
+          <i class="fa fa-check"></i
+        ></span>
+        <span *ngIf="selectedRow?.status < 2">2</span>
+
+        <span>{{ "step2" | translate }}</span>
+      </li>
+      <li>
+        <span
+          *ngIf="selectedRow?.status >= 3"
+          class="{{ selectedRow?.status >= 3 ? 'bg-base text-white' : '' }}"
+        >
+          <i class="fa fa-check"></i
+        ></span>
+        <span *ngIf="selectedRow?.status < 3">3</span>
+
+        <span>{{ "step3" | translate }}</span>
+      </li>
+      <li>
+        <span
+          *ngIf="selectedRow?.status >= 4"
+          class="{{ selectedRow?.status >= 4 ? 'bg-base text-white' : '' }}"
+        >
+          <i class="fa fa-check"></i
+        ></span>
+        <span *ngIf="selectedRow?.status < 4">4</span>
+
+        <span>{{ "step4" | translate }}</span>
+      </li>
+      <li>
+        <span
+          *ngIf="selectedRow?.status >= 5"
+          class="{{ selectedRow?.status >= 5 ? 'bg-base text-white' : '' }}"
+        >
+          <i class="fa fa-check"></i
+        ></span>
+        <span *ngIf="selectedRow?.status < 5">5</span>
+
+        <span>{{ "step5" | translate }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tables-data mt-3 overflow-hidden">
+    <!-- table -->
+    <div class="overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <!-- offer_id Column -->
+        <ng-container matColumnDef="offer_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم العرض',
+                en: 'offer id'
+              }"
+            ></span>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [title]="
+              element.status == 0
+                ? ('late' | translate)
+                : element.status == 3
+                ? ('Almost done' | translate)
+                : ''
+            "
+          >
+            <span
+              class="{{ element.status == 0 ? 'text-red-500 fw-bold' : '' }} {{
+                element.status == 3 ? 'text-yellow-500 fw-bold' : ''
+              }} "
+              >{{ element.offer_id }}</span
+            >
+          </td>
+        </ng-container>
+
+        <!-- date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: '  التاريخ',
+                en: 'Date  '
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.date | date : "dd-MM-yyyy" }}
+          </td>
+        </ng-container>
+
+        <!-- customer Column -->
+        <ng-container matColumnDef="customer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: '  العميل',
+                en: 'Customer'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.customer }}
+          </td>
+        </ng-container>
+
+        <!-- price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'المبلغ  ',
+                en: 'price'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.price }}
+          </td>
+        </ng-container>
+
+        <!-- user Column -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: '  مقدم العرض',
+                en: '  Presenter'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.user }}
+          </td>
+        </ng-container>
+
+        <!-- project_id Column -->
+        <ng-container matColumnDef="project_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'رقم المشروع',
+                en: 'Project Number'
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.project_id }}
+          </td>
+        </ng-container>
+
+        <!-- project-duration Column -->
+        <ng-container matColumnDef="project-duration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              [translate]="'name'"
+              [translateParams]="{
+                ar: 'مدة المشروع',
+                en: 'project duration  '
+              }"
+            ></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.projectDuration }}
+          </td>
+        </ng-container>
+
+        <!-- operations Column -->
+        <ng-container matColumnDef="operations">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [translate]="'name'"
+            [translateParams]="{
+              ar: 'خيارات',
+              en: 'Operations'
+            }"
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex gap-1 justify-center py-2">
+              <button
+                type="button"
+                class="p-2 bg-green-100 hover:bg-green-500 {{
+                  element.status == 0
+                    ? 'bg-red-500 hover:bg-red-500 text-white'
+                    : ''
+                }} rounded-lg duration-300 hover:text-white  w-30"
+              >
+                <span
+                  *ngIf="element.status == 0"
+                  [translate]="'name'"
+                  [translateParams]="{ ar: 'متأخر', en: 'delayed' }"
+                >
+                </span>
+                <span *ngIf="element.status == 1">{{
+                  "step1" | translate
+                }}</span>
+                <span *ngIf="element.status == 2">{{
+                  "step2" | translate
+                }}</span>
+                <span *ngIf="element.status == 3">{{
+                  "step3" | translate
+                }}</span>
+                <span *ngIf="element.status == 4">{{
+                  "step4" | translate
+                }}</span>
+                <span *ngIf="element.status == 5">{{
+                  "step5" | translate
+                }}</span>
+              </button>
+
+              <button
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(addOfferPrice, element, 'edit')"
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(deleteModal, null, 'delete')"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+              <button
+                class="p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="open(sendEmail, element, 'sendEmail')"
+              >
+                <i class="fa-solid fa-comment-sms"></i>
+              </button>
+              <button
+                class="p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="printProject()"
+              >
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="duration-300 hover:bg-slate-100"
+          (click)="setOfferData(row)"
+        ></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+<!-- addOfferPrice / edit -->
+<ng-template #addOfferPrice let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span *ngIf="modalDetails?.id">{{ "editNewOffer" | translate }}</span>
+
+      <span *ngIf="!modalDetails?.id">{{ "addNewOffer" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-white m-0"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #offerPriceForm="ngForm" class="offerPrice-form">
+      <div class="row align-items-end mb-4">
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customer" class="text-right col-form-label block">
+              {{ "Customer Name" | translate }}
+            </label>
+            <input
+              required
+              #customer="ngModel"
+              [(ngModel)]="modalDetails.customer"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customer"
+              name="customer"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Client Name (English)" | translate }}
+            </label>
+            <input
+              required
+              #customerEn="ngModel"
+              [(ngModel)]="modalDetails.customerEn"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customerEn"
+              name="customerEn"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEmail" class="text-right col-form-label block">
+              {{ "Email" | translate }}
+            </label>
+            <input
+              required
+              #customerEmail="ngModel"
+              [(ngModel)]="modalDetails.customerEmail"
+              ngModel
+              class="form-control"
+              type="text"
+              id="customerEmail"
+              name="customerEmail"
+              [disabled]="existValue"
+              email
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerPhone" class="text-right col-form-label block">
+              {{ "Mobile Number" | translate }}
+            </label>
+            <input
+              required
+              #customerPhone="ngModel"
+              [(ngModel)]="modalDetails.customerPhone"
+              ngModel
+              class="form-control"
+              type="tel"
+              id="customerPhone"
+              name="customerPhone"
+              [disabled]="existValue"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Chose Date" | translate }}
+            </label>
+            <div class="form-group timeInput">
+              <input
+                [(ngModel)]="modalDetails.date"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #exist="ngModel"
+              ngModel
+              type="checkbox"
+              [(ngModel)]="existValue"
+              id="exist"
+              name="exist"
+            />
+            <label for="exist" class="text-right col-form-label mx-2">
+              {{ "existUser" | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label"> {{ "Customer" | translate }}</label>
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.user"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="!existValue"
+              name="user"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label"> {{ "Title" | translate }}</label>
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.title"
+              [ngModelOptions]="{ standalone: true }"
+              name="title"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "description " | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.description"
+              [ngModelOptions]="{ standalone: true }"
+              name="description"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "sales Engineer" | translate }}</label
+            >
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.salesEngineer"
+              [ngModelOptions]="{ standalone: true }"
+              name="salesEngineer"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="department" class="text-right col-form-label block">
+              {{ "department" | translate }}
+            </label>
+            <input
+              required
+              #department="ngModel"
+              [(ngModel)]="modalDetails.department"
+              ngModel
+              class="form-control"
+              type="text"
+              id="department"
+              name="department"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="offer_id" class="text-right col-form-label block">
+              {{ "Offer Number" | translate }}
+            </label>
+            <div class="flex items-start">
+              <input
+                required
+                #offer_id="ngModel"
+                [(ngModel)]="modalDetails.offer_id"
+                ngModel
+                class="form-control"
+                type="text"
+                id="offer_id"
+                name="offer_id"
+                [disabled]="!showOfferValue"
+              />
+              <input
+                #showOffer="ngModel"
+                [(ngModel)]="showOfferValue"
+                class="form-check-input"
+                type="checkbox"
+                name="showOffer"
+                style="height: 38px; width: 38px; margin: 0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for=" offer_intro" class="text-right col-form-label block">
+              {{ "Presentation" | translate }}
+            </label>
+            <input
+              required
+              #offer_intro="ngModel"
+              [(ngModel)]="modalDetails.offer_intro"
+              ngModel
+              class="form-control"
+              type="text"
+              id="offer_intro"
+              name="offer_intro"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-0 mb-sm-3 flex justify-center">
+          <div class="form-group">
+            <input
+              #default="ngModel"
+              ngModel
+              type="checkbox"
+              id="default"
+              name="default"
+              [(ngModel)]="modalDetails.default"
+            />
+            <label for="default" class="text-right col-form-label mx-2">
+              {{ "default" | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <button type="button" class="btn bg-base text-white offerPrice-btn">
+              <i class="fa fa-user mx-2"></i>
+              <span>{{ "Land area and required floors" | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "services" | translate }}
+          <button
+            type="button "
+            class="offer-price-add-btn mx-2"
+            (click)="addService(offerServices?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="offer-price-editable shadow mb-4" style="overflow-x: auto">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="
+              vertical-align: middle;
+              font-size: 14px;
+              min-width: max-content;
+              width: 100%;
+            "
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "ServiceNo" | translate }}</th>
+                <th>{{ "ServiceName" | translate }}</th>
+                <th>{{ "Unit" | translate }}</th>
+                <th>{{ "Quantity" | translate }}</th>
+                <th>{{ "price" | translate }}</th>
+                <th>{{ "VATTax" | translate }}</th>
+                <th>{{ "netTax" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerServices; let i = index"
+                style="line-height: 5px"
+              >
+                <td>{{ item.id }}</td>
+                <td (click)="open(servicesListModal, null, 'servicesList', i)">
+                  <input
+                    type="text"
+                    name="os-name{{ i }}"
+                    [(ngModel)]="item.name"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="os-unit{{ i }}"
+                    [(ngModel)]="item.unit"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="text"
+                    name="os-amount{{ i }}"
+                    [(ngModel)]="item.amount"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    name="os-price{{ i }}"
+                    [(ngModel)]="item.price"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    name="os-vatTax{{ i }}"
+                    [(ngModel)]="item.vatTax"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="os-taxes{{ i }}"
+                    [(ngModel)]="item.taxes"
+                  />
+                </td>
+                <td>
+                  <button
+                    title=""
+                    class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                    style="margin-inline-end: 6px"
+                    (click)="open(serviceDetailsModal, item, 'serviceDetails')"
+                  >
+                    <i class="fa-solid fa-info"></i>
+                  </button>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deleteService(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="offerPrice-box-info">
+          <div class="pt-2">
+            <label for="include_tax">{{ "tax type" | translate }}</label>
+            <ng-select
+              class="p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              name="include_tax"
+            >
+              <ng-option [value]="0">{{
+                "Excluding tax" | translate
+              }}</ng-option>
+              <ng-option [value]="1">{{
+                "Taxes included" | translate
+              }}</ng-option>
+            </ng-select>
+          </div>
+
+          <div>
+            <label for="total_amount">{{ "Total amount" | translate }}</label>
+            <input
+              type="number"
+              id="total_amount"
+              name="total_amount"
+              class="form-control"
+            />
+          </div>
+
+          <div>
+            <label for="total_amount_text">{{
+              "total in writing" | translate
+            }}</label>
+            <input
+              type="text"
+              id="total_amount_text"
+              name="total_amount_text"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "payments" | translate }}
+          <button
+            type="button "
+            class="offer-price-add-btn mx-2"
+            (click)="addPayments(offerPayments?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="table offer-price-editable shadow">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="vertical-align: middle; font-size: 14px"
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "Statement" | translate }}</th>
+                <th>{{ "English statement" | translate }}</th>
+                <th>{{ "Ratio" | translate }}</th>
+                <th>{{ "amount" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+                <th>{{ "Installing" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerPayments; let i = index"
+                style="line-height: 5px"
+              >
+                <td>
+                  <input
+                    type="text"
+                    name="op-statement{{ i }}"
+                    [(ngModel)]="item.statement"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="op-statementEn{{ i }}"
+                    [(ngModel)]="item.statementEn"
+                  />
+                </td>
+                <td class="relative">
+                  <input
+                    type="number"
+                    name="op-ratio{{ i }}"
+                    [(ngModel)]="item.ratio"
+                  />
+                  <span class="absolute offer-price-percent">%</span>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="op-amount{{ i }}"
+                    [(ngModel)]="item.amount"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deletePayments(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="item.status"
+                    name="op-status{{ i }}"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <h3 class="flex items-center justify-start fw-bold">
+          {{ "Terms" | translate }}
+          <button
+            type="button "
+            class="offer-price-add-btn mx-2"
+            (click)="addTerm(offerTerms?.length)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+
+        <div class="table offer-price-editable shadow">
+          <table
+            class="table table-responsive table-striped table-bordered text-center"
+            style="vertical-align: middle; font-size: 14px"
+          >
+            <thead
+              class="bg-base text-white"
+              style="line-height: 30px; font-size: 13px"
+            >
+              <tr>
+                <th>{{ "Statement" | translate }}</th>
+                <th>{{ "English statement" | translate }}</th>
+                <th>{{ "action" | translate }}</th>
+                <th>{{ "Installing" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of offerTerms; let i = index"
+                style="line-height: 5px"
+              >
+                <td>
+                  <input
+                    type="text"
+                    name="ot-statement{{ i }}"
+                    [(ngModel)]="item.statement"
+                    ngModel
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="ot-statementEn{{ i }}"
+                    [(ngModel)]="item.statementEn"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    (click)="deleteTerm(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="item.status"
+                    name="ot-status{{ i }}"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr class="my-3" />
+
+      <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #remeberMe="ngModel"
+              ngModel
+              type="checkbox"
+              id="remeberMe"
+              name="remeberMe"
+              [(ngModel)]="modalDetails.remeberMe"
+            />
+            <label for="remeberMe" class="text-right col-form-label mx-2">
+              {{ "remeberMe" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <div class="form-group timeInput">
+              <input
+                placeholder="{{ 'Chose Date' | translate }}"
+                [(ngModel)]="modalDetails.followDate"
+                name="followDate"
+                type="text"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showNotification="ngModel"
+              ngModel
+              type="checkbox"
+              id="showNotification"
+              name="showNotification"
+              [(ngModel)]="modalDetails.showNotification"
+            />
+            <label
+              for="showNotification"
+              class="text-right col-form-label mx-2"
+            >
+              {{ "showNotification" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showSignatures="ngModel"
+              ngModel
+              type="checkbox"
+              id="showSignatures"
+              name="showSignatures"
+              [(ngModel)]="modalDetails.showSignatures"
+            />
+            <label for="showSignatures" class="text-right col-form-label mx-2">
+              {{ "showMarks" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #showAccount="ngModel"
+              ngModel
+              type="checkbox"
+              id="showAccount"
+              name="showAccount"
+              [(ngModel)]="modalDetails.showAccount"
+            />
+            <label
+              for="showAccount"
+              class="text-right col-form-label offerPrice-btn mx-2"
+            >
+              {{ "showAccount" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-0 mb-sm-3">
+          <div class="form-group">
+            <input
+              #PrintEn="ngModel"
+              ngModel
+              type="checkbox"
+              id="PrintEn"
+              name="PrintEn"
+              [(ngModel)]="modalDetails.PrintEn"
+            />
+            <label for="PrintEn" class="text-right col-form-label mx-2">
+              {{ "printEn" | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn bg-base text-white"
+      (click)="
+        modalDetails?.id ? EditOfferPrice() : AddOfferPrice();
+        modal.close('Save click', 'end')
+      "
+    >
+      {{ modalDetails?.id ? ("edit" | translate) : ("add" | translate) }}
+    </button>
+
+    <button (click)="modal?.dismiss()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- generalOrders -->
+<ng-template #generalOrders let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "requestModalTitle" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="text-white m-0"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="filter mb-3">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label">
+          {{ "requestModalFilter" | translate }}</label
+        >
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          [(ngModel)]="selectedDuration"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <ng-option
+            *ngFor="let duration of durations"
+            [value]="duration.id"
+            [translate]="'name'"
+            [translateParams]="{ ar: duration.name?.ar, en: duration.name?.en }"
+          >
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="table">
+      <table
+        class="table table-responsive table-striped table-bordered text-center"
+        style="vertical-align: middle; font-size: 14px"
+      >
+        <thead
+          class="bg-base text-white"
+          style="line-height: 30px; font-size: 13px"
+        >
+          <tr>
+            <th>{{ "requestModalColumn" | translate }}</th>
+            <th>{{ "Customer Name" | translate }}</th>
+            <th>{{ "email" | translate }}</th>
+            <th>{{ "Mobile Number" | translate }}</th>
+            <th>{{ "requestModalColumn2" | translate }}</th>
+            <th>{{ "requestModalColumn3" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of generalRequests; let i = index">
+            <td>{{ item.date | date : "dd-MM-yyyy" }}</td>
+            <td>{{ item.user_name }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.phone }}</td>
+            <td>
+              <button
+                class="p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="printRequest()"
+              >
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </td>
+            <td>
+              <div class="form-types checkbox">
+                <div class="checkbox-content relative">
+                  <!-- [checked]="item.status == 2" -->
+                  <input
+                    type="checkbox"
+                    name="check"
+                    [ngModel]="item.status"
+                    #checkbox="ngModel"
+                    (change)="changeRequestStatus(i, 'general')"
+                  />
+                  <div class="box {{ item.status == 2 ? 'checked' : 'blur' }}">
+                    <span class="absolute">{{
+                      "requestModalData1" | translate
+                    }}</span>
+                    <span class="absolute">{{
+                      "requestModalData2" | translate
+                    }}</span>
+                    <div class="cycle"></div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- designOrders -->
+<ng-template #designOrders let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "requestModalTitle" | translate }}
+    </h4>
+    <button
+      type="button"
+      class="text-white m-0"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="filter mb-3">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label">
+          {{ "requestModalFilter" | translate }}</label
+        >
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          [(ngModel)]="selectedDuration2"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <ng-option
+            *ngFor="let duration of durations"
+            [value]="duration.id"
+            [translate]="'name'"
+            [translateParams]="{ ar: duration.name?.ar, en: duration.name?.en }"
+          >
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="table">
+      <table
+        class="table table-responsive table-striped table-bordered text-center"
+        style="vertical-align: middle; font-size: 14px"
+      >
+        <thead
+          class="bg-base text-white"
+          style="line-height: 30px; font-size: 13px"
+        >
+          <tr>
+            <th>{{ "requestModalColumn" | translate }}</th>
+            <th>{{ "Customer Name" | translate }}</th>
+            <th>{{ "email" | translate }}</th>
+            <th>{{ "Mobile Number" | translate }}</th>
+            <th>{{ "requestModalColumn2" | translate }}</th>
+            <th>{{ "requestModalColumn3" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of designRequests; let i = index">
+            <td>{{ item.date | date : "dd-MM-yyyy" }}</td>
+            <td>{{ item.user_name }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.phone }}</td>
+            <td>
+              <button
+                class="p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white w-10"
+                (click)="printRequest()"
+              >
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </td>
+            <td>
+              <div class="form-types checkbox">
+                <div class="checkbox-content relative">
+                  <!-- [checked]="item.status == 2" -->
+                  <input
+                    type="checkbox"
+                    name="check"
+                    [ngModel]="item.status"
+                    #checkbox="ngModel"
+                    (change)="changeRequestStatus(i, 'designs')"
+                  />
+                  <div class="box {{ item.status == 2 ? 'checked' : 'blur' }}">
+                    <span class="absolute">{{
+                      "requestModalData1" | translate
+                    }}</span>
+                    <span class="absolute">{{
+                      "requestModalData2" | translate
+                    }}</span>
+                    <div class="cycle"></div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- sendEmail -->
+<ng-template #sendEmail let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "sendSms" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+      <form
+        class="grid gap-3 grid-cols-1 md:grid-cols-2 offerPrice-form"
+        #emailForm="ngForm"
+      >
+        <div class="form-group">
+          <label for="from" class="text-right col-form-label block">
+            {{ "From" | translate }}
+          </label>
+          <input
+            required
+            #from="ngModel"
+            [(ngModel)]="modalDetails.userEmail"
+            ngModel
+            class="form-control"
+            type="text"
+            id="from"
+            name="from"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="to234" class="text-right col-form-label block">
+            {{ "To" | translate }}
+          </label>
+          <input
+            required
+            #to234="ngModel"
+            [(ngModel)]="modalDetails.customerEmail"
+            ngModel
+            class="form-control"
+            type="text"
+            id="to234"
+            name="to234"
+            readonly
+          />
+        </div>
+        <div class="form-group col-span-1 md:col-span-2">
+          <label for="Subject" class="text-right col-form-label block">
+            {{ "subject" | translate }}
+          </label>
+          <input
+            required
+            #Subject="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="Subject"
+            name="Subject"
+          />
+        </div>
+
+        <div class="form-group col-span-1 md:col-span-2">
+          <label for="Text32" class="text-right col-form-label block">
+            {{ "Text" | translate }}
+          </label>
+          <textarea
+            required
+            #Text32="ngModel"
+            ngModel
+            class="form-control"
+            type="text"
+            id="Text32"
+            name="Text32"
+          ></textarea>
+        </div>
+
+        <div class="upload col-span-1 md:col-span-2">
+          <label for="">{{ "Add Attachments" | translate }}</label>
+
+          <file-upload [(ngModel)]="uploadedFiles" name="files"></file-upload>
+        </div>
+
+        <div
+          class="flex gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+        >
+          <button
+            class="btn bg-base text-white"
+            type="submit"
+            (click)="sendEMAIL(emailForm.value)"
+          >
+            {{ "Send" | translate }}
+          </button>
+          <button (click)="modal?.dismiss()" class="btn btn-secondary">
+            {{ "Back" | translate }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!-- serviceDetails -->
+<ng-template #serviceDetailsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "serviceDetails" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="offerPrice-service_item_details">
+      <li
+        *ngFor="let item of serviceDetails.items"
+        class="flex flex-wrap items-center justify-between w-100"
+      >
+        <div>
+          <i class="fa fa-check text-success"></i>
+          <span class="text-base mx-2">{{ item?.name }}</span>
+        </div>
+        <div class="offerPrice-serviceBtns">
+          <button
+            type="button"
+            class="btn border-base text-white"
+            style="margin-inline-end: 10px"
+          >
+            {{ "Insert" | translate }}
+          </button>
+          <button type="button" class="btn btn-outline-danger">
+            {{ "delete" | translate }}
+          </button>
+        </div>
+      </li>
+    </ul>
+    <div
+      class="flex justify-end gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+      <button type="button" class="btn bg-base text-white">
+        {{ "Insert All" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- servicesListModal -->
+<ng-template #servicesListModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "servicesList" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-form-field class="w-full">
+      <mat-label>{{ "search" | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+    </mat-form-field>
+
+    <div class="table">
+      <table
+        mat-table
+        [dataSource]="serviceListDataSource"
+        class="mat-elevation-z8 table table-responsive table-striped table-bordered text-center"
+        style="vertical-align: middle; font-size: 14px"
+      >
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "ServiceName" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>{{ "price" | translate }}</th>
+          <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="servicesListdisplayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            let i = index;
+            columns: servicesListdisplayedColumns
+          "
+          (click)="setServiceRowValue(i); modal.dismiss()"
+        ></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "noResult" | translate }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="text-end mt-2">
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

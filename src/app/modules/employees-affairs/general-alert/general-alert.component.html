@@ -1,0 +1,250 @@
+<div class=" pb-4">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="tables-data mt-3 overflow-hidden">
+
+    <!-- buttons -->
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div class="w-fit">
+        <input class="form-control" (keyup)="applyFilter($event)" placeholder="{{'search' | translate}}" #input />
+      </div>
+      <div class="flex gap-2 controler">
+        <button class="flex gap-1 btn btn-primary" (click)="open(addAlert,'edit','edit')">
+          <span class="hidden md:block" [translate]="'name'" [translateParams]="{
+              ar: 'اضافة تنبيه ',
+              en: 'Add Alert'
+            }"></span>
+          <i class="fa-solid fa-chart-simple"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto">
+      <table mat-table [dataSource]="data.alerts" matSort class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max">
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'عنوان التنبيه',
+                en: 'Alert Title'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.Name}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'تاريخ التنبيه',
+                en: 'Alert Date'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Date }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="SendUserName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'المرسل ',
+                en: 'Sent'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.SendUserName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span [translate]="'name'" [translateParams]="{
+                  ar: 'نص التنبيه ',
+                  en: 'Alert Text'
+                }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Description }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef [translate]="'name'" [translateParams]="{
+                            ar: 'خيارات',
+                            en: 'Operations'
+                          }"></th>
+          <td mat-cell *matCellDef="let element">
+
+
+            <button
+              class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="IsRead">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'حالة التنبية',
+                en: 'Alert Status'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.IsRead" [translate]="'name'" [translateParams]="{
+                ar: 'تمت المشاهدة',
+                en: 'Read'
+              }"></span>
+            <span *ngIf="!element.IsRead" [translate]="'name'" [translateParams]="{
+                ar: 'لم تتم المشاهدة',
+                en: 'Not Read'
+              }"></span>
+          </td>
+        </ng-container>
+
+
+
+
+        <!-- Symbol Column -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="duration-300 hover:bg-slate-100"></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "No result found for " }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+
+<ng-template #addAlert let-modal>
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="m-0">
+      <span class="text-2xl" [translate]="'name'" [translateParams]="{
+              ar: 'اضافة تنبيه ',
+              en: 'Add Alert'
+            }">
+
+      </span>
+    </h4>
+    <button type="button" class="text-2xl text-white m-0" (click)="modal.dismiss()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="modal-form " #form="ngForm">
+
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="form-group ">
+          <label class=" col-form-label">
+            {{'Department'|translate}}
+          </label>
+          <select id="DepartmentSelectId" class="form-control">
+            <option selected="" value="">{{'Chose'|translate}}</option>
+            <option value="1">قسم المتابعة </option>
+            <option value="2">قسم الحسابات </option>
+            <option value="5">قسم المعماري</option>
+            <option value="6">قسم الكهربائي</option>
+            <option value="7">الإنشائي </option>
+            <option value="8">قسم السلامة </option>
+            <option value="9">قسم المساحة</option>
+            <option value="10">البلديه </option>
+            <option value="11">الدريس</option>
+            <option value="13">IT</option>
+          </select>
+        </div>
+        <div class="form-group ">
+          <label class=" col-form-label">
+            {{'User'|translate}}
+          </label>
+          <select class="form-control  select2 ">
+            <option selected="" value="">{{'Chose'|translate}}</option>
+            <option value="2">أبو أحمد</option>
+            <option value="3">محمد هلهل</option>
+            <option value="4">ايهاب رجب</option>
+            <option value="6">test</option>
+            <option value="7">محمد داود ادمن </option>
+            <option value="8">z</option>
+            <option value="14">خلف الله محمد الطاهر</option>
+            <option value="15">b</option>
+            <option value="16">t</option>
+            <option value="17">مهند شيغالي</option>
+            <option value="20">مستخدم تجريبي</option>
+            <option value="21">هلهل</option>
+            <option value="24">mashael</option>
+            <option value="25">أنس جعفر</option>
+            <option value="26">علي سالم سويلم</option>
+            <option value="28">باسل معين</option>
+            <option value="29">أسامة المصري</option>
+            <option value="31">العربي الحوراني</option>
+            <option value="32">مهند السلطان</option>
+            <option value="38">م/ سليم </option>
+            <option value="39">م/ حسين</option>
+            <option value="41">يوزر 1</option>
+            <option value="42">م روان</option>
+            <option value="43">م حفسرجاوي</option>
+            <option value="44">إسماعيل رياض</option>
+            <option value="46">شذى</option>
+          </select>
+        </div>
+        <div class="form-group timeInput">
+          <label class=" col-form-label" [translate]="'name'" [translateParams]="{
+                ar: 'تاريخ التنبيه',
+                en: 'Alert Date'
+              }"> </label>
+          <input placeholder="{{ 'Chose Date' | translate }}" type="text" class="form-control" bsDatepicker
+            #dpr="bsDatepicker" />
+        </div>
+        <div class="form-group  ">
+          <label class=" col-form-label" [translate]="'name'" [translateParams]="{
+                  ar: 'عنوان التنبيه',
+                  en: 'Alert Title'
+                }">
+
+          </label>
+
+
+          <input class="form-control valid" type="text" id="NotificationNametxt" name="NotificationNametxt"
+            placeholder="عنوان التنبيه">
+        </div>
+      </div>
+
+      <div class="form-group ">
+        <label class=" col-form-label" [translate]="'name'" [translateParams]="{
+                      ar: 'نص التنبيه ',
+                      en: 'Alert Text'
+                    }">
+
+        </label>
+        <textarea class="form-control valid" id="NotificationDescriptiontxt" name="NotificationDescriptiontxt"
+          placeholder=" " rows="4"></textarea>
+      </div>
+
+      <mat-checkbox class="example-margin mt-3" color="primary"><span [translate]="'name'" [translateParams]="{
+                      ar: 'إيقاف التكرار ',
+                      en: 'Turn off repeat'
+                    }"></span> </mat-checkbox>
+      <br>
+      <mat-checkbox class="example-margin" color="primary"> <span [translate]="'name'" [translateParams]="{
+                      ar: 'التعميم على جميع الموظفين ',
+                      en: 'Circular to all employees'
+                    }"></span></mat-checkbox>
+
+
+    </form>
+    <div class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2">
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

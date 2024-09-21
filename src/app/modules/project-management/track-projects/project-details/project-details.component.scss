@@ -1,0 +1,37 @@
+.content {
+  padding-top: 30px;
+}
+
+.delay {
+  background: #ccc;
+  border-radius: 5px;
+  padding: 12px 14px !important;
+  width: 160px;
+  text-align: center;
+}
+.late {
+  @apply bg-red-500 text-white;
+  padding: 10px 14px !important;
+  display: inline-block;
+  min-width: 150px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.uploadDiv {
+  .ng-dropdown-panel {
+    .ng-dropdown-panel-items {
+      max-height: 170px !important;
+    }
+  }
+}
+
+::ng-deep {
+  .uploadDiv {
+    .ng-dropdown-panel {
+      .ng-dropdown-panel-items {
+        max-height: 170px !important;
+      }
+    }
+  }
+}

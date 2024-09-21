@@ -1,0 +1,261 @@
+<div class="p-4" style="text-align: end">
+  <button (click)="printData('report')" class="btn btn-success">
+    <i class="fa fa-print"></i>
+  </button>
+</div>
+
+<hr />
+
+<div id="report" [ngStyle]="{ direction: lang == 'ar' ? 'rtl' : 'ltr' }" class="end-service-reward">
+  <!--Header-->
+  <div class="report-header" style="
+      display: flex;
+      align-items: center;
+      gap: 100px;
+      padding: 3px 0px;
+      margin-bottom: 20px;
+    ">
+    <div class="headerNe-right-side">
+      <img src="https://placehold.co/200x200" alt="logo"
+        style="height: 200px; width: 200px; max-width: 200px; object-fit: fill" />
+    </div>
+
+    <div class="headerNe-lefy-side" style="width: 100%">
+      <h1 style="
+          letter-spacing: 0.25px;
+          font-size: 23px;
+          margin: 0;
+          margin-bottom: 5px;
+        ">
+        النسخة التجريبية - DEMO
+      </h1>
+      <h1 style="
+          letter-spacing: 0.25px;
+          font-size: 23px;
+          margin: 0;
+          margin-bottom: 5px;
+        ">
+        MAD Engineering Consultants
+      </h1>
+      <div class="line" style="position: relative; padding: 5px 0px 10px">
+        <span style="
+            position: absolute;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e5e5e5;
+            z-index: 1;
+          "></span>
+        <span style="
+            position: absolute;
+            right: 0;
+            width: 70%;
+            height: 2px;
+            background-color: #ec1c24;
+            z-index: 2;
+          "></span>
+      </div>
+
+      <h1 style="
+          margin-bottom: 0;
+          font-size: 34px;
+          color: #0c8191;
+          margin-bottom: 0;
+          margin-top: 30px;
+          font-weight: 500;
+        " [translate]="'name'" [translateParams]="{
+          ar: 'كشف الاجازات و مكافأة نهاية الخدمة لموظف',
+          en: 'A statement of vacations and end-of-service benefits for an employee'
+        }"></h1>
+    </div>
+  </div>
+  <!--/Header-->
+
+  <!-- main info card -->
+  <div class="main-info flex items-start justify-between flex-wrap" style="gap: 8px;">
+    <ul class="list-unstyled">
+      <li>
+        <span class="label">رقم الموظف</span>
+        <span>212</span>
+      </li>
+      <li>
+        <span class="label">الاسم</span>
+        <span>فلان الفلاني فلان الفلاني فلان الفلاني</span>
+      </li>
+      <li>
+        <span class="label">ID</span>
+        <span>0000000000</span>
+      </li>
+      <li class="nested">
+        <span class="label">
+          الجنسية
+          <br>
+          العمر
+        </span>
+        <span>
+          سعودي
+          <br>
+          38.6
+        </span>
+      </li>
+    </ul>
+    <ul class="list-unstyled">
+      <li>
+        <span class="label">تاريخ التعيين ميلادي</span>
+        <span>12-12-2024</span>
+      </li>
+      <li>
+        <span class="label">المدة كاملة مع الاجازات</span>
+        <span>7.9</span>
+      </li>
+      <li>
+        <span class="label">تاريخ انتهاء العقد ساري ميلادي</span>
+        <span>12-12-2024</span>
+      </li>
+      <li class="nested">
+        <span class="label">
+          تاريخ انتهاء الهوية ميلادي
+          <br>
+          تاريخ استحقاق الاجازة التالية
+        </span>
+        <span>
+          12-12-2024
+          <br>
+          #N/A
+        </span>
+      </li>
+    </ul>
+    <ul class="list-unstyled single-item">
+      <li>
+        <span class="label">الملاحظات</span>
+        <span>فلان الفلاني فلان الفلاني فلان الفلاني فلان الفلاني فلان الفلاني فلان الفلاني</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- empolyee data table -->
+  <div class="p-1" style="overflow: auto; margin-block: 24px">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th rowspan="2" class="xsmall-cell">م</th>
+          <th *ngFor="let period of work_periods; let i = index" rowspan="1" colspan="8">فترة عمل {{ i + 1}}</th>
+          <!-- <th rowspan="2" class="medium-cell">رصيد اجازات مستحق بالايام</th>
+          <th rowspan="1" colspan="2">اجازة فعلية (برنت جوازات)</th>
+          <th rowspan="1" colspan="5">فترة اجازة فعلية</th>
+          <th rowspan="2" class="small-cell">متوسط الأجر</th>
+          <th rowspan="2" class="medium-cell">قيمة بدل الاجازة</th>
+          <th rowspan="2" class="small-cell">تسليم مستحقات اجازة الفترة</th> -->
+        </tr>
+        <tr>
+          <ng-container *ngFor="let period of work_periods">
+            <th class="medium-cell">تاريخ مباشرة الفترة</th>
+            <th class="medium-cell">تاريخ التوقف للفترة</th>
+            <th class="small-cell">ايام الفترة</th>
+            <th class="small-cell">اعوام الفترة</th>
+            <th class="small-cell">علي النظام القديم</th>
+            <th class="small-cell">علي النظام الجديد</th>
+            <th class="small-cell">من خدمة اول 5 سنوات</th>
+            <th class="small-cell">من خدمة ما بعد 5 سنوات</th>
+          </ng-container>
+          <!-- <th class="medium-cell">من (خروج)</th>
+          <th class="medium-cell">الي (دخول)</th>
+          <th class="medium-cell">تاريخ بداية الاجازة</th>
+          <th class="medium-cell">تاريخ انتهاء الاجازة</th>
+          <th class="xsmall-cell">ايام اجازة فعلي</th>
+          <th class="small-cell">رصيد سابق غير مستنفذ</th>
+          <th class="small-cell">ايام اجازة بدون راتب</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items;let x = index">
+          <td class="xsmall-cell gray">{{x + 1}}</td>
+          <ng-container *ngFor="let period of work_periods">
+            <td class="meduim-cell blue"></td>
+            <td class="meduim-cell blue"></td>
+            <td class="small-cell blue"></td>
+            <td class="small-cell blue"></td>
+            <td class="small-cell lightBlue"></td>
+            <td class="small-cell lightBlue"></td>
+            <td class="small-cell lightBlue"></td>
+            <td class="small-cell lightBlue"></td>
+          </ng-container>
+          <!-- <td class="medium-cell green"></td>
+          <td class="meduim-cell lightGreen"></td>
+          <td class="meduim-cell lightGreen"></td>
+          <td class="meduim-cell green"></td>
+          <td class="meduim-cell green"></td>
+          <td class="xsmall-cell green"></td>
+          <td class="small-cell lightGreen"></td>
+          <td class="small-cell lightGreen"></td>
+          <td class="small-cell lightGreen"></td>
+          <td class="medium-cell lightGreen"></td>
+          <td class="small-cell lightGreen"></td> -->
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="xsmall-cell no-border"></td>
+          <ng-container *ngFor="let period of work_periods">
+            <td class="meduim-cell no-border"></td>
+            <td class="meduim-cell no-border"></td>
+            <td class="small-cell blue">1</td>
+            <td class="small-cell blue">1</td>
+            <td class="small-cell lightBlue">1</td>
+            <td class="small-cell lightBlue">1</td>
+            <td class="small-cell lightBlue">1</td>
+            <td class="small-cell lightBlue special">1</td>
+          </ng-container>
+          <!-- <td class="medium-cell green special">1</td>
+          <td class="meduim-cell no-border"></td>
+          <td class="meduim-cell no-border"></td>
+          <td class="meduim-cell no-border"></td>
+          <td class="meduim-cell no-border"></td>
+          <td class="xsmall-cell green">1</td>
+          <td class="small-cell lightGreen">1</td>
+          <td class="small-cell lightGreen">1</td>
+          <td class="small-cell lightGreen">1</td>
+          <td class="medium-cell lightGreen">1</td>
+          <td class="small-cell lightGreen">1</td> -->
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- empolyee data summary -->
+  <div class="summary">
+    <ul class="list-unstyled w-max">
+      <li>
+        <span class="label">الراتب الاساسي الاخير</span>
+        <span class="blue">7,890,00</span>
+      </li>
+    </ul>
+    <h4 class="mt-3 mb-1">حساب المجموع:</h4>
+    <ul class="list-unstyled w-max">
+      <li>
+        <span class="label">نهاية الخدمة</span>
+        <span>7,890,00</span>
+      </li>
+      <li>
+        <span class="label">بدلات الاجازات</span>
+        <span>7,890,00</span>
+      </li>
+      <li>
+        <span class="label">ايام من راتب</span>
+        <span>7,890,00</span>
+      </li>
+      <li>
+        <span class="label">المجموع</span>
+        <span>7,890,00</span>
+      </li>
+      <li>
+        <span class="label">السلف السابقة</span>
+        <span>7,890,00</span>
+      </li>
+      <li>
+        <span class="label">المبلغ الصافي</span>
+        <span>7,890,00</span>
+      </li>
+    </ul>
+  </div>
+</div>

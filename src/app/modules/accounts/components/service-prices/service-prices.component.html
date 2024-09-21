@@ -1,0 +1,1059 @@
+<div class="service-prices">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="row align-items-center">
+    <div class="col-xxl-3 col-md-4 col-lg-3 mb-0 mb-md-3">
+      <div class="form-group">
+        <label class="col-form-label"> {{ "Project Type" | translate }}</label>
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          ngModel
+          name="Project Type"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+          }}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-xxl-3 col-md-4 col-lg-3 mb-0 mb-md-3">
+      <div class="form-group">
+        <label class="col-form-label">
+          {{ "Subproject type" | translate }}</label
+        >
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          ngModel
+          name="Subproject type"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+          }}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-xxl-3 col-md-4 col-lg-3 mb-0 mb-md-3">
+      <div class="form-group">
+        <label class="col-form-label"> {{ "ServiceName" | translate }}</label>
+
+        <input type="text " class="w-full p-2 inputType" name="ServiceName" />
+      </div>
+    </div>
+
+    <div class="col-xxl-3 col-md-4 col-lg-3 mb-0 mb-md-3">
+      <div class="form-group">
+        <label class="col-form-label"> {{ "search" | translate }}</label>
+
+        <input type="text " class="w-full p-2 inputType" name="search" />
+      </div>
+    </div>
+  </div>
+
+  <div class="head flex gap-2 flex-wrap items-end justify-between">
+    <div class="btns mb-3 w-100">
+      <div class="row d-md-flex me-1">
+        <button
+          type="button"
+          class="flex gap-1 btn btn-outline-secondary mb-3 col-md-2 ms-3"
+          routerLink="/accounts/Sales_bill"
+        >
+          {{ "salesBill" | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="flex gap-1 btn bg-base mb-3 col-md-2 text-white ms-3"
+          (click)="open(totalSurfacesModal, null, 'add')"
+        >
+          {{ "totalSurfacesAllowed" | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="flex gap-1 btn btn-success mb-3 col-md-2 text-white ms-3"
+          (click)="open(addSerivceModal)"
+        >
+          {{ "AddService" | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="flex gap-1 btn bg-base mb-3 col-md-2 text-white ms-3"
+          (click)="open(totalSurfacesModal, { id: 1 }, 'edit')"
+        >
+          {{ "requiredRoles" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- table -->
+  <div class="overflow-auto mt-4">
+    <table
+      *ngIf="showTable"
+      mat-table
+      [dataSource]="projectsDataSource"
+      matSort
+      class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+    >
+      <ng-container matColumnDef="ProjectType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "Project Type" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.ProjectType }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="SubprojectType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "Subproject type" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.SubprojectType }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ServiceName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "ServiceName" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.ServiceName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "price" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.price }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="operations">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "operations" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+
+              <div class="child-btns">
+                <span class="dtr-data">
+                  <!--تعديل  -->
+                  <button
+                    type="button"
+                    id="68"
+                    class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=" تعديل "
+                    data-original-title="تعديل "
+                    (click)="open(addSerivceModal)"
+                  >
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </button>
+                </span>
+
+                <span class="dtr-data">
+                  <!--حذف   -->
+
+                  <button
+                    type="button"
+                    id="68"
+                    class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=" حذف "
+                    data-original-title="حذف "
+                    (click)="open(deleteModal)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </span>
+                <span class="dtr-data">
+                  <button
+                    type="button"
+                    id="68"
+                    class="AddNewTaskbtn btn btn-outline-success btn-sm waves-effect mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=" التفاصيل "
+                    data-original-title="التفاصيل "
+                    (click)="open(DetailsServiceModal)"
+                  >
+                    <i class="fa-solid fa-circle-info"></i>
+                  </button>
+                </span>
+              </div>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="projectDisplayedColumns"></tr>
+
+      <tr mat-row *matRowDef="let row; columns: projectDisplayedColumns"></tr>
+    </table>
+
+    <div *ngIf="!showTable" class="text-center">No Data Available in Table</div>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+</div>
+
+<!-- EditCheckDetailsModal -->
+<ng-template #EditCheckDetailsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "Check_transferDetails" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Payment type" | translate }}
+            </label>
+            <input required class="form-control" type="text" disabled />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "dateCheck_transfer" | translate }}
+            </label>
+            <input
+              placeholder="{{ 'Chose' | translate }}"
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+              disabled
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Check_transferNumber" | translate }}
+            </label>
+            <input
+              placeholder="{{ 'Check_transferNumber' | translate }}"
+              required
+              class="form-control"
+              type="text"
+              disabled
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "BankName" | translate }}
+            </label>
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              name="user"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <button type="button" class="flex gap-1 btn btn-success mb-3 col-md-2">
+          {{ "add" | translate }}
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد حذف هذا العنصر ؟',
+        en: 'Do you want to delete this item?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "close" | translate }}
+      </button>
+
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- مدى إجمالي المسطحات المسموحة -->
+<!-- totalSurfacesModal -->
+<ng-template #totalSurfacesModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span *ngIf="!modalDetails?.id">{{ "totalSurfacesAllowed" | translate }}</span>
+      <span *ngIf="modalDetails?.id">{{ "requiredRoles" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label  class="text-right col-form-label block">
+
+              <span *ngIf="!modalDetails?.id">{{ "rangeName" | translate }}</span>
+              <span *ngIf="modalDetails?.id">{{ "RoleName" | translate }}</span>
+
+
+            </label>
+            <input required class="form-control" type="text"  [placeholder]="modalDetails?.id ? ('RoleName' | translate) : ('rangeName' | translate)" />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label  class="text-right col-form-label block">
+              <span *ngIf="!modalDetails?.id">{{ "RangeValue" | translate }}</span>
+              <span *ngIf="modalDetails?.id">{{ "turnRatio" | translate }}</span>
+            </label>
+            <input required class="form-control" type="text"  [placeholder]="modalDetails?.id ? ('turnRatio' | translate) : ('RangeValue' | translate)" />
+          </div>
+
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn text-white mb-3 col-md-2 me-3"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th *ngIf="!modalDetails?.id">{{ "rangeName" | translate }}</th>
+              <th *ngIf="modalDetails?.id">{{ "RoleName" | translate }}</th>
+
+              <th *ngIf="!modalDetails?.id">{{ "RangeValue" | translate }}</th>
+              <th *ngIf="modalDetails?.id">{{ "turnRatio" | translate }}</th>
+              <th>{{ "operations" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal, null, 'delete')"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- requiredRolesModal -->
+<ng-template #requiredRolesModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span>{{ "requiredRoles" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="RoleName" class="text-right col-form-label block">
+              <span>{{ "RoleName" | translate }}</span>
+            </label>
+            <input
+              required
+              class="form-control"
+              type="text"
+              placeholder="{{ 'RoleName' | translate }}"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="turnRatio" class="text-right col-form-label block">
+              {{ "turnRatio" | translate }}
+            </label>
+            <input
+              required
+              class="form-control"
+              type="text"
+              name="turnRatio"
+              placeholder=" {{ 'turnRatio' | translate }}"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn text-white mb-3 col-md-2 me-3"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "RoleName" | translate }}</th>
+              <th>{{ "turnRatio" | translate }}</th>
+              <th>{{ "operations" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal, null, 'delete')"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- DetailsServiceModal -->
+<ng-template #DetailsServiceModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span>{{ "DetailsProvidedService" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div>
+    <div class="header d-flex justify-content-center">
+      <h2 class="text-center w-fit p-3 bg-blue-300 mt-3">رخصة بناء</h2>
+    </div>
+    <div class="body w-fit me-3">
+      <i class="fa-solid fa-check" style="color: #10e090"></i>
+      <span class="bg-blue-100 p-2 mx-2">رخصة بناءرخصة بناء </span>
+    </div>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 bg-base text-white" (click)="modal?.dismiss()">
+      {{ "close" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- addSerivceModal / edit -->
+<ng-template #addSerivceModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        {{ "AddNewService" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <!-- modal-body -->
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row items-center">
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "Project Type" | translate }}</label
+            >
+            <ng-select
+              name="Project Type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.ProjectType"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <button
+            type="button"
+
+            class="btn btn-success  mt-5 mb-2"
+            (click)="open(newItemModal , null , 'NewProject')"
+            >
+            {{ "AddNewProjectType" | translate }}
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "Subproject type" | translate }}</label
+            >
+            <ng-select
+              name="Subproject type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.SubprojectType"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <button
+            type="button"
+
+            class="btn btn-success  mt-5 mb-2"
+            (click)="open(newItemModal , {type:'newSub'} , 'NewSubgenre')"
+            >
+            {{ "AddNewSubgenre" | translate }}
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <!-- 2 -->
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "ServiceName" | translate }}</label
+            >
+            <input
+              name="ServiceName"
+              placeholder="{{ 'ServiceName' | translate }}"
+              type="text"
+              class="form-control"
+              [(ngModel)]="modalDetails.ServiceName"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "ServiceNameEN" | translate }}</label
+            >
+            <input
+              name="ServiceNameEN"
+              placeholder="{{ 'ServiceNameEN' | translate }}"
+              type="text"
+              class="form-control"
+              [(ngModel)]="modalDetails.ServiceNameEN"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "ServiceType" | translate }}</label
+            >
+            <ng-select
+              name="ServiceType"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.ServiceType"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label"> {{ "price" | translate }}</label>
+            <div class="d-flex">
+              <input
+                name="price"
+                placeholder="{{ 'price' | translate }}"
+                type="text"
+                class="form-control"
+                [(ngModel)]="modalDetails.price"
+                [ngModelOptions]="{ standalone: true }"
+              />
+              <SPAN class="me-1"> {{ "RS" | translate }}</SPAN>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "costCenter" | translate }}</label
+            >
+            <ng-select
+              name="costCenter"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.costCenter"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <button
+            type="button"
+
+            class="btn btn-outline-success  mt-5 mb-2"
+            (click)="open(newItemModal , {type:'ServiceDetails'} , 'ServiceDetails')"
+            >
+            {{ "AddServiceDetails" | translate }}
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ "ServiceRevenueAccount" | translate }}</label
+            >
+            <ng-select
+              name="ServiceRevenueAccount"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              [(ngModel)]="modalDetails.ServiceRevenueAccount"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+    <p class="w-fit bg-red-100 text-danger mx-auto my-3 p-1">
+      {{ "AttentionAddService" | translate }}
+    </p>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- newItemModal -->
+<ng-template #newItemModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        <span *ngIf="!modalDetails?.type">{{ "NewProjectType" | translate }}</span>
+        <span *ngIf="modalDetails?.type == 'newSub'">{{ "NewSubprojectType" | translate }}</span>
+        <span *ngIf="modalDetails?.type == 'ServiceDetails'">{{ "Add New Item" | translate }}</span>
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameAr" class="text-right col-form-label block">
+              {{ "nameAr" | translate }}
+            </label>
+            <input required class="form-control" type="text" />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameEn" class="text-right col-form-label block">
+              {{ "nameEn" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3" *ngIf="modalDetails?.type == 'newSub'">
+          <div class="form-group">
+            <label for="ApproximatePeriodDays" class="text-right col-form-label block">
+              {{ "ApproximatePeriodDays" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+
+
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn text-white mb-3 col-md-2 me-3"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "nameAr" | translate }}</th>
+              <th>{{ "nameEn" | translate }}</th>
+              <th     *ngIf="modalDetails?.type != 'newSub'"  >{{ "operations" | translate }}</th>
+              <th   *ngIf="modalDetails?.type == 'newSub'" >{{ "ApproximatePeriod" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+
+              <td *ngIf="modalDetails?.type == 'newSub'" >
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td  *ngIf="modalDetails?.type != 'newSub'">
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal)"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+  </div>
+</ng-template>

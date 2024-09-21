@@ -1,0 +1,191 @@
+<div class="expense-follow-up">
+  <app-navigator [title]="title"></app-navigator>
+
+  <!-- inputs -->
+  <div class="container-fluid">
+    <div class="flex flex-wrap gap-4 align-items-end">
+      <div class="form-group">
+        <label class="col-form-label"> {{ "accountName" | translate }}</label>
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          ngModel
+          name="accountName"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+          }}</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="form-group">
+        <label class="text-right col-form-label block">
+          {{ "date" | translate }}
+        </label>
+        <div class="form-group timeInput">
+          <input
+            placeholder="{{ 'Chose' | translate }}"
+            [(ngModel)]="modalDetails.from"
+            name="date"
+            type="text"
+            class="form-control"
+            bsDaterangepicker
+            style="min-width: 240px"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-form-label"> {{ "ExpenseType" | translate }}</label>
+        <ng-select
+          class="w-full p-0"
+          placeholder="{{ 'Chose' | translate }}"
+          ngModel
+          name="ExpenseType"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">{{
+            user.Name
+          }}</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="flex gap-3 justify-content-center">
+        <button type="button" class="flex gap-1 btn btn-success">
+          {{ "Print" | translate }}
+          <i class="fa-solid fa-print"></i>
+        </button>
+
+        <button type="button" class="flex gap-1 btn btn-outline-secondary">
+          {{ "exportExcel" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto mt-4">
+      <table
+        mat-table
+        [dataSource]="projectsDataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <ng-container matColumnDef="BondNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Bond number" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.BondNumber }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="BondDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "BondDate" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.BondDate }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="RegistrationNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Registration number" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.RegistrationNumber }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="SupplierTaxNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "SupplierTaxNumber" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.SupplierTaxNumber }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="ResourceName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "ResourceName" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ResourceName }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light">
+            {{ "total" | translate }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="PurchaseInvoiceNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "PurchaseInvoiceNumber" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.PurchaseInvoiceNumber }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="exchangeClause">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "exchangeClause" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.exchangeClause }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="Statement">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Statement" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Statement }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="principalAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "principalAmount" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.principalAmount }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light">3333</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Tax">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Tax" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Tax }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light">222</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "amount" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.amount }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="bg-light">3333</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="projectDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: projectDisplayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="projectDisplayedColumns"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,978 @@
+<app-navigator [title]="title"></app-navigator>
+
+<div class="flex guide flex-col gap-3">
+
+  <div
+    class="guide-header row  mt-3    bg-blue-700 bg-opacity-5   py-3 rounded-lg text-base guide-box align-items-start">
+    <div class="basics mb-3 text-start col-xl-3 col-md-6 d-xl-block d-none">
+      <h2 [translate]="'name'" [translateParams]="{
+        ar: 'أساسبات النظام  ',
+        en: 'System Basics'
+      }"></h2>
+      <ul>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns  d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mb-3 head col-xl-6" style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    ">
+      <div class="flex align-items-center gap-2   mb-3">
+        <h2 class="font-bold text-2xl min-w-max mb-0" [translate]="'name'" [translateParams]="{
+    ar: 'مكتبة الشروحات',
+    en: 'Discriptions Library'
+  }"></h2>
+        <button *ngIf="userType == 'superAdmin'" class="btn btn-primary" (click)="open(addNewExplain,  'add')">
+
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+      <form>
+        <div class="flex gap-2 bg-white p-2 rounded-lg">
+          <input type="text" class="form-control" />
+          <button class="btn-primary btn">{{ "Search" | translate }}</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="basics mb-3   col-xl-3 col-md-6 d-xl-none">
+      <h2 [translate]="'name'" [translateParams]="{
+        ar: 'أساسبات النظام  ',
+        en: 'System Basics'
+      }"></h2>
+      <ul>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+        <li class="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 (click)="open(content)">wadawd</h4>
+          <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success btn-sm waves-effect"
+              (click)="open(addNewExplain, 'edit')">
+              <i class="fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="using col-xl-3 col-md-6" style="display: flex;
+    align-items: center;
+    justify-content: center;">
+      <button class="btn btn-light " [translate]="'name'" [translateParams]="{
+      ar: 'اتفاقية الاستخدام  ',
+      en: 'using aggrement  '
+    }" (click)="open(questions)"></button>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'دليل الإدارة',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'قسم العملاء',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'قسم إدارة المشاريع',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'قسم شؤون الموظفين',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'قسم الحسابات',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'سيناريوهات تدريبية',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="guide-info mb-4">
+          <h3 [translate]="'name'" [translateParams]="{
+              ar: 'سؤال / جواب',
+              en: 'Departments'
+            }"></h3>
+          <ul>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+            <li class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 (click)="open(content)">wadawd</h4>
+              <div *ngIf="userType=='superAdmin'" class="liBtns d-flex align-items gap-1">
+                <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+                  (click)="open(addNewExplain,'edit')">
+                  <i class=" fa fa-edit "></i>
+                </button>
+                <button type="button" id="68"
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+                  data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Video Popup -->
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title text-primary" style="
+        margin: 0;
+        font-size: 20px;
+        color: var(--main-color) !important;
+        letter-spacing: 0.5px;
+      ">
+        wadawd
+      </h5>
+      <button type="button" class="btn-close mx-0" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <iframe id="myVideo" class="d-block w-75 m-auto" width="100%" height="75%"
+        style="height: 75vh; width: 100% !important; object-fit: fill" width="100%" height="75%" [src]="
+        'https://www.youtube.com/embed/-wozKn-0Wyk?si=L1XhC_931jlZn824'
+          | safe : 'resourceUrl'
+      "></iframe>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- questions Popup -->
+  <ng-template #questions let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title text-primary" style="
+        margin: 0;
+        font-size: 20px;
+        color: var(--main-color) !important;
+        letter-spacing: 0.5px;
+      ">
+
+        <span [translate]="'name'" [translateParams]="{
+              ar: 'سؤال / جواب',
+              en: 'Departments'
+            }"></span>
+
+        <button *ngIf="userType == 'superAdmin'" class="btn btn-primary" style="margin-inline-start: 10px;"
+          (click)="open(addNewQuestion,  'add')">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+
+      </h5>
+      <button type="button" class="btn-close mx-0" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+
+      <accordion class="accordion" [closeOthers]="true" [isAnimated]="true">
+        <accordion-group heading="Header">
+          <div *ngIf="userType=='superAdmin'" class="liBtns accrd d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+              (click)="open(addNewQuestion,'edit')">
+              <i class=" fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+          This content is straight in the template.
+        </accordion-group>
+        <accordion-group heading="Content 1">
+          <div *ngIf="userType=='superAdmin'" class="liBtns accrd  d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+              (click)="open(addNewQuestion,'edit')">
+              <i class=" fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+          <p>Content 1</p>
+        </accordion-group>
+        <accordion-group heading="Content 2">
+          <div *ngIf="userType=='superAdmin'" class="liBtns accrd  d-flex align-items gap-1">
+            <button type="button" id="68" class="btn btn-success tn-sm waves-effect"
+              (click)="open(addNewQuestion,'edit')">
+              <i class=" fa fa-edit "></i>
+            </button>
+            <button type="button" id="68"
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white" data-toggle="tooltip"
+              data-placement="top" title=" حذف " data-original-title="حذف " (click)="open(deleteModal, 'delete')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+          <p>Content 2</p>
+        </accordion-group>
+      </accordion>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+        {{ "close" | translate }}
+      </button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- addNewExplain   -->
+<ng-template #addNewExplain let-modal>
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span class="text-2xl" [translate]="'name'" [translateParams]="{
+          ar: 'إضافة فيديو توضيجي جديد',
+          en: 'Add New Explain Video'
+        }">
+      </span>
+    </h4>
+    <button type="button" class="text-white m-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form class="modal-form" #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "nameAr" | translate }}
+            <span class="text-danger">*</span></label>
+          <input class="form-control" type="text"
+            [placeholder]="('Write' | translate) + ' ' + ('nameAr' | translate)" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            {{ "nameEn" | translate }}
+            <span class="text-danger">*</span></label>
+          <input class="form-control" type="text"
+            [placeholder]="('Write' | translate) + ' ' + ('nameEn' | translate)" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            <span [translate]="'name'" [translateParams]="{ar:'الفيديو',en:'Video'}"></span>
+            <span class="text-danger">*</span></label>
+          <input class="form-control" type="url" [placeholder]="('Write' | translate) + ' ' + ('url' | translate)" />
+        </div>
+        <div class="form-group">
+
+          <label class="col-form-label">
+            {{ "department" | translate }}</label>
+          <div class="flex">
+            <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}" ngModel
+              [ngModelOptions]="{ standalone: true }">
+              <ng-option *ngFor="let part of departs" [value]="part.id">{{
+                part.name
+                }}</ng-option>
+            </ng-select>
+            <button type="button" class="btn bg-base text-white" style="padding: 5px 10px"
+              (click)="open(AddOption, 'departs')">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+    <div class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2">
+
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- addNewQuestion  -->
+<ng-template #addNewQuestion let-modal>
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      <span class="text-2xl" [translate]="'name'" [translateParams]="{
+          ar: 'إضافة سؤال و جواب جديد',
+          en: 'Add New Question And Answer'
+        }">
+      </span>
+    </h4>
+    <button type="button" class="text-white m-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form class="modal-form" #form="ngForm">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            <span [translate]="'name'" [translateParams]="{ar:'السؤال بالعربي' , en:'Question [Ar]'}"></span>
+            <span class="text-danger">*</span></label>
+          <input class="form-control" type="text" name="questionAr" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            <span [translate]="'name'" [translateParams]="{ar:'السؤال بالانجليزي' , en:'Question [En]'}"></span>
+            <span class="text-danger">*</span></label>
+          <input class="form-control" type="text" name="questionEn" />
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            <span [translate]="'name'" [translateParams]="{ar:'الاجابة بالعربي' , en:'Answer [Ar]'}"></span>
+            <span class="text-danger">*</span></label>
+          <textarea class="form-control" name="answerAr" style="min-height: 120px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="text-right col-form-label block">
+            <span [translate]="'name'" [translateParams]="{ar:'الاجابة بالانجليزي' , en:'Answer [En]'}"></span>
+            <span class="text-danger">*</span></label>
+          <textarea class="form-control" name="answerEn" style="min-height: 120px;"></textarea>
+        </div>
+      </div>
+
+    </form>
+    <div class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2">
+
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+      <button class="btn bg-base text-white" type="submit">
+        {{ "Save" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p [translate]="'name'" [translateParams]="{
+        ar: 'هل تريد حذف هذا العنصر ؟',
+        en: 'Do you want to delete this item?'
+      }"></p>
+    <div class="flex gap-2 justify-center">
+      <button type="button" (click)="modal.dismiss()" mat-raised-button color="basic">
+        {{ "close" | translate }}
+      </button>
+
+      <button type="button" mat-raised-button color="warn" (click)="confirm(); modal.dismiss()">
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add option -->
+<ng-template #AddOption let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title" [translate]="'name'"
+      [translateParams]="{ ar: 'اضافة جديدة', en: 'Add New' }"></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #addOptionForm="ngForm">
+      <div class="row">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameAr" | translate }}</label>
+            <input type="text" placeholder="{{ 'nameAr' | translate }}" class="form-control" ngModel name="nameAr"
+              required />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameEn" | translate }}</label>
+            <input type="text" placeholder="{{ 'nameEn' | translate }}" class="form-control" ngModel name="nameEn"
+              required />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-center" style="border-top: none">
+    <button type="button" class="btn btn-light py-2 px-3 mt-0" (click)="modal.dismiss('Cross click')">
+      {{ "close" | translate }}
+    </button>
+    <button type="button" class="btn submit-btn bg-base text-white py-2 px-3 mt-0" [disabled]="addOptionForm.invalid"
+      (click)="saveOption(addOptionForm.value)">
+      {{ "Save" | translate }}
+    </button>
+
+    <div class="d-block w-100 mt-4" style="
+        border-top: 2px solid #d5dadf;
+        padding-top: 24px;
+        border-radius: 3px;
+      ">
+      <div class="w-100 mb-3">
+        <input type="text" class="form-control pull-right" placeholder="{{ 'search' | translate }}"
+          (keyup)="updateFilter($event)" />
+      </div>
+
+      <ngx-datatable style="max-height: 300px; overflow-y: auto" #table class="striped w-100" [columnMode]="'flex'"
+        [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="100" [rows]="rows">
+        <!-- Column: Editing Mode-->
+        <ngx-datatable-column [flexGrow]="0.5">
+          <ng-template let-value="value" let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+            <!-- Pencil icon -->
+            <i class="fa fa-pencil" title="Modify" style="cursor: pointer" *ngIf="!this.isEditable[rowIndex]"
+              (click)="this.isEditable[rowIndex] = !this.isEditable[rowIndex]"></i>
+
+            <!-- Save/Delete icons -->
+            <div class="actions">
+              <i class="fa fa-edit text-success" *ngIf="this.isEditable[rowIndex]" title="Save"
+                (click)="save(row, rowIndex)"></i>
+              <i class="fa fa-trash text-danger" *ngIf="this.isEditable[rowIndex]" title="Delete"
+                (click)="delete(row, rowIndex)"></i>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="1.5" name="{{ 'nameAr' | translate }}">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+            <div class="form-input-group">
+              <input type="text" name="activity_name" [(ngModel)]="row.name_ar" [disabled]="!isEditable[rowIndex]" />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="1.5" name="{{ 'nameEn' | translate }}">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+            <div class="form-input-group">
+              <input type="text" name="activity_name_en" [(ngModel)]="row.name_en" [disabled]="!isEditable[rowIndex]" />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,858 @@
+<div class="project-setting">
+  <!-- list view -->
+  <ng-container *ngIf="currentPage == 'view'">
+    <app-navigator [title]="title"></app-navigator>
+    <div class="head flex gap-2 flex-wrap items-end justify-between">
+      <div class="btns mb-3">
+        <button
+          type="button"
+          class="flex gap-1 btn btn-outline-secondary mb-3"
+          [routerLink]="'/projects/track-projects'"
+        >
+          {{ "track-projects" | translate }}
+        </button>
+        <button
+          type="button"
+          class="flex gap-1 btn bg-base text-white mb-3"
+          (click)="open(copyFromProject)"
+        >
+          {{ "copyFromProject" | translate }}
+        </button>
+        <button
+          type="button"
+          class="flex gap-1 btn bg-success text-white mb-3"
+          (click)="currentPage = 'add'; resetModalDetails()"
+        >
+          {{ "addNewProjectSetting" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto">
+      <input
+        (keyup)="applyFilter($event)"
+        placeholder="{{ 'search' | translate }}"
+        #input
+        class="form-control d-block my-4 w-25 p-2"
+      />
+
+      <table
+        mat-table
+        [dataSource]="projectWorkflowsDataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <ng-container matColumnDef="projectWorkflowNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "ProjectNumber" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.projectWorkflowNo }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="projectWorkflowDesc">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "projectDescription" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.projectWorkflowDesc }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="projectType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Project Type" | translate }} </span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.projectType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="subProjectType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span
+              >{{
+                ("Subproject type" | translate) + " " + ("date" | translate)
+              }}
+            </span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.subProjectType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "expected duration" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.duration }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="total_duration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "totalDuration" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.total_duration }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="added_date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "addedDate" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.added_date | date : "dd-MM-yyyy" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "userName" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.user }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "operations" | translate }}</span>
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+            <button
+              class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+              (click)="currentPage = 'add'; setModalDetails(element)"
+            >
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+            <button
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+              (click)="open(deleteModal)"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="workOrdersDisplayedColumns"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: workOrdersDisplayedColumns"
+          class="duration-300 hover:bg-slate-100"
+        ></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            {{ "noResult" | translate }} "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </ng-container>
+
+  <!-- add / edit view -->
+  <ng-container *ngIf="currentPage == 'add' || currentPage == 'edit'">
+    <div class="bg-body pb-5 content">
+      <app-navigator
+        *ngIf="!modalDetails.id"
+        [title]="titleAdd"
+      ></app-navigator>
+      <app-navigator
+        *ngIf="modalDetails.id"
+        [title]="titleEdit"
+      ></app-navigator>
+
+      <form #projectWorkflowForm class="mt-4">
+        <div class="row">
+          <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "ProjectNumber" | translate
+              }}</label>
+              <input
+                type="text"
+                name="projectWorkflowNo"
+                [(ngModel)]="modalDetails.projectWorkflowNo"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "projectDescription" | translate
+              }}</label>
+              <input
+                type="text"
+                name="projectdesc"
+                [(ngModel)]="modalDetails.projectWorkflowDesc"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "Project Type" | translate
+              }}</label>
+              <div class="flex">
+                <ng-select
+                  name="projectType"
+                  class="w-full p-0"
+                  placeholder="{{ 'Chose' | translate }}"
+                  [(ngModel)]="modalDetails.projectType"
+                  ngModel
+                >
+                  <ng-option *ngFor="let user of users" [value]="user.id">{{
+                    user.Name
+                  }}</ng-option>
+                </ng-select>
+                <button
+                  *ngIf="!modalDetails.id"
+                  type="button"
+                  class="btn bg-base text-white"
+                  style="padding: 5px 10px"
+                  (click)="open(AddOption)"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "Subproject type" | translate
+              }}</label>
+              <div class="flex">
+                <ng-select
+                  name="subProjectType"
+                  class="w-full p-0"
+                  placeholder="{{ 'Chose' | translate }}"
+                  [(ngModel)]="modalDetails.subProjectType"
+                  ngModel
+                >
+                  <ng-option *ngFor="let user of users" [value]="user.id">{{
+                    user.Name
+                  }}</ng-option>
+                </ng-select>
+                <button
+                  *ngIf="!modalDetails.id"
+                  type="button"
+                  class="btn bg-base text-white"
+                  style="padding: 5px 10px"
+                  (click)="open(AddOption)"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-xl-2 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "Project duration" | translate
+              }}</label>
+              <input
+                type="text"
+                name="projectDuration"
+                ngModel
+                [value]="'awdawd'"
+                class="form-control"
+                readonly
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "main stage" | translate
+              }}</label>
+              <ng-select
+                name="mainStage"
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.mainStage"
+                ngModel
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div
+            class="col-md-6 col-xl-4 mb-3 flex items-end justify-start gap-8"
+          >
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "totalDuration" | translate
+              }}</label>
+              <div class="flex">
+                <input
+                  type="text"
+                  name="total_duration"
+                  ngModel
+                  class="form-control"
+                  [value]="'26يوم12ساعة'"
+                  disabled
+                  readonly
+                />
+                <button
+                  type="button"
+                  class="btn bg-base text-white"
+                  style="padding: 5px 10px"
+                  (click)="open(AddOption)"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="btns">
+              <button
+                class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                title="{{ 'show tasks' | translate }}"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                title="{{ 'add task' | translate }}"
+                (click)="open(addTaskModal, null, 'add task')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-xl-3 mb-3">
+            <div class="form-group">
+              <label class="col-form-label">{{
+                "sub stage" | translate
+              }}</label>
+              <input
+                type="text"
+                name="sub_stage"
+                [(ngModel)]="modalDetails.subStage"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div
+            class="col-md-6 col-xl-2 mb-3 flex items-end justify-start gap-8"
+          >
+            <div class="btns">
+              <button
+                type="button"
+                class="btn bg-base text-white"
+                style="padding: 5px 10px"
+                (click)="open(AddOption)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-blue-100 hover:bg-blue-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                title="{{ 'show tasks' | translate }}"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                title="{{ 'add task' | translate }}"
+                (click)="open(addTaskModal, null, 'add task')"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                title="{{ 'move' | translate }}"
+              >
+                <i class="fa fa-share"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="box rounded border mt-2 mb-4" style="min-height: 340px"></div>
+
+      <div class="footer flex items-center justify-between">
+        <div class="cases d-flex items-center gap-4">
+          <p class="mb-0">
+            <span>{{ "Ordinary task" | translate }}</span
+            ><i
+              style="margin-inline-start: 10px"
+              class="fa fa-paint-brush text-secondary"
+            ></i>
+          </p>
+          <p class="mb-0">
+            <span>{{ "Mission accomplished" | translate }}</span
+            ><i
+              style="margin-inline-start: 10px"
+              class="fa fa-paint-brush text-danger"
+            ></i>
+          </p>
+          <p class="mb-0">
+            <span>{{ "sub stage" | translate }}</span
+            ><i
+              style="margin-inline-start: 10px"
+              class="fa fa-paint-brush text-success"
+            ></i>
+          </p>
+          <p class="mb-0">
+            <span>{{ "key stage" | translate }}</span
+            ><i
+              style="margin-inline-start: 10px"
+              class="fa fa-paint-brush text-base"
+            ></i>
+          </p>
+        </div>
+
+        <div class="flex gap-3 justify-center">
+          <button
+            class="btn bg-base text-white"
+            type="submit"
+            (click)="modalDetails?.id ? editWorkOrder() : addWorkOrder()"
+          >
+            {{ "save" | translate }}
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            (click)="currentPage = 'view'"
+          >
+            {{ "Back" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- copyFromProject -->
+<ng-template #copyFromProject let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">
+        {{ "copyFromProject" | translate }}
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row items-center">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ ("From" | translate) + " " + ("Project Type" | translate) }}
+            </label>
+            <ng-select
+              name="from_project_type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ ("To" | translate) + " " + ("Project Type" | translate) }}
+            </label>
+            <ng-select
+              name="to_project_type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ ("From" | translate) + " " + ("Subproject type" | translate) }}
+            </label>
+            <ng-select
+              name="from_subproject_type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="col-form-label">
+              {{ ("To" | translate) + " " + ("Subproject type" | translate) }}
+            </label>
+            <ng-select
+              name="to_subproject_type"
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              ngModel
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div
+      class="flex gap-2 justify-center pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button
+        class="btn bg-base text-white"
+        type="submit"
+        (click)="copyprojectWorkflow()"
+      >
+        {{ "copy" | translate }}
+      </button>
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add option -->
+<ng-template #AddOption let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{ ar: 'اضافة جديدة', en: 'Add New' }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #addOptionForm="ngForm">
+      <div class="row">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameAr" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameAr' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameAr"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameEn" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameEn' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameEn"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-center" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="addOptionForm.invalid"
+      (click)="saveOption(addOptionForm.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+
+    <div
+      class="d-block w-100 mt-4"
+      style="
+        border-top: 2px solid #d5dadf;
+        padding-top: 24px;
+        border-radius: 3px;
+      "
+    >
+      <div class="w-100 mb-3">
+        <input
+          type="text"
+          class="form-control pull-right"
+          placeholder="{{ 'search' | translate }}"
+          (keyup)="updateFilter($event)"
+        />
+      </div>
+
+      <ngx-datatable
+        style="max-height: 300px; overflow-y: auto"
+        #table
+        class="striped w-100"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="100"
+        [rows]="rows"
+      >
+        <!-- Column: Editing Mode-->
+        <ngx-datatable-column [flexGrow]="0.5">
+          <ng-template
+            let-value="value"
+            let-row="row"
+            let-rowIndex="rowIndex"
+            ngx-datatable-cell-template
+          >
+            <!-- Pencil icon -->
+            <i
+              class="fa fa-pencil"
+              title="Modify"
+              style="cursor: pointer"
+              *ngIf="!this.isEditable[rowIndex]"
+              (click)="this.isEditable[rowIndex] = !this.isEditable[rowIndex]"
+            ></i>
+
+            <!-- Save/Delete icons -->
+            <div class="actions">
+              <i
+                class="fa fa-edit text-success"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Save"
+                (click)="save(row, rowIndex)"
+              ></i>
+              <i
+                class="fa fa-trash text-danger"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Delete"
+                (click)="delete(row, rowIndex)"
+              ></i>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameAr' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name"
+                [(ngModel)]="row.name_ar"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameEn' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name_en"
+                [(ngModel)]="row.name_en"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addTaskModal let-modal>
+  <div
+    class="modal-header bg-base text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ modalDetails.type | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="overflow-auto">
+      <table
+        mat-table
+        [dataSource]="missionsDataSource"
+        class="mat-elevation-z8"
+      >
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              color="warn"
+              (change)="$event ? toggleAllRows() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+              [aria-label]="checkboxLabel()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              color="warn"
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "taskName" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+        <!-- duration Column -->
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Duration" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+        </ng-container>
+        <!-- assigned Column -->
+        <ng-container matColumnDef="assigned">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "assigned" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.assigned }}</td>
+        </ng-container>
+        <!-- desc Column -->
+        <ng-container matColumnDef="desc">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "task details" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.desc }}</td>
+        </ng-container>
+
+        <!-- operations Column -->
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "operations" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+            >
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+            <button
+              class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+              (click)="open(deleteModal, null, 'delete')"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="missionsDisplayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: missionsDisplayedColumns"
+          (click)="selection.toggle(row)"
+        ></tr>
+      </table>
+    </div>
+    <div
+      class="flex gap-2 pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button
+        class="btn btn-primary"
+        type="submit"
+        (click)="merge()"
+        [translate]="'product_name'"
+        [translateParams]="{ ar: 'دمج', en: 'merge' }"
+      ></button>
+      <button (click)="modal?.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

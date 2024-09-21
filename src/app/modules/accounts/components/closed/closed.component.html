@@ -1,0 +1,2688 @@
+<div class="opening-entry">
+  <app-navigator [title]="title"></app-navigator>
+  <div class="head flex gap-2 flex-wrap items-end justify-between">
+    <div class="btns mb-3 w-100">
+      <div class="row d-md-flex justify-content-end">
+        <button
+          type="button"
+          class="flex gap-1 btn bg-base col-md-2 text-white ms-3"
+          (click)="open(ClosedModal, null, 'ClosedModal')"
+        >
+          {{ "Closed" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <label for="search" class="d-block">{{ "search" | translate }} </label>
+    <input
+      type="text"
+      class="form-control"
+      style="max-width: 300px"
+      id="search"
+    />
+  </div>
+
+  <!-- table -->
+  <div class="overflow-auto mt-4">
+    <table
+      *ngIf="showTable"
+      mat-table
+      [dataSource]="projectsDataSource"
+      matSort
+      class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+    >
+      <ng-container matColumnDef="BondNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "Bond number" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.BondNumber }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="BondDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "BondDate" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.BondDate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="BondTotal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "BondTotal" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.BondTotal }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="BondCondition">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "BondCondition" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.BondCondition }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="PostingDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "Posting date" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.PostingDate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="operations">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ "operations" | translate }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="child-btns">
+            <span class="dtr-data">
+              <!--تعديل  -->
+              <button
+                type="button"
+                id="68"
+                class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+                data-toggle="tooltip"
+                data-placement="top"
+                title=" تعديل "
+                data-original-title="تعديل "
+                (click)="open(EditModal)"
+              >
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+            </span>
+
+            <span class="dtr-data">
+              <!--حذف   -->
+
+              <button
+                type="button"
+                id="68"
+                class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 mx-1"
+                data-toggle="tooltip"
+                data-placement="top"
+                title=" حذف "
+                data-original-title="حذف "
+                (click)="open(deleteModal)"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+
+              <!-- عرض القيد العكسي  -->
+              <button
+                type="button"
+                id="68"
+                class="EditProjectPhasesTasks btn btn-outline-warning btn-sm waves-effect mx-1"
+                data-toggle="tooltip"
+                data-placement="top"
+                title=" عرض القيد العكسي"
+                data-original-title=" عرض القيد العكسي"
+                (click)="open(runningTasksModal)"
+              >
+                <i class="fa-brands fa-stripe-s"></i>
+              </button>
+
+              <!-- "    فك الترحيل " "-->
+              <button
+                type="button"
+                id="68"
+                class="EditProjectPhasesTasks btn btn-outline-warning btn-sm waves-effect mx-1"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="   فك الترحيل "
+                data-original-title="   فك الترحيل "
+                (click)="open(decodingPagingModal)"
+              >
+                <i class="fa-solid fa-share fa-flip-horizontal"></i>
+              </button>
+            </span>
+            <span class="dtr-data">
+              <!-- طباعة  -->
+              <button
+                type="button"
+                id="68"
+                class="AddNewTaskbtn btn btn-outline-success btn-sm waves-effect mx-1"
+                data-toggle="tooltip"
+                data-placement="top"
+                title=" طباعة "
+                data-original-title="طباعة "
+                (click)="
+                  sendToPrint('print-voucher'); (selectedVoucher == element)
+                "
+              >
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="projectDisplayedColumns"></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: projectDisplayedColumns"
+        (dblclick)="open(EditModal)"
+      ></tr>
+
+      <tr *ngIf="!projects?.length">
+        <td
+          colspan="6"
+          [translate]="'name'"
+          [translateParams]="{
+            ar: 'لا توجد بيانات متوفرة في الجدول',
+            en: 'No Data Available in Table  '
+          }"
+        ></td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+</div>
+
+<!-- NewSalesInvoiceModal  -->
+<ng-template #NewSalesInvoiceModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "NewsSalesInvoice" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container>
+      <form class="" #smsForm="ngForm">
+        <div class="row align-items-end mb-4 mx-3">
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "date" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "invoice number" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ 'invoice number' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <input
+                required
+                placeholder="{{ 'Registration number' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <input
+                required
+                placeholder="{{ 'SR' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'mainCenter' | translate }}"
+                required
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.user"
+                [ngModelOptions]="{ standalone: true }"
+                name="user"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <!-- 2 line-->
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label
+                for="Corresponding"
+                class="text-right col-form-label block"
+              >
+                {{ "Corresponding" | translate }}
+              </label>
+              <input
+                id="Corresponding"
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Type" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                name="description"
+                disabled
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'Chose' | translate }}"
+                [(ngModel)]="modalDetails.description"
+                [ngModelOptions]="{ standalone: true }"
+                name="description"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'thePhone' | translate }}"
+                required
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-2 mb-0 mb-sm-3">
+            <div class="form-group">
+              <input
+                placeholder="{{ 'ref' | translate }}"
+                required
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+          <!-- 3 line -->
+
+          <div class="col-sm-6 col-md-3 col-lg-3 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="Supplier" class="text-right col-form-label block">
+                {{ "Supplier" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                disabled
+                placeholder="{{ 'Chose' | translate }}"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-3 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "R_D_Supplier" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ '' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="editable shadow mb-4">
+            <table
+              class="table table-responsive table-striped table-bordered text-center"
+              style="vertical-align: middle; font-size: 14px"
+            >
+              <thead
+                class="bg-base text-white"
+                style="line-height: 30px; font-size: 13px"
+              >
+                <tr>
+                  <th>{{ "ServiceNo" | translate }}</th>
+                  <th colspan="2">{{ "ServiceName" | translate }}</th>
+                  <th>{{ "Unit" | translate }}</th>
+                  <th>{{ "Quantity" | translate }}</th>
+                  <th>{{ "price" | translate }}</th>
+                  <th>{{ "Discount" | translate }}</th>
+                  <th>{{ "discountPercentage" | translate }}</th>
+                  <th>{{ "totalBeforeTax" | translate }}</th>
+                  <th>{{ "VATTax" | translate }}</th>
+                  <th>{{ "Net_taxes" | translate }}</th>
+                  <th>{{ "delete" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of users; let i = index"
+                  style="line-height: 5px"
+                >
+                  <td>{{ item.id }}</td>
+                  <td colspan="2">
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="os-name{{ i }}"
+                      [(ngModel)]="item.Name"
+                      ngModel
+                    />
+                  </td>
+
+                  <td>
+                    <button
+                      class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="box w-100 py-2 me-3 px-5">
+                <div>
+                  <label for="include_tax">{{ "tax type" | translate }}</label>
+                  <ng-select
+                    class="w-100"
+                    placeholder="{{ 'Chose' | translate }}"
+                    name="include_tax"
+                  >
+                    <ng-option [value]="0">{{
+                      "Excluding tax" | translate
+                    }}</ng-option>
+                    <ng-option [value]="1">{{
+                      "Taxes included" | translate
+                    }}</ng-option>
+                  </ng-select>
+                </div>
+
+                <div>
+                  <label for="paid" class="text-right col-form-label block">
+                    {{ "paid" | translate }}
+                  </label>
+                  <input
+                    id="paid"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="remaining">{{ "remaining" | translate }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="remaining"
+                    name="remaining"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="d-flex me-3">
+                <input type="checkbox" name="date" id="date" ngModel />
+                <label for="date" class="mx-2">{{
+                  "hideAccount" | translate
+                }}</label>
+              </div>
+
+              <div class="form-group row my-4 me-3">
+                <label for="Statement" class="col-sm-2 col-form-label">{{
+                  "Statement" | translate
+                }}</label>
+                <div class="col-sm-10">
+                  <input
+                    disabled
+                    type="text"
+                    id="Statement"
+                    name="Statement"
+                    class="form-control"
+                    placeholder="{{ 'Statement' | translate }}"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row me-3">
+                <label for="theNotes" class="col-sm-2 col-form-label">{{
+                  "theNotes" | translate
+                }}</label>
+                <div class="col-sm-10">
+                  <input
+                    disabled
+                    type="text"
+                    id="theNotes"
+                    name="theNotes"
+                    class="form-control"
+                    placeholder="{{ 'theNotes' | translate }}"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="box w-100 px-2 py-2 mx-3">
+                <div>
+                  <label
+                    for="totalAmount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "totalAmount" | translate }}
+                  </label>
+                  <input
+                    id="totalAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
+                    for="TotalDiscount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "TotalDiscount" | translate }}
+                  </label>
+                  <input
+                    id="TotalDiscount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="netAmount"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "netAmount" | translate }}
+                  </label>
+                  <input
+                    id="netAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="AllTotal" class="text-right col-form-label block">
+                    {{ "AllTotal" | translate }}
+                  </label>
+                  <input
+                    id="AllTotal"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="netBill">{{ "netBill" | translate }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="netBill"
+                    name="netBill"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="TotalTaxes"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "TotalTaxes" | translate }}
+                  </label>
+                  <input
+                    id="TotalTaxes"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label for="CreditNoteTotal">{{
+                    "CreditNoteTotal" | translate
+                  }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="CreditNoteTotal"
+                    name="CreditNoteTotal"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label for="TotalDebtorNotice">{{
+                    "TotalDebtorNotice" | translate
+                  }}</label>
+                  <input
+                    disabled
+                    type="text"
+                    id="TotalDebtorNotice"
+                    name="TotalDebtorNotice"
+                    class="form-control"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="Net_taxes"
+                    class="text-right col-form-label block"
+                  >
+                    {{ "Net_taxes" | translate }}
+                  </label>
+                  <input
+                    id="Net_taxes"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- footer -->
+    </ng-container>
+
+    <div class="d-flex justify-content-end">
+      <div class="pt-3 m-3">
+        <button
+          (click)="modal?.dismiss()"
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "Save_CarryOver" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3 m-3">
+        <button (click)="modal?.dismiss()" class="btn btn-secondary">
+          {{ "close" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3 m-3">
+        <button
+          (click)="modal?.dismiss()"
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- EditCheckDetailsModal -->
+<ng-template #EditCheckDetailsModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "Check_transferDetails" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Payment type" | translate }}
+            </label>
+            <input required class="form-control" type="text" disabled />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "dateCheck_transfer" | translate }}
+            </label>
+            <input
+              placeholder="{{ 'Chose' | translate }}"
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+              disabled
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "Check_transferNumber" | translate }}
+            </label>
+            <input
+              placeholder="{{ 'Check_transferNumber' | translate }}"
+              required
+              class="form-control"
+              type="text"
+              disabled
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="customerEn" class="text-right col-form-label block">
+              {{ "BankName" | translate }}
+            </label>
+            <ng-select
+              class="w-full p-0"
+              placeholder="{{ 'Chose' | translate }}"
+              name="user"
+            >
+              <ng-option *ngFor="let user of users" [value]="user.id">{{
+                user.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="flex gap-1 btn btn-success mb-3 col-md-2"
+          (click)="open(Add_EditModal)"
+        >
+          {{ "add" | translate }}
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- اضافة  -->
+<!-- Add_EditModal -->
+<ng-template #Add_EditModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <!-- <span class="text-2xl">{{ "newItem" | translate }}</span> -->
+      <span class="text-2xl">{{ "BankName" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameAr" class="text-right col-form-label block">
+              {{ "nameAr" | translate }}
+            </label>
+            <input required class="form-control" type="text" />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameEn" class="text-right col-form-label block">
+              {{ "nameEn" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn text-white mb-3 col-md-2 me-3"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <p class="text-center">{{ "Check_transferDetails" | translate }}</p>
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "BankName_ar" | translate }}</th>
+              <th>{{ "BankName_en" | translate }}</th>
+              <th>{{ "operations" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal, null, 'delete')"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- deleteModal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد حذف هذا العنصر ؟',
+        en: 'Do you want to delete this item?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "close" | translate }}
+      </button>
+
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- عرض القيد المحاسبي  -->
+<!-- runningTasksModal -->
+<ng-template #runningTasksModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "ViewAccountingEntry" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <table class="table-fixed border border-gray-500">
+      <thead>
+        <tr>
+          <th class="w-1/9 px-4 py-2">{{ "date" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "Bond number" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "Bond type" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">
+            {{ "Registration number" | translate }}
+          </th>
+          <th class="w-1/9 px-4 py-2">{{ "account code" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "account name" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "Statement" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "debtor" | translate }}</th>
+          <th class="w-1/9 px-4 py-2">{{ "Creditor" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of accountingEntries">
+          <td class="w-1/9 border px-4 py-2">{{ entry.date }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.bondNumber }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.bondType }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.registrationNumber }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.accountCode }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.accountName }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.statement }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.debtor }}</td>
+          <td class="w-1/9 border px-4 py-2">{{ entry.creditor }}</td>
+        </tr>
+        <tr>
+          <td class="w-1/9 border px-4 py-2">{{ "total" | translate }}</td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2"></td>
+          <td class="w-1/9 border px-4 py-2 bg-green-500">{{ totalDebtor }}</td>
+          <td class="w-1/9 border px-4 py-2 bg-red-500">{{ totalCreditor }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button
+      class="btn text-white me-2"
+      style="background-color: var(--base-color)"
+      (click)="sendToPrint()"
+    >
+      {{ "Print" | translate }}
+    </button>
+
+    <button (click)="modal?.dismiss()" class="btn btn-secondary">
+      {{ "close" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- فك الترحيل -->
+<!-- decodingPagingModal -->
+<ng-template #decodingPagingModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد فك ترحيل هذا السند؟',
+        en: 'Do you want to undo the deportation of this bond?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "close" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="text-white"
+        mat-raised-button
+        style="background-color: var(--base-color)"
+        (click)="confirm(); modal.dismiss()"
+      >
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- EditModal  -->
+<ng-template #EditModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "edit" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container>
+      <form class="" #smsForm="ngForm">
+        <div class="row align-items-end mb-4 mx-3">
+          <!-- 1 line -->
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "date" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Bond number" | translate }}
+              </label>
+              <input required class="form-control" type="text" disabled />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "m_Cost" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'mainCenter' | translate }}"
+                [(ngModel)]="modalDetails.user"
+                [ngModelOptions]="{ standalone: true }"
+                name="user"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <!-- 2 line -->
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Corresponding" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "referenceNumber" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'referenceNumber' | translate }}"
+                required
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "F_Purchase" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ 'F_Purchase' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <!-- 3 line -->
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Registration number" | translate }}
+              </label>
+              <input
+                required
+                placeholder="{{ 'Registration number' | translate }}"
+                class="form-control"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Payment type" | translate }}
+              </label>
+              <ng-select
+                placeholder="{{ 'Chose' | translate }}"
+                class="w-full p-0"
+                disabled
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+            <div class="upload col-span-1 md:col-span-2">
+              <label for="attach">{{ "attachments" | translate }}</label>
+              <input type="file" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3 mx-3">
+          <div class="col-md-12">
+            <div class="boxContainer w-100 py-3 px-3">
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="tax type" class="text-orange" for="tax type">
+                    {{ "tax type" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-10">
+                  <ng-select
+                    placeholder="{{ 'Chose' | translate }}"
+                    class="w-full p-0"
+                    disabled
+                  >
+                    <ng-option *ngFor="let user of users" [value]="user.id">{{
+                      user.Name
+                    }}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="exchangeClause" class="text-babyblue">
+                    {{ "exchangeClause" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-9">
+                  <ng-select
+                    placeholder="{{ 'Chose' | translate }}"
+                    class="w-full p-0 h-100"
+                    disabled
+                  >
+                    <ng-option *ngFor="let user of users" [value]="user.id">
+                      {{ user.Name }}</ng-option
+                    >
+                  </ng-select>
+                </div>
+                <div class="col-md-1">
+                  <button
+                    class="btn bg-white text-black"
+                    (click)="open(newItemModal)"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="payFor" class="text-babyblue">
+                    {{ "payFor" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-9">
+                  <ng-select
+                    placeholder="{{ 'Chose' | translate }}"
+                    class="w-full p-0 h-100"
+                  >
+                    <ng-option *ngFor="let user of users" [value]="user.id">
+                      {{ user.Name }}</ng-option
+                    >
+                  </ng-select>
+                </div>
+                <div class="col-md-1">
+                  <button
+                    class="btn bg-white text-black"
+                    (click)="open(AddNewResourceModal)"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label
+                    for="recipientName"
+                    class="text-babyblue"
+                    for="recipientName"
+                  >
+                    {{ "recipientName" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-10">
+                  <input
+                    id="recipientName"
+                    placeholder="{{ 'recipientName' | translate }}"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="AmountOf" class="text-red">
+                    {{ "AmountOf" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="AmountOf"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+                <div class="col-md-8">
+                  <input
+                    id="netAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="amount" class="text-yellow">
+                    {{ "amount" | translate }} + VAT
+                  </label>
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="amount"
+                    required
+                    placeholder="0"
+                    class="form-control text-danger bg-yellow text-center red fw-bold"
+                    type="text"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="amount"
+                    required
+                    placeholder="0"
+                    class="form-control text-danger bg-yellow text-center red fw-bold"
+                    type="text"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <input
+                    placeholder="0"
+                    id="amount"
+                    required
+                    value="بعد VAT"
+                    class="form-control text-white bg-danger text-center fw-bolde"
+                    type="text"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="amount"
+                    required
+                    value="0"
+                    class="form-control text-white bg-danger text-center fw-bolde"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="R_D_Supplier" class=" ">
+                    {{ "R_D_Supplier" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-5">
+                  <input
+                    id="R_D_Supplier"
+                    placeholder="{{ 'R_D_Supplier' | translate }}"
+                    required
+                    class="form-control"
+                    type="text"
+                  />
+                </div>
+                <div class="col-md-5">
+                  <input
+                    id="R_theInvoice"
+                    placeholder="{{ 'R_theInvoice' | translate }}"
+                    required
+                    class="form-control"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="fromAccount" class="text-orange">
+                    {{ "fromAccount" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-8">
+                  <ng-select
+                    placeholder="{{ 'Chose' | translate }}"
+                    class="w-full p-0 h-100"
+                    disabled
+                  >
+                    <ng-option *ngFor="let user of users" [value]="user.id">
+                      {{ user.Name }}</ng-option
+                    >
+                  </ng-select>
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="netAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="toAccount" class="text-orange">
+                    {{ "toAccount" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-8">
+                  <ng-select
+                    placeholder="{{ 'recipientName' | translate }}"
+                    class="w-full p-0 h-100"
+                    disabled
+                  >
+                    <ng-option *ngFor="let user of users" [value]="user.id">
+                      {{ user.Name }}</ng-option
+                    >
+                  </ng-select>
+                </div>
+                <div class="col-md-2">
+                  <input
+                    id="netAmount"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="AndThatFor" class="text-yellow">
+                    {{ "AndThatFor" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-10">
+                  <input
+                    id="AndThatFor"
+                    placeholder="{{ 'AddHere' | translate }}"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row me-3">
+                <div class="col-md-2">
+                  <label for="Statement " class="text-babyblue">
+                    {{ "Statement" | translate }}
+                  </label>
+                </div>
+                <div class="col-md-10">
+                  <input
+                    id="Statement "
+                    placeholder="{{ 'Statement' | translate }}"
+                    required
+                    class="form-control"
+                    type="text"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex">
+          <div class="d-flex me-3">
+            <input type="checkbox" name="date" id="date" ngModel />
+            <label for="date" class="mx-2">{{
+              "NotActivatingAddedValue" | translate
+            }}</label>
+          </div>
+
+          <div class="d-flex me-3">
+            <input type="checkbox" name="date" id="date" ngModel />
+            <label for="date" class="mx-2">{{
+              "NotCountingExpenses" | translate
+            }}</label>
+          </div>
+        </div>
+      </form>
+
+      <div class="editable shadow mb-4 px-3">
+        <p class="text-center">{{ "Check_transferDetails" | translate }}</p>
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "serial" | translate }}</th>
+              <th>{{ "Payment type" | translate }}</th>
+              <th>{{ "Check_transferNumber" | translate }}</th>
+              <th>{{ "dateCheck_transfer" | translate }}</th>
+              <th>{{ "BankName" | translate }}</th>
+              <th>{{ "edit" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="open(EditCheckDetailsModal)"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- footer -->
+    </ng-container>
+
+    <div class="d-flex justify-content-around mb-3">
+      <div class="d-flex align-items-center">
+        <img
+          class="rounded-circle"
+          width="50"
+          height="50"
+          src="../../../../../assets/images/client-3.png"
+          alt=""
+        />
+        <p>
+          {{ "Data Entry" | translate }} : محمد هلهل - فى - 2023-06-13 -
+          13:45:00
+        </p>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <div class="pt-3 m-3">
+          <button
+            class="btn text-white"
+            style="background-color: var(--base-color)"
+          >
+            {{ "CarryOver" | translate }}
+          </button>
+        </div>
+
+        <div class="pt-3 m-3">
+          <button
+            class="btn text-white"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+        </div>
+
+        <div class="pt-3 m-3">
+          <button (click)="modal?.dismiss()" class="btn btn-secondary">
+            {{ "close" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- AddNewResourceModal -->
+<ng-template #AddNewResourceModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "newResource" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameAr" class="text-right col-form-label block">
+              {{ "nameAr" | translate }}
+            </label>
+            <input
+              required
+              placeholder="{{ 'nameAr' | translate }}"
+              class="form-control"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameEn" class="text-right col-form-label block">
+              {{ "nameEn" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'nameEn' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label
+              for="Commerial Registration"
+              class="text-right col-form-label block"
+            >
+              {{ "Commerial Registration" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Commerial Registration' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="thePhone" class="text-right col-form-label block">
+              {{ "thePhone" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'thePhone' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Address" class="text-right col-form-label block">
+              {{ "Address" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Address' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <!--  -->
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Postal Code" class="text-right col-form-label block">
+              {{ "Postal Code" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Postal Code' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label
+              for="Additional Phone"
+              class="text-right col-form-label block"
+            >
+              {{ "Additional Phone" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Additional Phone' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Country" class="text-right col-form-label block">
+              {{ "Country" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Country' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Neighborhood" class="text-right col-form-label block">
+              {{ "Neighborhood" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Neighborhood' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Street Name" class="text-right col-form-label block">
+              {{ "Street Name" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Street Name' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="BuildingNumber" class="text-right col-form-label block">
+              {{ "BuildingNumber" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'BuildingNumber' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-4 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="Region" class="text-right col-form-label block">
+              {{ "Region" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              placeholder="{{ 'Region' | translate }}"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn mb-3 col-md-2 me-3 text-white"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+            (click)="modal?.dismiss()"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <p class="text-center">{{ "Check_transferDetails" | translate }}</p>
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "ResourceName_ar" | translate }}</th>
+              <th>{{ "ResourceName_en" | translate }}</th>
+              <th>{{ "Commerial Registration" | translate }}</th>
+              <th>{{ "thePhone" | translate }}</th>
+              <th>{{ "operations" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal, null, 'delete')"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="d-flex justify-content-around mb-3">
+    <div class="d-flex align-items-center">
+      <img
+        class="rounded-circle"
+        width="50"
+        height="50"
+        src="../../../../../assets/images/client-3.png"
+        alt=""
+      />
+      <p>
+        {{ "Data Entry" | translate }} : محمد هلهل - فى - 2023-06-13 - 13:45:00
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <div class="pt-3 m-3">
+        <button
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "CarryOver" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3 m-3">
+        <button
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "save" | translate }}
+        </button>
+      </div>
+
+      <div class="pt-3 m-3">
+        <button (click)="modal?.dismiss()" class="btn btn-secondary">
+          {{ "close" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- newItemModal -->
+<ng-template #newItemModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "newItem" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="max-h-100 overflow-x-scroll overflow-y-scroll p-4">
+    <form class="" #smsForm="ngForm">
+      <div class="row align-items-end mb-4 mx-3">
+        <!-- 1 line -->
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameAr" class="text-right col-form-label block">
+              {{ "nameAr" | translate }}
+            </label>
+            <input required class="form-control" type="text" />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-6 mb-0 mb-sm-3">
+          <div class="form-group">
+            <label for="nameEn" class="text-right col-form-label block">
+              {{ "nameEn" | translate }}
+            </label>
+            <input
+              name="dateCheck_transfer"
+              type="text"
+              class="form-control"
+              bsDatepicker
+              #dpr="bsDatepicker"
+            />
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <button
+            type="button"
+            class="flex gap-1 btn text-white mb-3 col-md-2 me-3"
+            style="background-color: var(--base-color)"
+          >
+            {{ "save" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="flex gap-1 btn btn-secondary mb-3 col-md-2"
+          >
+            {{ "close" | translate }}
+          </button>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-lg-12 mb-0 mb-sm-3 text-center">
+          <input
+            name="dateCheck_transfer"
+            placeholder="{{ 'search' | translate }}"
+            type="text"
+            class="form-control"
+            bsDatepicker
+            #dpr="bsDatepicker"
+          />
+        </div>
+      </div>
+
+      <div class="editable shadow mb-4">
+        <p class="text-center">{{ "Check_transferDetails" | translate }}</p>
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "ItemName_ar" | translate }}</th>
+              <th>{{ "ItemName_en" | translate }}</th>
+              <th>{{ "operations" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of users; let i = index"
+              style="line-height: 5px"
+            >
+              <td>{{ item.id }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="os-name{{ i }}"
+                  [(ngModel)]="item.Name"
+                  ngModel
+                />
+              </td>
+              <td>
+                <button
+                  class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10 me-3"
+                  (click)="open(deleteModal, null, 'delete')"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-end p-3">
+    <button class="btn me-2 btn-secondary">
+      {{ "close" | translate }}
+    </button>
+
+    <button
+      (click)="modal?.dismiss()"
+      class="btn text-white"
+      style="background-color: var(--base-color)"
+    >
+      {{ "save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- قيد اقفال -->
+<!-- ClosedModal  -->
+<ng-template #ClosedModal let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span class="text-2xl">{{ "Closed" | translate }}</span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal?.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container>
+      <form class="" #smsForm="ngForm">
+        <div class="row align-items-end mb-4 mx-3">
+          <!-- 1 line -->
+          <div class="col-sm-6 col-md-3 col-lg-4">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "date" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Bond number" | translate }}
+              </label>
+              <input
+                required
+                class="form-control"
+                type="text"
+                value="02200000"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "m_Cost" | translate }}
+              </label>
+              <ng-select
+                class="w-full p-0"
+                placeholder="{{ 'mainCenter' | translate }}"
+                [(ngModel)]="modalDetails.user"
+                [ngModelOptions]="{ standalone: true }"
+                name="user"
+              >
+                <ng-option *ngFor="let user of users" [value]="user.id">{{
+                  user.Name
+                }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <!-- 2 line -->
+          <div class="col-sm-6 col-md-3 col-lg-4">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "Corresponding" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'Chose' | translate }}"
+                name="date"
+                type="text"
+                class="form-control"
+                bsDatepicker
+                #dpr="bsDatepicker"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3 col-lg-4">
+            <div class="form-group">
+              <label for="customerEn" class="text-right col-form-label block">
+                {{ "referenceNumber" | translate }}
+              </label>
+              <input
+                placeholder="{{ 'referenceNumber' | translate }}"
+                required
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ++++ -->
+        <div class="row mb-3">
+          <h3 class="flex items-center justify-start fw-bold">
+            <button
+              type="button "
+              class="add-btn mx-2"
+              (click)="addEmployee(employees?.length)"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h3>
+          <div class="editable entry shadow mb-4">
+            <table
+              class="table table-responsive table-striped table-bordered text-center"
+              style="vertical-align: middle; font-size: 14px"
+            >
+              <thead
+                class="bg-base text-white"
+                style="line-height: 30px; font-size: 13px"
+              >
+                <tr>
+                  <th>{{ "amount" | translate }}</th>
+                  <th>{{ "accountName" | translate }}</th>
+                  <th>{{ "credit_debit" | translate }}</th>
+                  <th>{{ "costCenter" | translate }}</th>
+                  <th>{{ "Statement" | translate }}</th>
+                  <th>{{ "referenceNumber" | translate }}</th>
+                  <th>{{ "action" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of employees; let i = index"
+                  style="line-height: 5px"
+                >
+                  <td>
+                    <input
+                      type="text"
+                      name="amount{{ i }}"
+                      [(ngModel)]="item.amount"
+                      ngModel
+                    />
+                  </td>
+
+                  <!-- select  -->
+                  <td>
+                    <ng-select
+                      name="username{{ i }}"
+                      [(ngModel)]="item.accountName"
+                      ngModel
+                    >
+                      <ng-option *ngFor="let item of users" [value]="item?.id">
+                        {{ item.Name }}
+                      </ng-option>
+                    </ng-select>
+                  </td>
+
+                  <!-- select  -->
+                  <td>
+                    <ng-select
+                      name="username{{ i }}"
+                      [(ngModel)]="item.credit_debit"
+                      ngModel
+                    >
+                      <ng-option *ngFor="let item of users" [value]="item?.id">
+                        {{ item.Name }}
+                      </ng-option>
+                    </ng-select>
+                  </td>
+
+                  <!-- select  -->
+                  <td>
+                    <ng-select
+                      name="username{{ i }}"
+                      [(ngModel)]="item.costCenter"
+                      ngModel
+                    >
+                      <ng-option *ngFor="let item of users" [value]="item?.id">
+                        {{ item.Name }}
+                      </ng-option>
+                    </ng-select>
+                  </td>
+
+                  <td>
+                    <input
+                      type="text"
+                      name="Statement{{ i }}"
+                      [(ngModel)]="item.Statement"
+                      ngModel
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="referenceNumber{{ i }}"
+                      [(ngModel)]="item.referenceNumber"
+                      ngModel
+                    />
+                  </td>
+
+                  <td>
+                    <button
+                      class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                      (click)="deleteEmployee(i)"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="boxContainer w-100 py-2 px-3">
+          <div class="row me-3">
+            <div class="col-md-2">
+              <label for="Notes" class=" " for="Notes">
+                {{ "Notes" | translate }}
+              </label>
+            </div>
+            <div class="col-md-10">
+              <input
+                id="Notes"
+                placeholder="{{ 'AddNotesHere' | translate }}"
+                required
+                class="form-control text-center"
+                type="text"
+              />
+            </div>
+          </div>
+
+          <div class="row me-3">
+            <div class="col-md-12">
+              <div class="col-md-2">
+                <label for="TotalCurrentLine" class=" " for="TotalCurrentLine">
+                  {{ "TotalCurrentLine" | translate }}
+                </label>
+              </div>
+              <div class="col-md-10">
+                <input
+                  id="TotalCurrentLine"
+                  required
+                  class="form-control text-center"
+                  type="number"
+                  value="5"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="col-md-2">
+                <label for="CreditorTotal" class=" " for="CreditorTotal">
+                  {{ "CreditorTotal" | translate }}
+                </label>
+              </div>
+              <div class="col-md-10">
+                <input
+                  id="CreditorTotal"
+                  required
+                  value="148500.00"
+                  class="form-control text-center"
+                  type="number"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row me-3 justify-content-between">
+            <div class="col-md-12">
+              <div class="col-md-2">
+                <label for="totalDebit" class=" " for="totalDebit">
+                  {{ "totalDebit" | translate }}
+                </label>
+              </div>
+              <div class="col-md-10">
+                <input
+                  id="totalDebit"
+                  required
+                  class="form-control text-center"
+                  type="number"
+                  value="148500.00"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row me-3 justify-content-between">
+            <div class="col-md-12">
+              <div class="col-md-2">
+                <label for="theDifference" class=" " for="theDifference">
+                  {{ "theDifference" | translate }}
+                </label>
+              </div>
+              <div class="col-md-10">
+                <input
+                  id="theDifference"
+                  required
+                  class="form-control text-center"
+                  type="number"
+                  value="148500.00"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- footer -->
+    </ng-container>
+
+    <div class="d-flex justify-content-end gap-3">
+      <div>
+        <button
+          class="btn text-white"
+          style="background-color: var(--base-color)"
+        >
+          {{ "save" | translate }}
+        </button>
+      </div>
+
+      <div>
+        <button (click)="modal?.dismiss()" class="btn btn-secondary">
+          {{ "close" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- notificationsModal -->
+<!-- <ng-template #notificationsModal let-modal>
+
+
+  <div class="modal-body">
+    <div class="row mb-3">
+      <h3 class="flex items-center justify-start fw-bold">
+        {{ "addEmployee" | translate }}
+        <button
+          type="button "
+          class="add-btn mx-2"
+          (click)="addEmployee(employees?.length)"
+        >
+          <i class="fa fa-plus"></i>
+        </button>
+      </h3>
+
+      <div class="editable shadow mb-4">
+        <table
+          class="table table-responsive table-striped table-bordered text-center"
+          style="vertical-align: middle; font-size: 14px"
+        >
+          <thead
+            class="bg-base text-white"
+            style="line-height: 30px; font-size: 13px"
+          >
+            <tr>
+              <th>{{ "userName" | translate }}</th>
+              <th>{{ "email" | translate }}</th>
+              <th>{{ "Mobile" | translate }}</th>
+              <th>{{ "reminder time" | translate }}</th>
+              <th>{{ "action" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of employees; let i = index"
+              style="line-height: 5px"
+            >
+              <td>
+                <ng-select
+                  name="username{{ i }}"
+                  [(ngModel)]="item.name"
+                  ngModel
+                >
+                  <ng-option *ngFor="let item of users" [value]="item?.id">
+                    {{ item.Name }}
+                  </ng-option>
+                </ng-select>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="email{{ i }}"
+                  [(ngModel)]="item.email"
+                  ngModel
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="phone{{ i }}"
+                  [(ngModel)]="item.phone"
+                  ngModel
+                />
+              </td>
+              <td>
+                <ng-select
+                  name="reminderTime{{ i }}"
+                  [(ngModel)]="item.time"
+                  ngModel
+                >
+                  <ng-option
+                    *ngFor="let item of remeberOptions"
+                    [value]="item?.en"
+                    [translate]="'name'"
+                    [translateParams]="{ ar: item?.ar, en: item?.en }"
+                  >
+                  </ng-option>
+                </ng-select>
+              </td>
+
+              <td>
+                <button
+                  class="p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="deleteEmployee(i)"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+
+</ng-template> -->

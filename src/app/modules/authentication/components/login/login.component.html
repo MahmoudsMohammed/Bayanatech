@@ -1,0 +1,232 @@
+<div class="login d-flex justify-content-center align-items-center">
+  <div class="container">
+    <div class="row">
+      <!-- col-md-6 -->
+      <div class="col-lg-6 mb-5 mb-md-0 main">
+        <div class="login-info rounded bg-body">
+          <div class="head text-center">
+            <img
+              src="/assets/images/logo_image.png"
+              alt="logo"
+              class="d-inline-block mb-3 img-fluid"
+            />
+            <!-- <h2>{{ "authTitle1" | translate }}</h2>
+            <p>{{ "authTitle2" | translate }}</p> -->
+          </div>
+          <form #form="ngForm">
+            <div class="form-input">
+              <img
+                src="/assets/images/ic_perm_identity_24px.png"
+                alt="user icon"
+              />
+
+              <input
+                type="text"
+                name="user_name"
+                placeholder="{{ 'userName' | translate }}"
+                ngModel
+                #name="ngModel"
+                required
+                minlength="4"
+                autocomplete="off"
+              />
+              <span
+                class="text-danger"
+                *ngIf="name.hasError('required') && name.touched"
+                >{{ "requiredError" | translate }}</span
+              >
+              <span
+                class="text-danger"
+                *ngIf="
+                  name.hasError('minlength') &&
+                  !name.hasError('required') &&
+                  name.touched
+                "
+                >{{ "userNameError" | translate }}</span
+              >
+            </div>
+
+            <div class="form-input">
+              <img src="/assets/images/ic_lock_open_24px.png" alt="lock icon" />
+
+              <input
+                [type]="text ? 'text' : 'password'"
+                name="password"
+                placeholder="{{ 'password' | translate }}"
+                ngModel
+                #password="ngModel"
+                required
+                minlength="8"
+                autocomplete="off"
+              />
+              <i
+                class="fa fa-{{ text ? 'eye' : 'eye-slash' }}"
+                (click)="text = !text"
+              ></i>
+              <span
+                class="text-danger"
+                *ngIf="password.hasError('required') && password.touched"
+                >{{ "requiredError" | translate }}</span
+              >
+              <span
+                class="text-danger"
+                *ngIf="
+                  password.hasError('minlength') &&
+                  !password.hasError('required') &&
+                  password.touched
+                "
+                >{{ "passwordError" | translate }}</span
+              >
+            </div>
+
+            <div class="row qr m-0 position-relative">
+              <div class="col-7 col-lg-8 mb-0 ps-0">
+                <div class="form-input">
+                  <img
+                    src="/assets/images/qr-code-scan.png"
+                    alt="qr-code icon"
+                  />
+
+                  <input
+                    type="text"
+                    name="parCode"
+                    placeholder="{{ 'code' | translate }}"
+                    ngModel
+                    #parCode="ngModel"
+                    required
+                    minlength="4"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+              <div class="col-5 col-lg-4 mb-0 pe-0">
+                <div class="qrcode d-flex align-items-center">
+                  <div class="qrcode-value">
+                    <span>{{ qrCodeCheckValue[0] }}</span>
+                    <span>{{ qrCodeCheckValue[1] }}</span>
+                    <span>{{ qrCodeCheckValue[2] }}</span>
+                    <span>{{ qrCodeCheckValue[3] }}</span>
+                  </div>
+                  <i
+                    style="cursor: pointer"
+                    class="fa fa-refresh"
+                    (click)="refreshQrCode(); parCode.reset()"
+                  ></i>
+                </div>
+              </div>
+
+              <span
+                class="text-danger"
+                style="bottom: 4px"
+                *ngIf="!parCode.value && parCode.touched"
+                >{{ "requiredError" | translate }}</span
+              >
+              <span
+                class="text-danger"
+                style="bottom: 4px"
+                *ngIf="
+                  parCode.value != qrCodeCheckValue &&
+                  parCode.touched &&
+                  parCode.dirty
+                "
+                >{{ "codeError" | translate }}</span
+              >
+            </div>
+
+            <div class="form-input remember">
+              <span class="unchecked"></span>
+              <span class="checked" *ngIf="checked">
+                <i class="fa fa-check"></i>
+              </span>
+              <input
+                type="checkbox"
+                name="remember_me"
+                id="checkBox"
+                [(ngModel)]="checked"
+                #remember_me="ngModel"
+                ngModel
+              />
+              <label for="checkBox" class="d-inline-block ms-2">{{
+                "remember" | translate
+              }}</label>
+            </div>
+
+            <button
+              class="btn btn-outline-secondary login-btn"
+              [disabled]="form.invalid || parCode.value != qrCodeCheckValue"
+              (click)="login(form.value)"
+            >
+              {{ "Login" | translate }}
+            </button>
+
+            <div
+              class="actions-btns mt-4 mb-0 text-center flex items-center justify-between flex-wrap"
+            >
+              <p
+                class="mb-4"
+                [routerLink]="'/auth/forget-password'"
+                style="color: var(--base-color)"
+              >
+                <i class="fa fa-lock"></i>
+                {{ "forgetPass" | translate }}
+              </p>
+              <p
+                class="mb-4"
+                [routerLink]="'/auth/retrive-password'"
+                style="color: var(--base-color)"
+              >
+                <i class="fa fa-lock"></i>
+                {{ "retrivePass" | translate }}
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div
+        class="col-lg-6 d-flex justify-content-center align-items-start text-center info"
+      >
+        <div class="login-logo rounded">
+          <h3>{{ "loginHeader" | translate }}</h3>
+          <div class="bannar">
+            <img
+              src="/assets/images/login-img.png"
+              alt="bannar"
+              class="img-fluid"
+            />
+          </div>
+          <div class="apps text-center mt-4">
+            <h3 class="mb-4">{{ "downloadApp" | translate }}</h3>
+            <div class="links">
+              <a
+                href="javascript:void(0)"
+                target="_blank"
+                class="d-inline-block me-4 mb-3 mb-xl-0"
+              >
+                <img src="/assets/images/google-play.png" alt="app image" />
+              </a>
+              <a
+                href="javascript:void(0)"
+                target="_blank"
+                class="d-inline-block"
+              >
+                <img src="/assets/images/app-store.png" alt="app image" />
+              </a>
+            </div>
+            <!-- <div class="wts-icon text-start mt-3">
+              <a
+                href="https://wa.me/+966503326610"
+                target="_blank"
+                style="cursor: pointer; margin-inline-start: 60px"
+              >
+                <img
+                  src="/assets/images/WhatsApp-Logo.wine.png"
+                  alt="whatsapp image"
+                />
+              </a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

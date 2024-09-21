@@ -1,0 +1,23 @@
+.grid-box {
+  > div {
+    @apply grid grid-cols-7 items-center;
+    > label {
+      @apply col-span-1 m-0;
+    }
+    > div {
+      @apply col-span-6;
+    }
+  }
+}
+::ng-deep {
+  .mat-paginator-container {
+    justify-content: space-between !important;
+    padding: 15px 10px 0px !important;
+  }
+  .mat-paginator-range-actions {
+    direction: inherit !important;
+  }
+  .mat-paginator-range-label {
+    direction: initial;
+  }
+}

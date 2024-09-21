@@ -1,0 +1,26 @@
+<div class="p-4">
+  <div class="row justify-between">
+    <a
+      routerLink="/attendance/addAttendance/new"
+      class="btn btn-primary col-md-2"
+      >Add Location</a
+    >
+    <div class="col-md-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Username"
+        aria-label="Username"
+        aria-describedby="addon-wrapping"
+      />
+    </div>
+  </div>
+  <div class="card-container row mt-4">
+    <ng-container *ngFor="let item of attendanceData">
+      <app-attendaceCard
+        class="col-md-3"
+        [taskName]="item.name"
+      ></app-attendaceCard>
+    </ng-container>
+  </div>
+</div>

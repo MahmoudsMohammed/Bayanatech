@@ -1,0 +1,255 @@
+<div>
+  <div class="flex gap-3 justify-between flex-wrap">
+    <app-navigator [title]="title"></app-navigator>
+    <button class="btn btn-primary px-5 w-fit">{{ "Save" | translate }}</button>
+  </div>
+  <div
+    class="bg-white rounded-lg p-2 py-4 mt-3 gap-3 grid md:grid-cols-3 lg:grid-cols-4"
+  >
+    <div class="md:col-span-3 lg:col-span-4 p-3 rounded-lg bg-red-200">
+      {{ "supportAttention" | translate }}
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Customer Name" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Full Name" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "user name" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Email" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Mobile number" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Release" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div
+      class="grid-rows-2 flex items-center gap-3 md:col-span-3 lg:col-span-2"
+    >
+      <img
+        class="h-16 aspect-square object-cover rounded-full"
+        src="../../../../../assets/user-test.jpeg"
+        alt=""
+      />
+      <button
+        (click)="open(supportRequests, '', 'lg', 'top')"
+        class="btn btn-primary"
+      >
+        {{ "Previous Requests" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="bg-white rounded-lg p-2 py-4 mt-3 gap-3 grid md:grid-cols-3 lg:grid-cols-4"
+  >
+    <div class="form-group">
+      <label class="col-form-label"> {{ "Type of ticket" | translate }}</label>
+      <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+        <ng-option>{{ "اخنيار" }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="form-group">
+      <label class="col-form-label"> {{ "Department" | translate }}</label>
+      <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+        <ng-option>{{ "اخنيار" }}</ng-option>
+      </ng-select>
+    </div>
+    <div>
+      <label class="col-form-label">
+        {{ "Order Description" | translate }}
+      </label>
+      <input type="text" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label class="col-form-label"> {{ "Periority" | translate }}</label>
+      <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+        <ng-option>{{ "اخنيار" }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="md:col-span-3 lg:col-span-4">
+      <label class="col-form-label">
+        {{
+          "Order details (please mention the screen name, and add a detailed explanation of the order)"
+            | translate
+        }}
+      </label>
+      <textarea
+        name=""
+        id=""
+        cols="30"
+        rows="4"
+        class="form-control"
+      ></textarea>
+    </div>
+    <div class="md:col-span-1">
+      <div class="upload">
+        <file-upload class="h-full" [control]="control">
+          <ng-template
+            let-isFileDragDropAvailable="isFileDragDropAvailable"
+            #placeholder
+          >
+            <div *ngIf="control.size === 0">
+              <div class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1em"
+                  viewBox="0 0 640 512"
+                >
+                  <path
+                    d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="upload-text"
+                style="width: max-content; padding: 0px 20px"
+              >
+                {{ "Add Image" | translate }}
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template
+            let-i="index"
+            let-file="file"
+            let-control="control"
+            #item
+          >
+            <div class="overlay">
+              <span class="delete-button" (click)="control.removeFile(file)">
+                <svg viewBox="0 0 448 512">
+                  <path
+                    d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                  ></path>
+                </svg>
+              </span>
+              <img
+                class="max-h-44"
+                *ngIf="control.valid"
+                [src]="uploadedFile | async"
+              />
+            </div>
+          </ng-template>
+        </file-upload>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg p-2 py-4 mt-3 gap-3 flex flex-col">
+    <div class="p-3 rounded-lg bg-blue-200">
+      {{ "supportMessage" | translate }}
+    </div>
+    <a
+      class="btn btn-primary px-5 w-fit"
+      href="https://anydesk.com/en/downloads"
+      target="_blank"
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'تحميل',
+        en: 'Download'
+      }"
+    ></a>
+
+    <span
+      class="p-3 rounded-lg bg-red-200 w-max"
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'مواعيد العمل :السبت - الخميس 09:00 - 19:00',
+        en: 'مواعيد العمل :السبت - الخميس 09:00 - 19:00'
+      }"
+    >
+    </span>
+  </div>
+</div>
+<!-- supportRequests -->
+<ng-template #supportRequests let-modal>
+  <div
+    style="background-color: var(--base-color)"
+    class="modal-header text-white flex justify-between items-center"
+  >
+    <h4 class="m-0">
+      <span
+        class="text-2xl"
+        [translate]="'name'"
+        [translateParams]="{
+          ar: 'طلبات الدعم',
+          en: ' Support Requests'
+        }"
+      >
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="text-2xl text-white m-0"
+      (click)="modal.dismiss()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="max-h-96 overflow-auto mt-2">
+      <table class="custome-table">
+        <thead>
+          <tr class="text-center">
+            <th
+              *ngFor="let col of columns"
+              [translate]="'name'"
+              [translateParams]="{
+                ar: col.ar,
+                en: col.en
+              }"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let request of requests">
+            <td>{{ request.Address }}</td>
+            <td>{{ request.Type }}</td>
+            <td>{{ request.Department }}</td>
+            <td>{{ request.priority }}</td>
+            <td>{{ request.Topic }}</td>
+            <td>{{ request.DateF }}</td>
+
+            <td>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="flex gap-2 justify-end pt-3 border-t border-neutral-300 col-span-1 md:col-span-2 mt-2"
+    >
+      <button (click)="modal.dismiss()" class="btn btn-secondary">
+        {{ "Back" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

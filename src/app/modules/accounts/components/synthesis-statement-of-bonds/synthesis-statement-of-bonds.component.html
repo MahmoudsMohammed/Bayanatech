@@ -1,0 +1,108 @@
+<div class="synthesis-statement-of-bonds">
+  <app-navigator [title]="title"></app-navigator>
+
+  <!-- inputs -->
+  <div class="container-fluid">
+    <div class="flex flex-wrap gap-4 align-items-end">
+      <div class="form-group">
+        <label class="col-form-label"> {{ "search" | translate }}</label>
+
+        <input type="text " class="w-full p-2 inputType" name="search" />
+      </div>
+
+      <div class="flex justify-content-center">
+        <button type="button" class="flex gap-1 btn btn-success">
+          {{ "Print" | translate }}
+          <i class="fa-solid fa-print"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="overflow-auto mt-4">
+      <table
+        mat-table
+        [dataSource]="projectsDataSource"
+        matSort
+        class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+      >
+        <ng-container matColumnDef="BondNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Bond number" | translate }}</span>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="{{
+              element.status == 0
+                ? 'text-red-500 fw-bold'
+                : element.status == 5
+                ? 'text-warning-500 fw-bold'
+                : ''
+            }}"
+          >
+            {{ element.BondNumber }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Type" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Type }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BondDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "BondDate" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.BondDate }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date_Hijri">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "date_Hijri" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.date_Hijri }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BondTotal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "BondTotal" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.BondTotal }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BondCondition">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "BondCondition" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.BondCondition }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="PostingDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>{{ "Posting date" | translate }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.PostingDate }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="projectDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: projectDisplayedColumns"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>

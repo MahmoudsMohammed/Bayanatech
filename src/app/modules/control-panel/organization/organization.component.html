@@ -1,0 +1,4187 @@
+<div class="organization">
+  <div class="container-fluid">
+    <app-navigator [title]="title"></app-navigator>
+    <div class="info mt-4">
+      <tabset>
+        <tab heading="{{ 'Head office data' | translate }}">
+          <div class="content">
+            <form #form="ngForm" class="row">
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="form-group">
+                  <label
+                    for="EstablishmentAr"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Establishment Name (Arabic)" | translate }}
+                  </label>
+                  <input
+                    #EstablishmentAr="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="EstablishmentAr"
+                    name="EstablishmentAr"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="form-group">
+                  <label
+                    for="EstablishmentEn"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Establishment name (English)" | translate }}
+                  </label>
+                  <input
+                    #EstablishmentEn="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="EstablishmentEn"
+                    name="EstablishmentEn"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="phone"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "phone" | translate }}
+                  </label>
+                  <input
+                    #phone="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="number"
+                    id="phone"
+                    name="phone"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label for="fax" class="text-right col-form-label block mx-2">
+                    {{ "fax" | translate }}
+                  </label>
+                  <input
+                    #fax="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="number"
+                    id="fax"
+                    name="fax"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="row p-0">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="PostalCode"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Postal code" | translate }}
+                      </label>
+                      <input
+                        #PostalCode="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="number"
+                        id="PostalCode"
+                        name="PostalCode"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="Country"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Country" | translate }}
+                      </label>
+                      <input
+                        #Country="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="text"
+                        id="Country"
+                        name="Country"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="row p-0">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="col-form-label mx-2">
+                        {{ "Region" | translate }}</label
+                      >
+                      <div class="flex">
+                        <ng-select
+                          class="w-full p-0"
+                          placeholder="{{ 'Chose' | translate }}"
+                          name="Region"
+                          #Region="ngModel"
+                          ngModel
+                          style="min-width: unset !important"
+                        >
+                          <ng-option
+                            *ngFor="let user of users"
+                            [value]="user.id"
+                            >{{ user.Name }}</ng-option
+                          >
+                        </ng-select>
+                        <button
+                          type="button"
+                          class="bg-base text-white"
+                          style="padding: 0px 10px"
+                          (click)="open(addOption)"
+                        >
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="row p-0">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="Neighborhood"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Neighborhood" | translate }}
+                      </label>
+                      <input
+                        #Neighborhood="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="text"
+                        id="Neighborhood"
+                        name="Neighborhood"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="Street"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Street name" | translate }}
+                      </label>
+                      <input
+                        #Street="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="text"
+                        id="Street"
+                        name="Street"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="row p-0">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="BuildingNumber"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "BuildingNumber" | translate }}
+                      </label>
+                      <input
+                        #BuildingNumber="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="number"
+                        id="BuildingNumber"
+                        name="BuildingNumber"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="AdditionalPhone"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Additional Phone" | translate }}
+                      </label>
+                      <input
+                        #AdditionalPhone="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="number"
+                        id="AdditionalPhone"
+                        name="AdditionalPhone"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="row p-0">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="CommerialRegistration"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Commerial Registration" | translate }}
+                      </label>
+                      <input
+                        #CommerialRegistration="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="number"
+                        id="CommerialRegistration"
+                        name="CommerialRegistration"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label
+                        for="CommercialRegister"
+                        class="text-right col-form-label block mx-2"
+                      >
+                        {{ "Commercial Register" | translate }}
+                      </label>
+                      <input
+                        #CommercialRegister="ngModel"
+                        ngModel
+                        class="form-control"
+                        type="number"
+                        id="CommercialRegister"
+                        name="CommercialRegister"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="form-group">
+                  <label
+                    for="email"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Office customer correspondence email" | translate }}
+                  </label>
+                  <div class="flex">
+                    <input
+                      #email="ngModel"
+                      ngModel
+                      class="form-control"
+                      type="email"
+                      id="email"
+                      name="email"
+                    />
+                    <button
+                      type="button"
+                      class="bg-base text-white"
+                      style="padding: 0px 10px"
+                      (click)="open(emailSettingModal)"
+                    >
+                      <i class="fa fa-gears"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="form-group">
+                  <label
+                    for="Address"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Address" | translate }}
+                  </label>
+                  <input
+                    #Address="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="Address"
+                    name="Address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="form-group">
+                  <label
+                    for="Location"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Location" | translate }}
+                  </label>
+                  <input
+                    #Location="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="Location"
+                    name="Location"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="BankName"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "BankName" | translate }}
+                  </label>
+                  <ng-select
+                    #BankName="ngModel"
+                    ngModel
+                    id="BankName"
+                    name="BankName"
+                  >
+                    <ng-option *ngFor="let item of users" [value]="item.id">{{
+                      item.Name
+                    }}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="BankAccount"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "Bank account" | translate }}
+                  </label>
+                  <input
+                    #BankAccount="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="BankAccount"
+                    name="BankAccount"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-3">
+                <div class="form-group">
+                  <label
+                    for="companyRepresentative"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "companyRepresentative" | translate }}
+                  </label>
+                  <ng-select
+                    #companyRepresentative="ngModel"
+                    ngModel
+                    id="companyRepresentative"
+                    name="companyRepresentative"
+                  >
+                    <ng-option *ngFor="let item of users" [value]="item.id">{{
+                      item.Name
+                    }}</ng-option></ng-select
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-3">
+                <div class="form-group">
+                  <label for="as" class="text-right col-form-label block mx-2">
+                    {{ "as" | translate }}
+                  </label>
+                  <input
+                    #as="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="as"
+                    name="as"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="NationalId"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "NationalId" | translate }}
+                  </label>
+                  <input
+                    #NationalId="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="NationalId"
+                    name="NationalId"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="BankName2"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "BankName" | translate }}
+                  </label>
+                  <ng-select
+                    #BankName2="ngModel"
+                    ngModel
+                    id="BankName2"
+                    name="BankName2"
+                  >
+                    <ng-option *ngFor="let item of users" [value]="item.id">{{
+                      item.Name
+                    }}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-2 mb-3">
+                <div class="form-group">
+                  <label
+                    for="BankAccount2"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ ("Bank account" | translate) + " 2" }}
+                  </label>
+                  <input
+                    #BankAccount2="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="text"
+                    id="BankAccount2"
+                    name="BankAccount2"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-3">
+                <div class="form-group">
+                  <label
+                    for="EngineeringLicense"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "EngineeringLicense" | translate }}
+                  </label>
+                  <input
+                    #EngineeringLicense="ngModel"
+                    ngModel
+                    class="form-control"
+                    type="number"
+                    id="EngineeringLicense"
+                    name="EngineeringLicense"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-3">
+                <div class="form-group">
+                  <label
+                    for="IssuedOn"
+                    class="text-right col-form-label block mx-2"
+                  >
+                    {{ "IssuedOn" | translate }}
+                  </label>
+                  <input
+                    #IssuedOn="ngModel"
+                    ngModel
+                    class="form-control"
+                    id="IssuedOn"
+                    name="IssuedOn"
+                    bsDatepicker
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div
+                  class="box rounded p-3"
+                  style="border: 4px solid var(--base-color)"
+                >
+                  <p
+                    class="text-red-500 fw-bold"
+                    style="letter-spacing: 0.5px; line-height: 1.7em"
+                  >
+                    {{ "branchsHint" | translate }}
+                  </p>
+                  <mat-slide-toggle
+                    name="activeBranches"
+                    ngModel
+                    color="primary"
+                    ><span
+                      [translate]="'name'"
+                      [translateParams]="{
+                        ar: 'تفعيل الفروع؟',
+                        en: 'Active Branches?'
+                      }"
+                    ></span
+                  ></mat-slide-toggle>
+                </div>
+              </div>
+
+              <div class="col-12 my-3">
+                <div class="row p-0">
+                  <div class="col-md-6 mb-4 mb-md-0">
+                    <p class="bg-red-100 p-1">
+                      {{
+                        "Please: Choose the representative of the facility authorized to sign the employee contracts and the facility's customer contracts"
+                          | translate
+                      }}
+                    </p>
+                    <div class="form-input-group flex gap-2 items-center">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        ngModel
+                        name="showInfoInReport"
+                        required
+                      />
+                      <label for="showInfoInReport" class="m-0">{{
+                        "Show the establishment data at the end of the reportsbranchsHint"
+                          | translate
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 my-3">
+                <div class="row p-0 items-center">
+                  <div class="col-md-4">
+                    <img
+                      src="/assets/images/logo_image.png"
+                      alt=""
+                      class="img-fluid"
+                      style="
+                        width: 340px;
+                        height: 200px;
+                        object-fit: contain;
+                        background-color: #fff;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="upload">
+                      <file-upload [control]="control">
+                        <ng-template
+                          let-isFileDragDropAvailable="isFileDragDropAvailable"
+                          #placeholder
+                        >
+                          <div *ngIf="control.size === 0">
+                            <div class="icon">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="1em"
+                                viewBox="0 0 640 512"
+                              >
+                                <path
+                                  d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                                />
+                              </svg>
+                            </div>
+
+                            <div class="upload-text">
+                              {{ "Add Image" | translate }}
+                            </div>
+                          </div>
+                        </ng-template>
+
+                        <ng-template
+                          let-i="index"
+                          let-file="file"
+                          let-control="control"
+                          #item
+                        >
+                          <div class="overlay">
+                            <span
+                              class="delete-button"
+                              (click)="control.removeFile(file)"
+                            >
+                              <svg viewBox="0 0 448 512">
+                                <path
+                                  d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                                ></path>
+                              </svg>
+                            </span>
+                            <img
+                              *ngIf="control.valid"
+                              [src]="uploadedFile | async"
+                            />
+                          </div>
+                        </ng-template>
+                      </file-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div
+              class="modal-footer justify-content-end my-3"
+              style="border-top: none"
+            >
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                (click)="open(AdjustSMSModal)"
+              >
+                {{ "Adjust SMS provider settings" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                [disabled]="form.invalid"
+                (click)="saveMainInfo(form.value)"
+              >
+                {{ "Save" | translate }}
+              </button>
+              <button type="button" class="btn btn-light py-2 px-3 mt-0">
+                {{ "close" | translate }}
+              </button>
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="{{ 'Set and prepare branch data' | translate }}">
+          <div class="content">
+            <button
+              class="p-2 bg-base rounded-lg duration-300 text-white"
+              (click)="open(BranchModal, null, 'add')"
+            >
+              {{ "new branch" | translate }}
+            </button>
+
+            <div class="tables-data mt-3 overflow-hidden">
+              <!-- table -->
+              <input
+                (keyup)="applyFilter($event)"
+                class="form-control mb-3"
+                style="max-width: 300px"
+                #input
+                placeholder="{{ 'search' | translate }}"
+              />
+              <div class="overflow-auto">
+                <table
+                  mat-table
+                  [dataSource]="dataSource"
+                  matSort
+                  class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+                >
+                  <!-- Name column -->
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Name" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.Name }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- CommercialRegister column -->
+                  <ng-container matColumnDef="CommercialRegister">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Commercial Register" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.CommercialRegister }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- CommerialRegistration column -->
+                  <ng-container matColumnDef="CommerialRegistration">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Commerial Registration" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.CommerialRegistration }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- city/region column -->
+                  <ng-container matColumnDef="city/region">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "city/region" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.location }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- coins column -->
+                  <ng-container matColumnDef="coins">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "coins" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.coins }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- operations Column -->
+                  <ng-container matColumnDef="operations">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "operations" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="flex gap-1 justify-center py-2">
+                        <button
+                          class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(BranchModal, element, 'edit')"
+                        >
+                          <i class="fa fa-edit"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(deleteModal)"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(branchesAccountsModal)"
+                          title="{{ 'branches accounts' | translate }}"
+                        >
+                          <i class="fa-solid fa-database"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(incomeAccountsModal)"
+                          title="{{ 'income list accounts' | translate }}"
+                        >
+                          <i class="fa-solid fa-list"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    class="duration-300 hover:bg-slate-100"
+                  ></tr>
+
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">
+                      {{ "noResult" | translate }} "{{ input.value }}"
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+            </div>
+          </div>
+        </tab>
+
+        <tab
+          heading="{{
+            'Adjusting and preparing shifts and official holidays' | translate
+          }}"
+        >
+          <div class="content">
+            <button
+              class="p-2 bg-base rounded-lg duration-300 text-white"
+              (click)="open(OfficialVacationsModal, null, 'add')"
+            >
+              {{ "Official vacations" | translate }}
+            </button>
+            <button
+              class="p-2 bg-base rounded-lg duration-300 text-white mx-2"
+              (click)="open(staffTimeModal, null, 'add')"
+            >
+              {{ "Staff Time" | translate }}
+            </button>
+
+            <div class="tables-data mt-3 overflow-hidden">
+              <!-- table -->
+              <input
+                (keyup)="applyFilterStaffTime($event)"
+                class="form-control mb-3"
+                style="max-width: 300px"
+                #input
+                placeholder="{{ 'search' | translate }}"
+              />
+
+              <div class="overflow-auto">
+                <table
+                  mat-table
+                  [dataSource]="staffTimeDataSource"
+                  matSort
+                  class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+                >
+                  <!-- Name column -->
+                  <ng-container matColumnDef="NameAr">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "nameAr" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.NameAr }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- NameEn column -->
+                  <ng-container matColumnDef="NameEn">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "nameEn" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.NameEn }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- notes column -->
+                  <ng-container matColumnDef="notes">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Notes" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.notes }}</span>
+                    </td>
+                  </ng-container>
+
+                  <!-- operations Column -->
+                  <ng-container matColumnDef="operations">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "operations" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="flex gap-1 justify-center py-2">
+                        <button
+                          class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(staffTimeModal, element, 'edit')"
+                        >
+                          <i class="fa fa-edit"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(deleteModal)"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(staffTimeDetails, null, 'details')"
+                          title="{{ 'Time details' | translate }}"
+                        >
+                          <i class="fa-solid fa-info"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="staffTimeDisplayedColumns"
+                  ></tr>
+
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: staffTimeDisplayedColumns"
+                    class="duration-300 hover:bg-slate-100"
+                  ></tr>
+
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">
+                      {{ "noResult" | translate }} "{{ input.value }}"
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="{{ 'system options' | translate }}">
+          <div class="content">
+            <form #form="ngForm">
+              <h3
+                [translate]="'name'"
+                [translateParams]="{
+                  ar: 'اعدادات النظام',
+                  en: 'system setting'
+                }"
+                class="my-4 text-base fw-bold"
+              ></h3>
+              <div class="row">
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Set up the phone number" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="SetPhone"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Mobile number setup" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="MobileSetup"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Set up the ID number" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="SetID"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "The number of decimal digits" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="decimalDigits"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Consulting contract code prefix" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="contractCodePrefix"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Project code prefix" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="ProjectCodePrefix"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Supervision contract code prefix" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="SCCPrefix"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Design contract code prefix" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="DCCPrefix"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Prefix contract batches" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="PrefixContractBatches"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{ "Installment contract prefix" | translate }}
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      ngModel
+                      name="installmentContractPrefix"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{
+                        "Reminder of the residence is about to expire"
+                          | translate
+                      }}
+                    </label>
+                    <ng-select
+                      ngModel
+                      name="expireResidence"
+                      style="min-width: unset !important"
+                    >
+                      <ng-option *ngFor="let item of users" [value]="item?.id">
+                        {{ item.Name }}
+                      </ng-option></ng-select
+                    >
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-group">
+                    <label class="text-right col-form-label block">
+                      {{
+                        "Reminder counter contracts read to expiry" | translate
+                      }}
+                    </label>
+                    <ng-select
+                      ngModel
+                      name="expiryReminder"
+                      style="min-width: unset !important"
+                      ><ng-option *ngFor="let item of users" [value]="item?.id">
+                        {{ item.Name }}
+                      </ng-option></ng-select
+                    >
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-check form-switch">
+                    <label
+                      class="form-check-label block"
+                      for="ClientEmail"
+                      style="width: max-content"
+                    >
+                      {{ "Client email" | translate }}
+                    </label>
+                    <input
+                      style="float: unset !important"
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="ClientEmail"
+                      ngModel
+                      name="ClientEmail"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-check form-switch">
+                    <label
+                      class="form-check-label block"
+                      for="CustomerId"
+                      style="width: max-content"
+                    >
+                      {{ "Customer ID" | translate }}
+                    </label>
+                    <input
+                      style="float: unset !important"
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="CustomerId"
+                      ngModel
+                      name="CustomerId"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+                  <div class="form-check form-switch">
+                    <label
+                      class="form-check-label block"
+                      for="CustomerMobile"
+                      style="width: max-content"
+                    >
+                      {{ "Customer mobile" | translate }}
+                    </label>
+                    <input
+                      style="float: unset !important"
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="CustomerMobile"
+                      ngModel
+                      name="CustomerMobile"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <hr class="mb-4" />
+
+              <h2
+                class="flex items-center gap-1 fw-bold text-base"
+                style="letter-spacing: 1px"
+              >
+                <span>{{ "Last update" | translate }}</span>
+                <span>{{ "afawfawf" }}</span>
+                <span>{{ "in" | translate }}</span>
+                <span>{{ today | date : "dd-MM-yyyy - h:m:s" }}</span>
+              </h2>
+
+              <div class="flex justify-end mb-3">
+                <button
+                  type="button"
+                  class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                  [disabled]="form.invalid"
+                  (click)="saveSetting(form.value)"
+                >
+                  {{ "Save" | translate }}
+                </button>
+              </div>
+
+              <hr class="mb-4" />
+              <div class="row p-0">
+                <div class="col-md-6 mb-4 mb-md-0">
+                  <h4 class="text-base fw-bold mb-3">
+                    {{ "Added value settings" | translate }}
+                  </h4>
+                  <div class="form-group flex gap-2 items-center">
+                    <label for="showInfoInReport" class="m-0">{{
+                      "tax rate" | translate
+                    }}</label>
+
+                    <div class="flex">
+                      <input
+                        type="text"
+                        class="form-control"
+                        ngModel
+                        name="taxRate"
+                        required
+                      />
+                      <span class="persent">%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 flex items-start">
+                  <div
+                    class="box rounded p-3"
+                    style="
+                      border: 4px solid var(--base-color);
+                      margin-inline-end: 16px;
+                    "
+                  >
+                    <p
+                      class="text-red-500 fw-bold"
+                      style="
+                        letter-spacing: 0.5px;
+                        line-height: 1.7em;
+                        font-size: 13px;
+                      "
+                    >
+                      {{
+                        "You can activate the link with the fatoorah platform by activating the link with the platform by clicking on the button below. You will receive an activation code on an e-mail consisting of 4 digits."
+                          | translate
+                      }}
+                    </p>
+                    <mat-slide-toggle
+                      name="activeBranches"
+                      ngModel
+                      color="primary"
+                      (change)="openModal($event)"
+                      ><span
+                        [translate]="'name'"
+                        [translateParams]="{
+                          ar: 'تفعيل منصة فاتورة؟',
+                          en: 'Invoice platform activation?'
+                        }"
+                      ></span
+                    ></mat-slide-toggle>
+                  </div>
+
+                  <img
+                    src="/assets/images/zatca.jpg"
+                    alt=""
+                    style="
+                      max-width: 200px;
+                      max-height: 120px;
+                      object-fit: cover;
+                    "
+                  />
+                </div>
+              </div>
+
+              <hr class="my-4" />
+
+              <h2
+                class="flex items-center gap-1 fw-bold text-base"
+                style="letter-spacing: 1px"
+              >
+                <span>{{ "Last update" | translate }}</span>
+                <span>{{ "afawfawf" }}</span>
+                <span>{{ "in" | translate }}</span>
+                <span>{{ today | date : "dd-MM-yyyy - h:m:s" }}</span>
+              </h2>
+            </form>
+
+            <div class="flex justify-end mb-3">
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                [disabled]="form.invalid"
+                (click)="saveSetting(form.value)"
+              >
+                {{ "Save" | translate }}
+              </button>
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="{{ 'Content management' | translate }}">
+          <div class="content">
+            <div class="btns flex flex-wrap gap-3">
+              <button
+                class="p-2 bg-base rounded-lg duration-300 text-white"
+                (click)="open(BranchDataModal, null, 'add')"
+              >
+                {{ "Add branch information" | translate }}
+              </button>
+              <button
+                class="p-2 bg-base rounded-lg duration-300 text-white"
+                (click)="open(SocialDataModal, null, 'add')"
+              >
+                {{ "Social networking links" | translate }}
+              </button>
+              <button
+                class="p-2 bg-base rounded-lg duration-300 text-white"
+                (click)="open(latestNewsModal, null, 'add')"
+              >
+                {{ "latest news" | translate }}
+              </button>
+            </div>
+
+            <div class="tables-data mt-3 overflow-hidden">
+              <!-- table -->
+              <input
+                (keyup)="applyContentFilter($event)"
+                class="form-control mb-3"
+                style="max-width: 300px"
+                #input
+                placeholder="{{ 'search' | translate }}"
+              />
+              <div class="overflow-auto">
+                <table
+                  mat-table
+                  [dataSource]="contentDataSource"
+                  matSort
+                  class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+                >
+                  <!-- name column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "branch name" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.name }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- address column -->
+                  <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Address" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.address }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- mobile column -->
+                  <ng-container matColumnDef="mobile">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Mobile" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.mobile }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- customerService column -->
+                  <ng-container matColumnDef="customerService">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "Branch official" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.customerService }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- email column -->
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span>{{ "email" | translate }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{ element?.email }}</span>
+                    </td>
+                  </ng-container>
+
+                  <!-- operations Column -->
+                  <ng-container matColumnDef="operations">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "operations" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="flex gap-1 justify-center py-2">
+                        <button
+                          class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(BranchDataModal, element, 'edit')"
+                        >
+                          <i class="fa fa-edit"></i>
+                        </button>
+
+                        <button
+                          class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                          (click)="open(deleteModal)"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="contentDisplayedColumns"
+                  ></tr>
+
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: contentDisplayedColumns"
+                    class="duration-300 hover:bg-slate-100"
+                  ></tr>
+
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">
+                      {{ "noResult" | translate }} "{{ input.value }}"
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>
+
+<!-- Add option -->
+<ng-template #addOption let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{ ar: 'اضافة جديدة', en: 'Add New' }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #addOptionForm="ngForm">
+      <div class="row">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameAr" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameAr' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameAr"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-input-group">
+            <label for="" class="block mb-3">{{ "nameEn" | translate }}</label>
+            <input
+              type="text"
+              placeholder="{{ 'nameEn' | translate }}"
+              class="form-control"
+              ngModel
+              name="nameEn"
+              required
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-center" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="addOptionForm.invalid"
+      (click)="saveOption(addOptionForm.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+
+    <div
+      class="d-block w-100 mt-4"
+      style="
+        border-top: 2px solid #d5dadf;
+        padding-top: 24px;
+        border-radius: 3px;
+      "
+    >
+      <div class="w-100 mb-3">
+        <input
+          type="text"
+          class="form-control pull-right"
+          placeholder="{{ 'search' | translate }}"
+          (keyup)="updateFilter($event)"
+        />
+      </div>
+
+      <ngx-datatable
+        style="max-height: 300px; overflow-y: auto"
+        #table
+        class="striped w-100"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="100"
+        [rows]="rows"
+      >
+        <!-- Column: Editing Mode-->
+        <ngx-datatable-column [flexGrow]="0.5">
+          <ng-template
+            let-value="value"
+            let-row="row"
+            let-rowIndex="rowIndex"
+            ngx-datatable-cell-template
+          >
+            <!-- Pencil icon -->
+            <i
+              class="fa fa-pencil"
+              title="Modify"
+              style="cursor: pointer"
+              *ngIf="!this.isEditable[rowIndex]"
+              (click)="this.isEditable[rowIndex] = !this.isEditable[rowIndex]"
+            ></i>
+
+            <!-- Save/Delete icons -->
+            <div class="actions">
+              <i
+                class="fa fa-edit text-success"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Save"
+                (click)="save(row, rowIndex)"
+              ></i>
+              <i
+                class="fa fa-trash text-danger"
+                *ngIf="this.isEditable[rowIndex]"
+                title="Delete"
+                (click)="delete(row, rowIndex)"
+              ></i>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameAr' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name"
+                [(ngModel)]="row.name_ar"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [flexGrow]="1.5"
+          name="{{ 'nameEn' | translate }}"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-rowIndex="rowIndex"
+            let-row="row"
+          >
+            <div class="form-input-group">
+              <input
+                type="text"
+                name="activity_name_en"
+                [(ngModel)]="row.name_en"
+                [disabled]="!isEditable[rowIndex]"
+              />
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</ng-template>
+
+<!-- emailSettingModal -->
+<ng-template #emailSettingModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'اعدادات البريد الالكتروني',
+        en: 'Email Setting'
+      }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #emailForm="ngForm">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <div class="form-input-group">
+            <label for="email" class="block mb-3">{{
+              "email" | translate
+            }}</label>
+            <input
+              type="email"
+              placeholder="{{ 'email' | translate }}"
+              class="form-control"
+              ngModel
+              name="email"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-input-group">
+            <label for="password" class="block mb-3">{{
+              "password" | translate
+            }}</label>
+            <input
+              type="password"
+              placeholder="{{ 'password' | translate }}"
+              class="form-control"
+              ngModel
+              name="password"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-input-group">
+            <label for="confirmepassword" class="block mb-3">{{
+              "confirmepassword" | translate
+            }}</label>
+            <input
+              type="password"
+              placeholder="{{ 'confirmepassword' | translate }}"
+              class="form-control"
+              ngModel
+              name="confirmepassword"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-input-group">
+            <label for="SMTP" class="block mb-3">{{
+              "SMTP outgoing mail server" | translate
+            }}</label>
+            <input
+              type="email"
+              placeholder="{{ 'SMTP outgoing mail server' | translate }}"
+              class="form-control"
+              ngModel
+              name="SMTP"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-input-group">
+            <label for="Port" class="block mb-3">{{
+              "Port" | translate
+            }}</label>
+            <input
+              type="number"
+              placeholder="{{ 'Port' | translate }}"
+              class="form-control"
+              ngModel
+              name="Port"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-3 flex justify-between items-start">
+          <div class="form-input-group">
+            <label for="SSL" class="block mb-3">{{ "SSL" | translate }}</label>
+            <input
+              type="checkbox"
+              placeholder="{{ 'SSL' | translate }}"
+              class="form-check-input"
+              ngModel
+              name="SSL"
+              required
+            />
+          </div>
+          <div
+            class="emailBox border rounded px-3 py-1"
+            style="border-color: #444"
+          >
+            <p class="fw-bold text-red-500">
+              {{ "The outgoing protocol for Gmail is" | translate }}
+              {{ "smtp.gmail.com" }}
+            </p>
+            <p class="fw-bold text-base">
+              {{ "Outgoing protocol for" | translate }}
+              {{ "smtp.live.com" }}
+            </p>
+            <p class="fw-bold text-red-500">
+              {{ "Gmail SMTP port" | translate }}: {{ "465" }}
+            </p>
+            <p class="fw-bold text-base">
+              {{ "Hotmail SMTP port" | translate }}: {{ "587,25 or 465" }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="emailForm.invalid"
+      (click)="setEmailSetting(emailForm.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- AdjustSMSModal -->
+<ng-template #AdjustSMSModal let-modal>
+  <div class="modal-header bg-base text-white justify-end">
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #setting="ngForm">
+      <tabset>
+        <tab heading="{{ 'Mobile number' | translate }}">
+          <div class="content row">
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="MessageServiceProviders"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "Message service providers" | translate }}
+                </label>
+                <ng-select
+                  #MessageServiceProviders="ngModel"
+                  ngModel
+                  id="MessageServiceProviders"
+                  name="MessageServiceProviders"
+                >
+                  <ng-option *ngFor="let item of users" [value]="item.id">{{
+                    item.Name
+                  }}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label for="phone" class="text-right col-form-label block mx-2">
+                  {{ "phone" | translate }}
+                </label>
+                <input
+                  #phone="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="number"
+                  id="phone"
+                  name="phone"
+                />
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="BearerTokens"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "Bearer Tokens" | translate }}
+                </label>
+                <input
+                  #BearerTokens="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="BearerTokens"
+                  name="BearerTokens"
+                />
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="username"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "username" | translate }}
+                </label>
+                <input
+                  #username="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="username"
+                  name="username"
+                />
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="SenderName"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "SenderName" | translate }}
+                </label>
+                <input
+                  #SenderName="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="SenderName"
+                  name="SenderName"
+                />
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="ApiUrl"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "Api Url" | translate }}
+                </label>
+                <input
+                  #ApiUrl="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="ApiUrl"
+                  name="ApiUrl"
+                />
+              </div>
+            </div>
+            <div
+              class="modal-footer justify-content-end"
+              style="border-top: none"
+            >
+              <button
+                type="button"
+                class="btn btn-light py-2 px-3 mt-0"
+                (click)="modal.dismiss('Cross click')"
+              >
+                {{ "close" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                [disabled]="setting.invalid"
+                (click)="setSetting(setting.value)"
+              >
+                {{ "Save" | translate }}
+              </button>
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="{{ 'fingerprint devices' | translate }}">
+          <div class="content row">
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="CompanyCode"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "CompanyCode" | translate }}
+                </label>
+                <input
+                  #CompanyCode="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="CompanyCode"
+                  name="CompanyCode"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="username"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "username" | translate }}
+                </label>
+                <input
+                  #username="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="username"
+                  name="username"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="password"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "password" | translate }}
+                </label>
+                <input
+                  #password="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="password"
+                  id="password"
+                  name="password"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <div class="form-group">
+                <label
+                  for="DeviceName"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "DeviceName" | translate }}
+                </label>
+                <input
+                  #DeviceName="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="DeviceName"
+                  name="DeviceName"
+                />
+              </div>
+            </div>
+
+            <div
+              class="modal-footer justify-content-end"
+              style="border-top: none"
+            >
+              <button
+                type="button"
+                class="btn btn-light py-2 px-3 mt-0"
+                (click)="modal.dismiss('Cross click')"
+              >
+                {{ "close" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                [disabled]="setting.invalid"
+                (click)="setSetting(setting.value)"
+              >
+                {{ "Save" | translate }}
+              </button>
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="{{ 'technical support' | translate }}">
+          <div class="content row">
+            <div class="col-lg-6 mb-3">
+              <div class="form-group">
+                <label
+                  for="technicalSupportAr"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "technical support ar" | translate }}
+                </label>
+                <input
+                  #technicalSupportAr="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="technicalSupportAr"
+                  name="technicalSupportAr"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6 mb-3">
+              <div class="form-group">
+                <label
+                  for="technicalSupportEn"
+                  class="text-right col-form-label block mx-2"
+                >
+                  {{ "technical support en" | translate }}
+                </label>
+                <input
+                  #technicalSupportEn="ngModel"
+                  ngModel
+                  class="form-control"
+                  type="text"
+                  id="technicalSupportEn"
+                  name="technicalSupportEn"
+                />
+              </div>
+            </div>
+
+            <div
+              class="modal-footer justify-content-end"
+              style="border-top: none"
+            >
+              <button
+                type="button"
+                class="btn btn-light py-2 px-3 mt-0"
+                (click)="modal.dismiss('Cross click')"
+              >
+                {{ "close" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+                [disabled]="setting.invalid"
+                (click)="setSetting(setting.value)"
+              >
+                {{ "Save" | translate }}
+              </button>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </form>
+  </div>
+</ng-template>
+
+<!-- confirm delete Modal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-body text-center">
+    <p
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"
+    ></p>
+    <div class="flex gap-2 justify-center">
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="modal.dismiss()"
+      >
+        {{ "Yes" | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="modal.dismiss()"
+        mat-raised-button
+        color="basic"
+      >
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!--BranchModal -->
+<ng-template #BranchModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "new branch" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="BranchNameAr"
+              class="text-right col-form-label mx-2 flex"
+            >
+              {{ "Branch name (Arabic)" | translate }}
+
+              <div style="margin-inline-start: 30px">
+                <input
+                  type="checkbox"
+                  name="showInInvoice"
+                  id="showInInvoice"
+                />
+                <label for="showInInvoice" class="col-form-label mx-2 p-0">{{
+                  "Show the name of the branch on the invoice" | translate
+                }}</label>
+              </div>
+            </label>
+            <input
+              #BranchNameAr="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BranchNameAr"
+              name="BranchNameAr"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="BranchNameEn"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Branch name (English)" | translate }}
+            </label>
+            <input
+              #BranchNameEn="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BranchNameEn"
+              name="BranchNameEn"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="ProjectNumberPrefix"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Project number prefix (branch specific)" | translate }}
+            </label>
+            <input
+              #ProjectNumberPrefix="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="ProjectNumberPrefix"
+              name="ProjectNumberPrefix"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="Country" class="text-right col-form-label block mx-2">
+              {{ "Country" | translate }}
+            </label>
+            <input
+              #Country="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="Country"
+              name="Country"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="Address" class="text-right col-form-label block mx-2">
+              {{ "Address" | translate }}
+            </label>
+            <input
+              #Address="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="Address"
+              name="Address"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="PostalCode"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Postal code" | translate }}
+            </label>
+            <input
+              #PostalCode="ngModel"
+              ngModel
+              class="form-control"
+              type="number"
+              id="PostalCode"
+              name="PostalCode"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="CommerialRegistration"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Commerial Registration" | translate }}
+            </label>
+            <input
+              #CommerialRegistration="ngModel"
+              ngModel
+              class="form-control"
+              type="number"
+              id="CommerialRegistration"
+              name="CommerialRegistration"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="CommercialRegister"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Commercial Register" | translate }}
+            </label>
+            <input
+              #CommercialRegister="ngModel"
+              ngModel
+              class="form-control"
+              type="number"
+              id="CommercialRegister"
+              name="CommercialRegister"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="Neighborhood"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Neighborhood" | translate }}
+            </label>
+            <input
+              #Neighborhood="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="Neighborhood"
+              name="Neighborhood"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="Street" class="text-right col-form-label block mx-2">
+              {{ "Street Name" | translate }}
+            </label>
+            <input
+              #Street="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="Street"
+              name="Street"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="BuildingNumber"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "BuildingNumber" | translate }}
+            </label>
+            <input
+              #BuildingNumber="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BuildingNumber"
+              name="BuildingNumber"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="AdditionalPhone"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Additional Phone" | translate }}
+            </label>
+            <input
+              #AdditionalPhone="ngModel"
+              ngModel
+              class="form-control"
+              type="number"
+              id="AdditionalPhone"
+              name="AdditionalPhone"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="BankName" class="text-right col-form-label block mx-2">
+              {{ "BankName" | translate }}
+            </label>
+            <ng-select
+              #BankName="ngModel"
+              ngModel
+              id="BankName"
+              name="BankName"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="BankAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Bank account" | translate }}
+            </label>
+            <input
+              #BankAccount="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BankAccount"
+              name="BankAccount"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="BankName2" class="text-right col-form-label block mx-2">
+              {{ "BankName" | translate }}
+            </label>
+            <ng-select
+              #BankName2="ngModel"
+              ngModel
+              id="BankName2"
+              name="BankName2"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="BankAccount2"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ ("Bank account" | translate) + " 2" }}
+            </label>
+            <input
+              #BankAccount2="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="BankAccount2"
+              name="BankAccount2"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label
+              for="EngineeringLicense"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ ("EngineeringLicense" | translate) + " 2" }}
+            </label>
+            <input
+              #EngineeringLicense="ngModel"
+              ngModel
+              class="form-control"
+              type="text"
+              id="EngineeringLicense"
+              name="EngineeringLicense"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="IssuedOn" class="text-right col-form-label block mx-2">
+              {{ ("IssuedOn" | translate) + " 2" }}
+            </label>
+            <input
+              #IssuedOn="ngModel"
+              ngModel
+              class="form-control"
+              id="IssuedOn"
+              name="IssuedOn"
+              bsDatepicker
+            />
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="city" class="text-right col-form-label block mx-2">
+              {{ "city" | translate }}
+            </label>
+            <div class="flex">
+              <ng-select
+                #city="ngModel"
+                ngModel
+                id="city"
+                name="city"
+                style="min-width: 320px !important"
+              >
+                <ng-option *ngFor="let item of users" [value]="item.id">{{
+                  item.Name
+                }}</ng-option>
+              </ng-select>
+              <button
+                type="button"
+                class="bg-base text-white"
+                style="padding: 0px 10px"
+                (click)="open(addOption)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group col-span-1 md:col-span-2">
+            <label for="formFile" class="form-label">
+              {{ "Upload File" | translate }}</label
+            >
+
+            <div class="upload">
+              <file-upload [control]="control">
+                <ng-template
+                  let-isFileDragDropAvailable="isFileDragDropAvailable"
+                  #placeholder
+                >
+                  <div *ngIf="control.size === 0">
+                    <div class="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="0.5em"
+                        viewBox="0 0 640 512"
+                      >
+                        <path
+                          d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div class="upload-text">
+                      {{ "uploadFile" | translate }}
+                    </div>
+                  </div>
+                </ng-template>
+
+                <ng-template
+                  let-i="index"
+                  let-file="file"
+                  let-control="control"
+                  #item
+                >
+                  <div class="overlay">
+                    <span
+                      class="delete-button"
+                      (click)="control.removeFile(file)"
+                    >
+                      <svg viewBox="0 0 448 512">
+                        <path
+                          d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <img *ngIf="control.valid" [src]="uploadedFile | async" />
+                  </div>
+                </ng-template>
+              </file-upload>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group col-span-1 md:col-span-2">
+            <label for="formFile" class="form-label">
+              {{ "Upload Header" | translate }}</label
+            >
+
+            <div class="upload">
+              <file-upload [control]="control">
+                <ng-template
+                  let-isFileDragDropAvailable="isFileDragDropAvailable"
+                  #placeholder
+                >
+                  <div *ngIf="control.size === 0">
+                    <div class="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="0.5em"
+                        viewBox="0 0 640 512"
+                      >
+                        <path
+                          d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div class="upload-text">
+                      {{ "uploadFile" | translate }}
+                    </div>
+                  </div>
+                </ng-template>
+
+                <ng-template
+                  let-i="index"
+                  let-file="file"
+                  let-control="control"
+                  #item
+                >
+                  <div class="overlay">
+                    <span
+                      class="delete-button"
+                      (click)="control.removeFile(file)"
+                    >
+                      <svg viewBox="0 0 448 512">
+                        <path
+                          d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <img *ngIf="control.valid" [src]="uploadedFile | async" />
+                  </div>
+                </ng-template>
+              </file-upload>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group col-span-1 md:col-span-2">
+            <label for="formFile" class="form-label">
+              {{ "Upload Footer" | translate }}</label
+            >
+
+            <div class="upload">
+              <file-upload [control]="control">
+                <ng-template
+                  let-isFileDragDropAvailable="isFileDragDropAvailable"
+                  #placeholder
+                >
+                  <div *ngIf="control.size === 0">
+                    <div class="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="0.5em"
+                        viewBox="0 0 640 512"
+                      >
+                        <path
+                          d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div class="upload-text">
+                      {{ "uploadFile" | translate }}
+                    </div>
+                  </div>
+                </ng-template>
+
+                <ng-template
+                  let-i="index"
+                  let-file="file"
+                  let-control="control"
+                  #item
+                >
+                  <div class="overlay">
+                    <span
+                      class="delete-button"
+                      (click)="control.removeFile(file)"
+                    >
+                      <svg viewBox="0 0 448 512">
+                        <path
+                          d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <img *ngIf="control.valid" [src]="uploadedFile | async" />
+                  </div>
+                </ng-template>
+              </file-upload>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="form-group">
+            <input
+              type="checkbox"
+              name="ShowInvoice"
+              id="ShowInvoice"
+              class="form-check-input"
+              ngModel
+            />
+            <label for="ShowInvoice" class="col-form-label mx-2">{{
+              "Show the invoice" | translate
+            }}</label>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="form-group">
+            <input
+              type="checkbox"
+              name="receiptVoucher"
+              id="receiptVoucher"
+              class="form-check-input"
+              ngModel
+            />
+            <label for="receiptVoucher" class="col-form-label mx-2">{{
+              "Show in the receipt voucher" | translate
+            }}</label>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="form-group">
+            <input
+              type="checkbox"
+              name="dailyEntry"
+              id="dailyEntry"
+              class="form-check-input"
+              ngModel
+            />
+            <label for="dailyEntry" class="col-form-label mx-2">{{
+              "Show in daily entry" | translate
+            }}</label>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="form-group">
+            <input
+              type="checkbox"
+              name="voucherExchange"
+              id="voucherExchange"
+              class="form-check-input"
+              ngModel
+            />
+            <label for="voucherExchange" class="col-form-label mx-2">{{
+              "Show in the voucher of exchange" | translate
+            }}</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="setEmailSetting(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- branchesAccountsModal-->
+<ng-template #branchesAccountsModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "branches accounts" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="FundAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Fund account" | translate }}
+            </label>
+            <ng-select
+              #FundAccount="ngModel"
+              ngModel
+              id="FundAccount"
+              name="FundAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="CashAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Cash account points of sale - Mada-ATM" | translate }}
+            </label>
+            <ng-select
+              #CashAccount="ngModel"
+              ngModel
+              id="CashAccount"
+              name="CashAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="Calculation"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Calculation of value added tax on purchases" | translate }}
+            </label>
+            <ng-select
+              #Calculation="ngModel"
+              ngModel
+              id="Calculation"
+              name="Calculation"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="customerAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "customer account" | translate }}
+            </label>
+            <ng-select
+              #customerAccount="ngModel"
+              ngModel
+              id="customerAccount"
+              name="customerAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="CollateralAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Collateral account" | translate }}
+            </label>
+            <ng-select
+              #CollateralAccount="ngModel"
+              ngModel
+              id="CollateralAccount"
+              name="CollateralAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="RevenueAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Revenue account (sales)" | translate }}
+            </label>
+            <ng-select
+              #RevenueAccount="ngModel"
+              ngModel
+              id="RevenueAccount"
+              name="RevenueAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="SuppliersAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Suppliers account" | translate }}
+            </label>
+            <ng-select
+              #xxx="ngModel"
+              ngModel
+              id="SuppliersAccount"
+              name="SuppliersAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="StaffAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Staff account" | translate }}
+            </label>
+            <ng-select
+              #StaffAccount="ngModel"
+              ngModel
+              id="StaffAccount"
+              name="StaffAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="addedTax" class="text-right col-form-label block mx-2">
+              {{ "Calculation of value added tax on sales" | translate }}
+            </label>
+            <ng-select
+              #addedTax="ngModel"
+              ngModel
+              id="addedTax"
+              name="addedTax"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="AdvancesAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Advances account" | translate }}
+            </label>
+            <ng-select
+              #AdvancesAccount="ngModel"
+              ngModel
+              id="AdvancesAccount"
+              name="AdvancesAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="BankAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Bank account" | translate }}
+            </label>
+            <ng-select
+              #BankAccount="ngModel"
+              ngModel
+              id="BankAccount"
+              name="BankAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="salesReturns"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Calculation of sales returns" | translate }}
+            </label>
+            <ng-select
+              #salesReturns="ngModel"
+              ngModel
+              id="salesReturns"
+              name="salesReturns"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="purchaseReturns"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Calculation of purchase returns" | translate }}
+            </label>
+            <ng-select
+              #purchaseReturns="ngModel"
+              ngModel
+              id="purchaseReturns"
+              name="purchaseReturns"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="SalesDiscount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Sales discount account" | translate }}
+            </label>
+            <ng-select
+              #SalesDiscount="ngModel"
+              ngModel
+              id="SalesDiscount"
+              name="SalesDiscount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="PurchaseDiscount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Purchase discount account" | translate }}
+            </label>
+            <ng-select
+              #PurchaseDiscount="ngModel"
+              ngModel
+              id="PurchaseDiscount"
+              name="PurchaseDiscount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="employeeEngagement"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Calculation of employee engagement" | translate }}
+            </label>
+            <ng-select
+              #employeeEngagement="ngModel"
+              ngModel
+              id="employeeEngagement"
+              name="employeeEngagement"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="PurchasesAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Purchases account" | translate }}
+            </label>
+            <ng-select
+              #PurchasesAccount="ngModel"
+              ngModel
+              id="PurchasesAccount"
+              name="PurchasesAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="CarExpense"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Car expense account" | translate }}
+            </label>
+            <ng-select
+              #CarExpense="ngModel"
+              ngModel
+              id="CarExpense"
+              name="CarExpense"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label
+              for="OwnerCurrentAccount"
+              class="text-right col-form-label block mx-2"
+            >
+              {{ "Owner's current account" | translate }}
+            </label>
+            <ng-select
+              #OwnerCurrentAccount="ngModel"
+              ngModel
+              id="OwnerCurrentAccount"
+              name="OwnerCurrentAccount"
+            >
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option></ng-select
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="setEmailSetting(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- incomeAccountsModal-->
+<ng-template #incomeAccountsModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "income list accounts" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="item mb-3">
+        <h4>{{ "depreciation account" | translate }}</h4>
+        <div class="form-group">
+          <ng-select
+            #depreciationAccount="ngModel"
+            ngModel
+            id="depreciationAccount"
+            name="depreciationAccount"
+          >
+            <ng-option *ngFor="let item of users" [value]="item.id">{{
+              item.Name
+            }}</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <div class="item mb-3">
+        <h4>{{ "General and administrative expense account" | translate }}</h4>
+        <div class="max-h-[40vh] overflow-auto px-10">
+          <tree-ngx
+            [nodeItems]="nodeItems"
+            class="{{ 'dir' | translate }}"
+            (selectedItems)="selectedTask1 = $event"
+            [options]="options"
+          >
+            <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
+              <span *ngIf="!expanded">
+                <i class="fa-solid fa-folder-plus tree-icon"></i>
+              </span>
+              <span *ngIf="expanded">
+                <i class="fa-solid fa-folder-minus tree-icon"></i>
+              </span>
+            </ng-template>
+          </tree-ngx>
+        </div>
+      </div>
+      <div class="item mb-3">
+        <h4>{{ "Cost of operating revenue/expenses" | translate }}</h4>
+        <div class="max-h-[40vh] overflow-auto px-10">
+          <tree-ngx
+            [nodeItems]="nodeItems"
+            class="{{ 'dir' | translate }}"
+            (selectedItems)="selectedTask1 = $event"
+            [options]="options"
+          >
+            <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
+              <span *ngIf="!expanded">
+                <i class="fa-solid fa-folder-plus tree-icon"></i>
+              </span>
+              <span *ngIf="expanded">
+                <i class="fa-solid fa-folder-minus tree-icon"></i>
+              </span>
+            </ng-template>
+          </tree-ngx>
+        </div>
+      </div>
+      <div class="item mb-3">
+        <h4>{{ "general revenue" | translate }}</h4>
+        <div class="max-h-[40vh] overflow-auto px-10">
+          <tree-ngx
+            [nodeItems]="nodeItems"
+            class="{{ 'dir' | translate }}"
+            (selectedItems)="selectedTask1 = $event"
+            [options]="options"
+          >
+            <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
+              <span *ngIf="!expanded">
+                <i class="fa-solid fa-folder-plus tree-icon"></i>
+              </span>
+              <span *ngIf="expanded">
+                <i class="fa-solid fa-folder-minus tree-icon"></i>
+              </span>
+            </ng-template>
+          </tree-ngx>
+        </div>
+      </div>
+      <div class="item mb-3">
+        <h4>{{ "Other income" | translate }}</h4>
+        <div class="max-h-[40vh] overflow-auto px-10">
+          <tree-ngx
+            [nodeItems]="nodeItems"
+            class="{{ 'dir' | translate }}"
+            (selectedItems)="selectedTask1 = $event"
+            [options]="options"
+          >
+            <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
+              <span *ngIf="!expanded">
+                <i class="fa-solid fa-folder-plus tree-icon"></i>
+              </span>
+              <span *ngIf="expanded">
+                <i class="fa-solid fa-folder-minus tree-icon"></i>
+              </span>
+            </ng-template>
+          </tree-ngx>
+        </div>
+      </div>
+      <p class="bg-red-100 p-1" style="width: max-content; margin: auto">
+        {{
+          "Warning: The system deals with these accounts through these settings only"
+            | translate
+        }}
+      </p>
+    </form>
+  </div>
+
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="setEmailSetting(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- OfficialVacationsModal -->
+<ng-template #OfficialVacationsModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "Official vacations" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <button
+      class="p-2 bg-base rounded-lg duration-300 text-white"
+      (click)="open(vacationModal, null, 'add')"
+    >
+      {{ "Add official leave" | translate }}
+    </button>
+
+    <div class="tables-data mt-3 overflow-hidden">
+      <!-- table -->
+
+      <div class="overflow-auto">
+        <table
+          mat-table
+          [dataSource]="vacationsDataSource"
+          matSort
+          class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+        >
+          <!-- name column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "The name of the official holiday" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.name }}</span>
+            </td>
+          </ng-container>
+          <!-- from column -->
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "From the date of" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.from | date : "dd-MM-yyyy , h:m:s a" }}</span>
+            </td>
+          </ng-container>
+          <!-- to column -->
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "To date" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.to | date : "dd-MM-yyyy , h:m:s a" }}</span>
+            </td>
+          </ng-container>
+          <!-- operations Column -->
+          <ng-container matColumnDef="operations">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "operations" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex gap-1 justify-center py-2">
+                <button
+                  class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="open(vacationModal, element, 'edit')"
+                >
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="open(deleteModal)"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="vacationDisplayedColumns"></tr>
+
+          <tr
+            mat-row
+            *matRowDef="let row; columns: vacationDisplayedColumns"
+            class="duration-300 hover:bg-slate-100"
+          ></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              {{ "noResult" | translate }} "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="setEmailSetting(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- vacationModal -->
+<ng-template #vacationModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "Add a new official holiday" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "The name of the official holiday" | translate }}
+            </label>
+            <input
+              class="form-control"
+              name="holidayName"
+              type="text"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "From the date of" | translate }}
+            </label>
+            <input
+              class="form-control"
+              name="FromDate"
+              type="text"
+              ngModel
+              bsDatepicker
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "To date" | translate }}
+            </label>
+            <input
+              class="form-control"
+              name="ToDate"
+              type="text"
+              ngModel
+              bsDatepicker
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="saveVacation(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- staffTimeModal -->
+<ng-template #staffTimeModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "new Staff Time" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "nameAr" | translate }}
+            </label>
+            <input class="form-control" name="nameAr" type="text" ngModel />
+          </div>
+        </div>
+        <div class="col-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "nameEn" | translate }}
+            </label>
+            <input class="form-control" name="nameEn" type="text" ngModel />
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Notes" | translate }}
+            </label>
+            <input class="form-control" name="Notes" type="text" ngModel />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer justify-content-end" style="border-top: none">
+    <button
+      type="button"
+      class="btn btn-light py-2 px-3 mt-0"
+      (click)="modal.dismiss('Cross click')"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      [disabled]="form.invalid"
+      (click)="addStaffTime(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- staffTimeDetails -->
+<ng-template #staffTimeDetails let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "Time details" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="day" class="text-right col-form-label block mx-2">
+              {{ "day" | translate }}
+            </label>
+            <ng-select #day="ngModel" ngModel id="day" name="day">
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="from" class="text-right col-form-label block mx-2">
+              {{ "from the hour" | translate }}
+            </label>
+            <ng-select #from="ngModel" ngModel id="from" name="from">
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="to" class="text-right col-form-label block mx-2">
+              {{ "to the hour" | translate }}
+            </label>
+            <ng-select #to="ngModel" ngModel id="to" name="to">
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-input-group flex gap-2 items-center">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              ngModel
+              name="secondPeriod"
+              required
+            />
+            <label for="secondPeriod" class="m-0">{{
+              "second period" | translate
+            }}</label>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="from2" class="text-right col-form-label block mx-2">
+              {{ "from the hour" | translate }}
+            </label>
+            <ng-select #from2="ngModel" ngModel id="from2" name="from2">
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="form-group">
+            <label for="to2" class="text-right col-form-label block mx-2">
+              {{ "to the hour" | translate }}
+            </label>
+            <ng-select #to2="ngModel" ngModel id="to2" name="to2">
+              <ng-option *ngFor="let item of users" [value]="item.id">{{
+                item.Name
+              }}</ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="modal-footer justify-content-end" style="border-top: none">
+      <button
+        type="button"
+        class="btn btn-light py-2 px-3 mt-0"
+        (click)="modal.dismiss('Cross click')"
+      >
+        {{ "close" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+        [disabled]="form.invalid"
+        (click)="setEmailSetting(form.value)"
+      >
+        {{ "Save" | translate }}
+      </button>
+    </div>
+
+    <div class="tables-data mt-3 overflow-hidden">
+      <!-- table -->
+      <input
+        (keyup)="applyFilterShiffts($event)"
+        class="form-control mb-3"
+        style="max-width: 300px"
+        #input
+        placeholder="{{ 'search' | translate }}"
+      />
+      <div class="overflow-auto">
+        <table
+          mat-table
+          [dataSource]="shifftsDataSource"
+          matSort
+          class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+        >
+          <!-- day column -->
+          <ng-container matColumnDef="day">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "day" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.day }}</span>
+            </td>
+          </ng-container>
+          <!-- from column -->
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "from the hour" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.from | date : "dd-MM-yyyy" }}</span>
+            </td>
+          </ng-container>
+          <!-- to column -->
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "to the hour" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.to | date : "dd-MM-yyyy" }}</span>
+            </td>
+          </ng-container>
+          <!-- secondFrom column -->
+          <ng-container matColumnDef="secondFrom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "from the hour" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.secondFrom | date : "dd-MM-yyyy" }}</span>
+            </td>
+          </ng-container>
+          <!-- secondTo column -->
+          <ng-container matColumnDef="secondTo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "to the hour" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.secondTo | date : "dd-MM-yyyy" }}</span>
+            </td>
+          </ng-container>
+
+          <!-- operations Column -->
+          <ng-container matColumnDef="operations">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "operations" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex gap-1 justify-center py-2">
+                <button
+                  class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="open(deleteModal)"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="shifftsDisplayedColumns"></tr>
+
+          <tr
+            mat-row
+            *matRowDef="let row; columns: shifftsDisplayedColumns"
+            class="duration-300 hover:bg-slate-100"
+          ></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              {{ "noResult" | translate }} "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- optToggleActivationModal -->
+<ng-template #optToggleActivationModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4
+      class="modal-title mb-0"
+      id="modal-basic-title"
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'تفعيل /عدم تفعيل منصة فاتورة',
+        en: 'Activating/disabling the invoice platform'
+      }"
+    ></h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <h2
+      class="text-base mb-4"
+      [translate]="'name'"
+      [translateParams]="{
+        ar: 'ادخل كود التفعيل / عدم التفعيل      ',
+        en: 'Enter the activation / deactivation code'
+      }"
+    ></h2>
+    <ng-otp-input [formCtrl]="otp" [config]="{ length: 4 }"></ng-otp-input>
+
+    <div
+      class="modal-footer justify-content-center mt-3"
+      style="border-top: none"
+    >
+      <button
+        type="button"
+        class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+        (click)="confiremOtp()"
+      >
+        {{ "confirem" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- BranchDataModal -->
+<ng-template #BranchDataModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "Add a new branch" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "branch name" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'branch name' | translate"
+              name="branchName"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Address" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Address' | translate"
+              name="Address"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Branch manager mobile" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Branch manager mobile' | translate"
+              name="BranchManagerMobile"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "customers service" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'customers service' | translate"
+              name="customersService"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "email" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'email' | translate"
+              name="email"
+              ngModel
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-end mt-3" style="border-top: none">
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      (click)="modal.dismiss()"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      (click)="addBranch(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- SocialDataModal -->
+<ng-template #SocialDataModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "Social networking links" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Facebook" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Facebook' | translate"
+              name="Facebook"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Twitter" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Twitter' | translate"
+              name="Twitter"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Google Plus" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Google Plus' | translate"
+              name="GooglePlus"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Instagram" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Instagram' | translate"
+              name="Instagram"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "snap chat" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'snap chat' | translate"
+              name="snapChat"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "Linkedin" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'Linkedin' | translate"
+              name="Linkedin"
+              ngModel
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-end mt-3" style="border-top: none">
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      (click)="modal.dismiss()"
+    >
+      {{ "close" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+      (click)="addBranch(form.value)"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- latestNewsModal -->
+<ng-template #latestNewsModal let-modal>
+  <div class="modal-header bg-base text-white">
+    <h4 class="modal-title mb-0" id="modal-basic-title">
+      {{ "latest news" | translate }}
+    </h4>
+    <button type="button" class="m-0" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-close"></i>
+    </button>
+  </div>
+
+  <div class="modal-body text-center">
+    <form #form="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "The address is Arabic" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'The address is Arabic' | translate"
+              name="addressAr"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "The address is English" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'The address is English' | translate"
+              name="addressEn"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "The text is Arabic" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'The text is Arabic' | translate"
+              name="textAr"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label class="text-right col-form-label block">
+              {{ "The text is English" | translate }}
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              [placeholder]="'The text is English' | translate"
+              name="textEn"
+              ngModel
+            />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="upload">
+            <file-upload [control]="control">
+              <ng-template
+                let-isFileDragDropAvailable="isFileDragDropAvailable"
+                #placeholder
+              >
+                <div *ngIf="control.size === 0">
+                  <div class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="0.5em"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                      />
+                    </svg>
+                  </div>
+
+                  <div class="upload-text">
+                    {{ "Determine the image of the news" | translate }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template
+                let-i="index"
+                let-file="file"
+                let-control="control"
+                #item
+              >
+                <div class="overlay">
+                  <span
+                    class="delete-button"
+                    (click)="control.removeFile(file)"
+                  >
+                    <svg viewBox="0 0 448 512">
+                      <path
+                        d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                      ></path>
+                    </svg>
+                  </span>
+                  <img *ngIf="control.valid" [src]="uploadedFile | async" />
+                </div>
+              </ng-template>
+            </file-upload>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer justify-content-end mt-3" style="border-top: none">
+      <button
+        type="button"
+        class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+        (click)="confiremOtp()"
+      >
+        {{ "new" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn submit-btn bg-base text-white py-2 px-3 mt-0"
+        (click)="confiremOtp()"
+      >
+        {{ "save" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary py-2 px-3 mt-0"
+        (click)="modal.dismiss()"
+      >
+        {{ "close" | translate }}
+      </button>
+    </div>
+
+    <div class="tables-data mt-3 overflow-hidden">
+      <div class="overflow-auto">
+        <table
+          mat-table
+          [dataSource]="newsDataSource"
+          matSort
+          class="mat-elevation-z8 rounded-t-lg overflow-hidden w-max"
+        >
+          <!-- nameAr column -->
+          <ng-container matColumnDef="nameAr">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "nameAr" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.nameAr }}</span>
+            </td>
+          </ng-container>
+          <!-- nameEn column -->
+          <ng-container matColumnDef="nameEn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>{{ "nameEn" | translate }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element?.nameEn }}</span>
+            </td>
+          </ng-container>
+          <!-- operations Column -->
+          <ng-container matColumnDef="operations">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "operations" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex gap-1 justify-center py-2">
+                <button
+                  class="p-2 bg-green-100 hover:bg-green-500 rounded-lg duration-300 hover:text-white w-10"
+                >
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button
+                  class="p-2 bg-red-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white w-10"
+                  (click)="open(deleteModal)"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="newsDisplayedColumns"></tr>
+
+          <tr
+            mat-row
+            *matRowDef="let row; columns: newsDisplayedColumns"
+            class="duration-300 hover:bg-slate-100"
+          ></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              {{ "noResult" | translate }} "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+    </div>
+  </div>
+</ng-template>

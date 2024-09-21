@@ -1,0 +1,132 @@
+<div class="pb-4">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="teabls-data mt-3 overflow-hidden">
+
+    <div class="flex gap-2 flex-wrap items-end">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Customer Branch" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+          <ng-option [value]="1">
+            خيار
+          </ng-option>
+
+        </ng-select>
+      </div>
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "خلال فترة زمنية" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}">
+          <ng-option [value]="1">
+            خيار
+          </ng-option>
+
+        </ng-select>
+      </div>
+      <button class="btn btn-primary" (click)="data.filter.enable = !data.filter.enable" [translate]="'name'"
+        [translateParams]="{
+          ar: 'فلترة بالوقت',
+          en: 'Time Filter'
+        }"></button>
+      <div class="form-group timeInput" *ngIf="data.filter.enable">
+        <input placeholder="{{ 'Chose Date' | translate }}" [(ngModel)]="data.filter.date" type="text"
+          class="form-control" bsDaterangepicker #dpr="bsDaterangepicker" />
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div class="max-w-xs flex-grow">
+        <label class="col-form-label"> {{ "Customer" | translate }}</label>
+        <ng-select class="w-full p-0" placeholder="{{ 'Chose' | translate }}" [(ngModel)]="data.selected"
+          [ngModelOptions]="{ standalone: true }">
+          <ng-option [value]="1">
+            خيار
+          </ng-option>
+
+        </ng-select>
+      </div>
+      <div class="flex gap-2 controler">
+
+
+        <button class="flex gap-1 btn btn-primary">
+          <span class="hidden md:block">{{'Print'|translate}}</span>
+          <i class="fa-solid fa-print"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- table -->
+    <div class="overflow-auto">
+
+      <table class="custome-table">
+        <tr>
+          <td></td>
+          <td colspan="8">قياس اداء الموظف في انجاز المهام</td>
+          <td colspan="6">قياس اداء الموظف في انجاز المشاريع
+          </td>
+        </tr>
+        <tr>
+          <td [translate]="'name'" [translateParams]="{
+                          ar: 'العميل',
+                          en: 'Customer'
+                        }"></td>
+          <td>لم تبدا</td>
+          <td>قيد التشغيل</td>
+          <td>الرجيعة</td>
+          <td>المنجزة</td>
+          <td>قاربت التاخير</td>
+          <td>المتاخرة</td>
+          <td>المتوقفة</td>
+          <td>نسبة التاخير</td>
+          <td>نسبة الانجاز</td>
+          <td>المتاخرة</td>
+          <td>قيد التنفيذ</td>
+          <td>المتوقفة</td>
+          <td>قاربت التاخير</td>
+          <td>بدون حركة</td>
+        </tr>
+        <tr *ngFor="let user of data.reports">
+          <td>{{user.UserName}}</td>
+          <td>{{user.Notstarted}}</td>
+          <td>{{user.Inprogress}}</td>
+          <td>{{user.Retrived}}</td>
+          <td>{{user.Completed}}</td>
+          <td>{{user.AlmostLate}}</td>
+          <td>{{user.Latetask}}</td>
+          <td>{{user.StoppedTasks}}</td>
+          <td>{{user.LatePercentage}}</td>
+          <td>{{user.CompletePercentage}}</td>
+          <td>{{user.ProjectLate}}</td>
+          <td>{{user.ProjectInProgress}}</td>
+          <td>{{user.ProjectStoped}}</td>
+          <td>{{user.ProjectAlmostfinish}}</td>
+          <td>{{user.ProjectWithout}}</td>
+        </tr>
+        <tr class="text-white bg-base">
+          <td [translate]="'name'" [translateParams]="{
+                          ar: 'الاجمالـــي',
+                          en: 'Total'
+                        }"></td>
+
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>

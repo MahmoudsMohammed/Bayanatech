@@ -1,0 +1,373 @@
+<div class="pb-4">
+  <app-navigator [title]="title"></app-navigator>
+
+  <div class="tables-data mt-3 overflow-hidden">
+    <!-- buttons -->
+    <div class="flex justify-between gap-2 items-center my-3 flex-wrap">
+      <div class="w-fit">
+        <input class="form-control" (keyup)="applyFilter($event)" placeholder="{{ 'search' | translate }}" #input />
+      </div>
+      <div class="flex gap-2 controler">
+        <button class="flex gap-1 btn btn-primary">
+          <span class="hidden md:block" [translate]="'name'" [translateParams]="{
+              ar: 'تحويل للكل',
+              en: 'Forward For All '
+            }"></span>
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <button class="flex gap-1 btn btn-secondary" (click)="searchBox.open = !searchBox.open">
+          <span class="hidden md:block" [translate]="'name'" [translateParams]="{
+              ar: 'بحث',
+              en: 'Search'
+            }">
+          </span>
+          <i class="fa-solid fa-user-tag"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- search box -->
+    <form class="flex flex-wrap gap-2 items-end my-3" #searchForm="ngForm" [@fade] *ngIf="searchBox.open">
+      <div class="form-group">
+        <label for="ProjectNumber" class="text-right col-form-label block">
+          {{ "Project Number" | translate }}
+          <span class="text-danger">*</span></label>
+        <input required #CustomerNameAr="ngModel" ngModel class="form-control" type="text" id="ProjectNumber"
+          name="ProjectNumber" autocomplete="off" [placeholder]="
+            ('Write' | translate) + ' ' + ('Project Number' | translate)
+          " />
+      </div>
+
+      <div>
+        <label> {{ "Customer Name" | translate }} </label>
+        <ng-select class="w-full p-0 mt-2.5">
+          <ng-option>اسم العميل</ng-option>
+          <ng-option>اسم العميل</ng-option>
+          <ng-option>اسم العميل</ng-option>
+          <ng-option>اسم العميل</ng-option>
+          <ng-option>اسم العميل</ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <label> {{ "Project Maneger" | translate }} </label>
+        <ng-select class="w-full p-0 mt-2.5">
+          <ng-option>اسم المدير</ng-option>
+          <ng-option>اسم المدير</ng-option>
+          <ng-option>اسم المدير</ng-option>
+          <ng-option>اسم المدير</ng-option>
+        </ng-select>
+      </div>
+
+      <div *ngIf="searchBox.searchType" [@fade]>
+        <label for="searchBox" class="form-label" [translate]="'name'" [translateParams]="{
+            ar: searchBox.searchType.name.ar,
+            en: searchBox.searchType.name.en
+          }"></label>
+        <input type="email" class="form-control" id="searchBox"
+          placeholder="{{ searchBox.searchType.en | translate }}" />
+      </div>
+      <button class="btn btn-primary" (click)="data.filter.enable = !data.filter.enable" [translate]="'name'"
+        [translateParams]="{
+          ar: 'فلترة بالوقت',
+          en: 'Time Filter'
+        }"></button>
+      <div class="form-group timeInput" *ngIf="data.filter.enable">
+        <input placeholder="{{ 'Chose Date' | translate }}" [(ngModel)]="data.filter.date" type="text"
+          class="form-control" bsDaterangepicker #dpr="bsDaterangepicker" />
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+        <label class="form-check-label" for="flexSwitchCheckDefault" [translate]="'name'" [translateParams]="{
+            ar: 'عليه مهام',
+            en: 'Project Task Exist'
+          }">
+        </label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+        <label class="form-check-label" for="flexSwitchCheckDefault" [translate]="'name'" [translateParams]="{
+            ar: 'عليه فواتير',
+            en: 'Project Invoice Exist'
+          }">
+        </label>
+      </div>
+    </form>
+
+    <!-- table -->
+    <div class="overflow-auto">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox color="warn" (change)="$event ? toggleAllRows() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="warn" (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ProjectNumber">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Project Number" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.ProjectNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ProjectDescription">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "ProjectDescription" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ProjectDescription }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ProjectManeger">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Project Maneger" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ProjectMangerName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Customer">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Customer" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CustomerName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Task">
+          <th mat-header-cell *matHeaderCellDef>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'عليه مهام',
+                en: 'Project Task Exist'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ProjectTaskExist }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Invoice">
+          <th mat-header-cell *matHeaderCellDef>
+            <span [translate]="'name'" [translateParams]="{
+                ar: 'عليه فواتير',
+                en: 'Project Invoice Exist'
+              }"></span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.ProjectInvoiceExist }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef [translate]="'name'" [translateParams]="{
+              ar: 'خيارات',
+              en: 'Operations'
+            }"></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex gap-1 justify-center py-2">
+              <button
+                class="min-w-max p-2 bg-orange-100 hover:bg-orange-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="forwardModal.show()">
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="deleteModal.show()">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-sky-100 hover:bg-sky-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="finishModal.show()">
+                <i class="fa-solid fa-thumbs-up"></i>
+              </button>
+              <button
+                class="min-w-max p-2 bg-red-100 hover:bg-red-500 rounded-lg duration-300 hover:text-white aspect-square w-10"
+                (click)="canceleModal.show()">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>
+      </table>
+    </div>
+
+    <mat-paginator #MatPaginator [pageSizeOptions]="[10, 25]"> </mat-paginator>
+  </div>
+</div>
+
+<!-- confirm delete  -->
+<div class="modal fade ngxModal center" #deleteModal="bs-modal" bsModal tabindex="-1" role="dialog">
+  <div class="modal-body text-center">
+    <p [translate]="'name'" [translateParams]="{
+        ar: 'هل تريد بالتأكيد حذف هذا الصف',
+        en: 'Are you sure to delete this row ?'
+      }"></p>
+    <div class="flex gap-2 justify-center">
+      <button type="button" mat-raised-button color="warn" (click)="confirmDelete()">
+        {{ "Yes" | translate }}
+      </button>
+      <button type="button" (click)="deleteModal.hide()" mat-raised-button color="basic">
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- confirm cancele  -->
+<div class="modal fade ngxModal center" #canceleModal="bs-modal" bsModal tabindex="-1" role="dialog">
+  <div class="modal-body text-center">
+    <p [translate]="'name'" [translateParams]="{
+        ar: 'هل تريد حذف وإلغاء المشروع بجميع المهام التي عليه ؟',
+        en: 'Are you sure to canceele this project ?'
+      }"></p>
+    <div class="flex gap-2 justify-center">
+      <button type="button" mat-raised-button color="warn" (click)="confirmDelete()">
+        {{ "Yes" | translate }}
+      </button>
+      <button type="button" (click)="canceleModal.hide()" mat-raised-button color="basic">
+        {{ "No" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- forwared  -->
+<div class="modal fade ngxModal" bsModal #forwardModal="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-static-name2">
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="m-0">
+      <span class="text-2xl" [translate]="'name'" [translateParams]="{
+          ar: 'تحويل المشروع',
+          en: 'Exchange Project'
+        }">
+      </span>
+    </h4>
+    <button type="button" class="text-2xl text-white m-0" (click)="forwardModal?.hide()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center h-28 overflow-auto">
+    <form #forward="ngForm">
+      <div>
+        <label class="col-form-label block">
+          {{ "Customer Name" | translate }}
+        </label>
+        <select #customer="ngModel" name="customer" required ngModel class="form-select"
+          aria-label=".form-select-lg example">
+          <option selected>Open this select menu</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
+    </form>
+
+    <!-- <div class="flex gap-2 mt-3 pt-3 border-t border-neutral-300">
+    </div> -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn bg-base text-white" type="submit" [disabled]="forward.invalid" (click)="forwardModal?.hide()">
+      {{ "Save" | translate }}
+    </button>
+    <button (click)="forwardModal?.hide()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- finishModal  -->
+<div class="modal fade ngxModal" bsModal #finishModal="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-static-name2">
+  <div style="background-color: var(--base-color)" class="modal-header text-white flex justify-between items-center">
+    <h4 class="m-0">
+      <span class="text-2xl" [translate]="'name'" [translateParams]="{
+          ar: 'إنهاء مشروع',
+          en: 'Project Finish'
+        }">
+      </span>
+    </h4>
+    <button type="button" class="text-2xl text-white m-0" (click)="finishModal?.hide()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <form #finish="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div>
+        <label>{{ "status" | translate }}</label>
+        <div class="flex gap-3">
+          <div class="border-b-8 border-green-500">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="status" id="flexRadioDefault1" />
+              <label class="col-form-label block" for="flexRadioDefault1" [translate]="'name'" [translateParams]="{
+                  ar: 'مكتمل',
+                  en: ' Complete'
+                }">
+              </label>
+            </div>
+          </div>
+          <div class="border-b-8 border-red-500">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="status" id="flexRadioDefault12" />
+              <label class="form-check-label" for="flexRadioDefault12" [translate]="'name'" [translateParams]="{
+                  ar: 'ملغاة',
+                  en: '  Canceled'
+                }">
+              </label>
+            </div>
+          </div>
+          <div class="border-b-8 border-yellow-500">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="status" id="flexRadioDefault13" />
+              <label class="form-check-label" for="flexRadioDefault13" [translate]="'name'" [translateParams]="{
+                  ar: 'ايقاف مؤقت',
+                  en: '  Paused'
+                }">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group timeInput">
+        <label for="" [translate]="'name'" [translateParams]="{
+            ar: 'تاريخ الانهاء',
+            en: 'End Date'
+          }" class="col-form-label block"></label>
+        <input readonly type="text" class="form-control" value="{{ day | date : 'short' }}" />
+      </div>
+      <div class="md:col-span-2">
+        <label for="exampleFormControlTextarea1" class="col-form-label block" [translate]="'name'" [translateParams]="{
+            ar: 'سبب الانهاء',
+            en: 'Finish Reason'
+          }">
+        </label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+    </form>
+
+    <!-- <div class="flex gap-2 mt-3 pt-3 border-t border-neutral-300">
+    </div> -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn bg-base text-white" type="submit" [disabled]="forward.invalid" (click)="forwardModal?.hide()">
+      {{ "Save" | translate }}
+    </button>
+    <button (click)="finishModal?.hide()" class="btn btn-secondary">
+      {{ "Back" | translate }}
+    </button>
+  </div>
+</div>
