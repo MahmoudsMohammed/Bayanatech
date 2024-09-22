@@ -78,6 +78,7 @@ export class AddAttendanceComponent implements OnInit {
       'esri/widgets/Search',
       'esri/geometry/Extent',
       'esri/geometry/support/webMercatorUtils',
+      'esri/intl',
     ])
       .then(
         ([
@@ -89,9 +90,12 @@ export class AddAttendanceComponent implements OnInit {
           Search,
           Extent,
           webMercatorUtils,
+          intl,
         ]) => {
+          intl.setLocale('ar');
           const map = new Map({
-            basemap: 'streets-navigation-vector',
+            basemap: 'hybrid',
+            language: 'ar',
           });
 
           const view = new MapView({

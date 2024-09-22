@@ -6,9 +6,18 @@ import { AttendanceListComponent } from './pages/attendanceList/attendanceList.c
 import { AttendaceCardComponent } from './pages/attendanceList/components/attendaceCard/attendaceCard.component';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { EmployeesDataComponent } from './pages/attendanceList/components/employeesData/employeesData.component';
 
 @NgModule({
   imports: [
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatDialogModule,
     FormsModule,
     RouterLink,
     RouterOutlet,
@@ -25,6 +34,7 @@ import { FormsModule } from '@angular/forms';
     ]),
   ],
   declarations: [
+    EmployeesDataComponent,
     AttendanceComponent,
     AddAttendanceComponent,
     AttendanceListComponent,
