@@ -95,7 +95,6 @@ export class AddAttendanceComponent implements OnInit {
           intl.setLocale('ar');
           const map = new Map({
             basemap: 'hybrid',
-            language: 'ar',
           });
 
           const view = new MapView({
