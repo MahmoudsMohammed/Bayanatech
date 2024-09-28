@@ -79,6 +79,7 @@ export class AddAttendanceComponent implements OnInit {
       'esri/geometry/Extent',
       'esri/geometry/support/webMercatorUtils',
       'esri/intl',
+      'esri/widgets/BasemapToggle',
     ])
       .then(
         ([
@@ -91,6 +92,7 @@ export class AddAttendanceComponent implements OnInit {
           Extent,
           webMercatorUtils,
           intl,
+          BasemapToggle,
         ]) => {
           intl.setLocale('ar');
           const map = new Map({
@@ -224,6 +226,15 @@ export class AddAttendanceComponent implements OnInit {
             layer: graphicsLayer,
             view: view,
             creationMode: 'update',
+          });
+
+          const basemapToggle = new BasemapToggle({
+            view: view,
+            nextBasemap: 'topo-vector',
+          });
+
+          view.ui.add(basemapToggle, {
+            position: 'top-right',
           });
 
           sketch.on('update', (event: any) => {
